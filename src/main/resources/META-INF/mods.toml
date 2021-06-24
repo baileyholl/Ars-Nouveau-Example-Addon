@@ -56,3 +56,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mollis lacinia magn
     versionRange="[1.16.2,)"
     ordering="NONE"
     side="BOTH"
+[[dependencies.examplemod]]
+    modId="ars_nouveau"
+    mandatory=true
+    versionRange="[1.18.10,)"
+    ordering="AFTER"
+    side="BOTH"
