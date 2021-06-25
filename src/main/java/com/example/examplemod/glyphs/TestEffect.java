@@ -27,10 +27,7 @@ public class TestEffect extends AbstractEffect {
     @Override
     public void onResolve(RayTraceResult rayTraceResult, World world, @Nullable LivingEntity shooter, List<AbstractAugment> augments, SpellContext spellContext) {
         super.onResolve(rayTraceResult, world, shooter, augments, spellContext);
-        if(shooter != null){
-            System.out.println(CONFIG);
-            PortUtil.sendMessageNoSpam(shooter, new StringTextComponent("Hello from my resolve!"));
-        }
+        System.out.println("Hello from my resolve!");
     }
 
     @Override

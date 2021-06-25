@@ -14,12 +14,9 @@ import java.util.ArrayList;
 @Mod.EventBusSubscriber
 public class ExampleConfig {
 
-
     public static void registerGlyphConfigs(){
-        RegistryHelper.generateConfig(ExampleMod.MODID,ArsNouveauRegistry.registeredSpells);
+        RegistryHelper.generateConfig(ExampleMod.MODID, ArsNouveauRegistry.registeredSpells);
     }
-
-
 
     @SubscribeEvent
     public static void onLoad(final ModConfig.Loading configEvent) { }

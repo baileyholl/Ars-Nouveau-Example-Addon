@@ -9,6 +9,7 @@ import java.util.List;
 
 public class ArsNouveauRegistry {
     public static List<AbstractSpellPart> registeredSpells = new ArrayList<>();
+
     public static void registerGlyphs(){
         register(TestEffect.INSTANCE);
     }
@@ -17,5 +18,4 @@ public class ArsNouveauRegistry {
         ArsNouveauAPI.getInstance().registerSpell(spellPart.tag,spellPart);
         registeredSpells.add(spellPart);
     }
-
 }
