@@ -144,10 +144,9 @@ dependencies {
 //    runtimeOnly fg.deobf("curse.maven:exp-401955:3362707")  // Ars Nouveau 1.18.10
 //    compileOnly fg.deobf("curse.maven:exp-401955:3362707")
 
-//    runtimeOnly fg.deobf("curse.maven:exp-401955:3362707")  // Ars Nouveau 1.18.10
-//    compileOnly fg.deobf("curse.maven:exp-401955:3362707")
-    runtimeOnly fg.deobf("com.hollingsworth.ars_nouveau:Ars-Nouveau:1.18.11")
-    compileOnly fg.deobf("com.hollingsworth.ars_nouveau:Ars-Nouveau:1.18.11")
+    runtimeOnly fg.deobf("curse.maven:exp-401955:3531531")  // Ars Nouveau 1.24.2
+    compileOnly fg.deobf("curse.maven:exp-401955:3531531")
+
   //  runtimeOnly fg.deobf("com.hollingsworth.ars_nouveau:Ars-Nouveau:1.18.11")
  //   compileOnly fg.deobf("ars_nouveau:Ars-Nouveau:1.18.10")
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-50:api")
