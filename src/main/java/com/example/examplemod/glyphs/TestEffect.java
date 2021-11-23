@@ -4,6 +4,7 @@ import com.hollingsworth.arsnouveau.api.ArsNouveauAPI;
 import com.hollingsworth.arsnouveau.api.spell.AbstractAugment;
 import com.hollingsworth.arsnouveau.api.spell.AbstractEffect;
 import com.hollingsworth.arsnouveau.api.spell.SpellContext;
+import com.hollingsworth.arsnouveau.api.spell.SpellStats;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
 import com.hollingsworth.arsnouveau.common.util.PortUtil;
 import net.minecraft.entity.LivingEntity;
@@ -25,8 +26,8 @@ public class TestEffect extends AbstractEffect {
     }
 
     @Override
-    public void onResolve(RayTraceResult rayTraceResult, World world, @Nullable LivingEntity shooter, List<AbstractAugment> augments, SpellContext spellContext) {
-        super.onResolve(rayTraceResult, world, shooter, augments, spellContext);
+    public void onResolve(RayTraceResult rayTraceResult, World world, @Nullable LivingEntity shooter, SpellStats spellStats, SpellContext spellContext) {
+        super.onResolve(rayTraceResult, world, shooter, spellStats, spellContext);
         System.out.println("Hello from my resolve!");
     }
 
