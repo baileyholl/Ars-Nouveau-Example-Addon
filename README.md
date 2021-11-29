@@ -10,9 +10,19 @@ Ars Nouveau features an extensive API for addons, as well as this repo that you 
 **Rules**
 
 Eligible mods must be publicly available by the 31st for voting. They must have Ars Nouveau as a core dependency. If you have already started an addon, you can submit it as long as it is still in development and not yet released publicly.
+ To enter your mod for voting, you may DM it to me or post it here to request to be added to the list.
 
-All submitted mods, at the authors discretion, will be entered into a public vote for the chance to win one of three $30 Redbubble gift cards! Use these to pick up some Ars Nouveau merch, or from other mods hosted on RedBubble like Botania! To enter your mod for voting, you may DM it to me or post it here to request to be added to the list.
 
+**Prizes**
+
+To enter your mod for voting, you may DM it to me via discord, post it in the Ars Nouveau discord, or post it here to request to be added to the list. Places and prizes will be determined by a public vote held via the discord once the competition has ended. 
+
+* First Place - $50 Redbubble Giftcard and $100 USD worth of Curseforge points (Sponsored by Curseforge)
+* Second Place - $50 Redbubble Gift Card
+* Third Place - $50 Redbubble Gift Card
+* Best Project Page (looks, reads, and presents well) - $50 USD worth of Curseforge points (Sponsored by Curseforge)
+
+Winners will also be featured in the Curseforge Featured Projects page.
 
 **Getting Started**
 
