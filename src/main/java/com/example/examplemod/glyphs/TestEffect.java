@@ -6,15 +6,13 @@ import com.hollingsworth.arsnouveau.api.spell.AbstractEffect;
 import com.hollingsworth.arsnouveau.api.spell.SpellContext;
 import com.hollingsworth.arsnouveau.api.spell.SpellStats;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
-import com.hollingsworth.arsnouveau.common.util.PortUtil;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.HitResult;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.List;
+
 import java.util.Set;
 
 public class TestEffect extends AbstractEffect {
@@ -26,15 +24,17 @@ public class TestEffect extends AbstractEffect {
     }
 
     @Override
-    public void onResolve(RayTraceResult rayTraceResult, World world, @Nullable LivingEntity shooter, SpellStats spellStats, SpellContext spellContext) {
-        super.onResolve(rayTraceResult, world, shooter, spellStats, spellContext);
-        System.out.println("Hello from my resolve!");
+    public int getDefaultManaCost() {
+        return 100;
     }
 
     @Override
-    public int getManaCost() {
-        return 100;
+    public void onResolve(HitResult rayTraceResult, Level world, @Nullable LivingEntity shooter, SpellStats spellStats, SpellContext spellContext) {
+        super.onResolve(rayTraceResult, world, shooter, spellStats, spellContext);
+
+        System.out.println("Hello from my resolve!");
     }
+
 
     @Nonnull
     @Override
