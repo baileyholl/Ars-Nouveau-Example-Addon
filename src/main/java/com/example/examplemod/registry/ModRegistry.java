@@ -23,10 +23,10 @@ public class ModRegistry {
         ITEMS.register(bus);
     }
 
-    public static final RegistryObject<Item> EXAMPLE;
+    public static RegistryObject<Item> EXAMPLE;
 
     static {
-        EXAMPLE = ITEMS.register("star_hat", () -> new ExampleCosmetic(new Item.Properties().tab(ArsNouveau.itemGroup)));
+        //EXAMPLE = ITEMS.register("star_hat", () -> new ExampleCosmetic(new Item.Properties().tab(ArsNouveau.itemGroup)));
     }
 
 }
