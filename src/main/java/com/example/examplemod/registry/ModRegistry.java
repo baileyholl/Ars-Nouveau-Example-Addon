@@ -2,7 +2,6 @@ package com.example.examplemod.registry;
 
 import com.example.examplemod.item.ExampleCosmetic;
 import com.hollingsworth.arsnouveau.ArsNouveau;
-import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -23,10 +22,10 @@ public class ModRegistry {
         ITEMS.register(bus);
     }
 
-    public static RegistryObject<Item> EXAMPLE;
+    public static final RegistryObject<Item> EXAMPLE;
 
     static {
-        //EXAMPLE = ITEMS.register("star_hat", () -> new ExampleCosmetic(new Item.Properties().tab(ArsNouveau.itemGroup)));
+        EXAMPLE = ITEMS.register("star_hat", () -> new ExampleCosmetic(new Item.Properties().tab(ArsNouveau.itemGroup)));
     }
 
 }
