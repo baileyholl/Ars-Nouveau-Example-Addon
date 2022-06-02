@@ -9,10 +9,6 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 @Mod.EventBusSubscriber
 public class ExampleConfig {
 
-    public static void registerGlyphConfigs(){
-        RegistryHelper.generateConfig(ExampleMod.MODID, ArsNouveauRegistry.registeredSpells);
-    }
-
     @SubscribeEvent
     public static void onLoad(final ModConfigEvent.Loading configEvent) { }
 
