@@ -28,5 +28,13 @@
 			}
 		}
 	],
-	"display": {}
+	"display": {
+		"ground": {
+			"translation": [0, 0.5, 3.5]
+		},
+		"gui": {
+			"rotation": [30, 225, 0],
+			"translation": [-1.5, 3.75, 0]
+		}
+	}
 }

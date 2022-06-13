@@ -1,6 +1,6 @@
-package com.example.examplemod.registry;
+package com.example.an_addon.registry;
 
-import com.example.examplemod.item.ExampleCosmetic;
+import com.example.an_addon.item.ExampleCosmetic;
 import com.hollingsworth.arsnouveau.ArsNouveau;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -9,7 +9,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import static com.example.examplemod.ExampleMod.MODID;
+import static com.example.an_addon.ExampleANAddon.MODID;
 
 public class ModRegistry {
 

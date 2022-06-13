@@ -1,8 +1,8 @@
-package com.example.examplemod.datagen;
+package com.example.an_addon.datagen;
 
-import com.example.examplemod.ArsNouveauRegistry;
-import com.example.examplemod.ExampleMod;
-import com.example.examplemod.glyphs.TestEffect;
+import com.example.an_addon.ArsNouveauRegistry;
+import com.example.an_addon.ExampleANAddon;
+import com.example.an_addon.glyphs.TestEffect;
 import com.hollingsworth.arsnouveau.api.enchanting_apparatus.EnchantingApparatusRecipe;
 import com.hollingsworth.arsnouveau.api.familiar.AbstractFamiliarHolder;
 import com.hollingsworth.arsnouveau.api.ritual.AbstractRitual;
@@ -12,16 +12,12 @@ import com.hollingsworth.arsnouveau.common.crafting.recipes.ImbuementRecipe;
 import com.hollingsworth.arsnouveau.common.datagen.ApparatusRecipeProvider;
 import com.hollingsworth.arsnouveau.common.datagen.GlyphRecipeProvider;
 import com.hollingsworth.arsnouveau.common.datagen.ImbuementRecipeProvider;
-import com.hollingsworth.arsnouveau.common.datagen.Recipes;
 import com.hollingsworth.arsnouveau.common.datagen.patchouli.*;
-import com.hollingsworth.arsnouveau.setup.ItemsRegistry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
 
@@ -206,9 +202,9 @@ public class ArsProviders {
 
     }
 
-    static String root = ExampleMod.MODID;
+    static String root = ExampleANAddon.MODID;
     static ResourceLocation prefix(String path){
-        return new ResourceLocation(ExampleMod.MODID, path);
+        return new ResourceLocation(ExampleANAddon.MODID, path);
     }
 
 }

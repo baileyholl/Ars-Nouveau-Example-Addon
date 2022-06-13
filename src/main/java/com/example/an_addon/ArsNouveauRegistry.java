@@ -1,6 +1,6 @@
-package com.example.examplemod;
+package com.example.an_addon;
 
-import com.example.examplemod.glyphs.TestEffect;
+import com.example.an_addon.glyphs.TestEffect;
 import com.hollingsworth.arsnouveau.api.ArsNouveauAPI;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
 
