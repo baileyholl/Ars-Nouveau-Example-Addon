@@ -1,9 +1,7 @@
-package com.example.examplemod;
+package com.example.an_addon;
 
-import com.hollingsworth.arsnouveau.api.RegistryHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 @Mod.EventBusSubscriber

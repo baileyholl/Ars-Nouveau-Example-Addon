@@ -1,6 +1,6 @@
-package com.example.examplemod;
+package com.example.an_addon;
 
-import com.example.examplemod.registry.ModRegistry;
+import com.example.an_addon.registry.ModRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -13,14 +13,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod(ExampleMod.MODID)
-public class ExampleMod
+@Mod(ExampleANAddon.MODID)
+public class ExampleANAddon
 {
     public static final String MODID = "an_addon";
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public ExampleMod() {
+    public ExampleANAddon() {
         IEventBus modbus = FMLJavaModLoadingContext.get().getModEventBus();
         ModRegistry.registerRegistries(modbus);
         ArsNouveauRegistry.registerGlyphs();
