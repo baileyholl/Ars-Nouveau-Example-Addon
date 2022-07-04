@@ -1,7 +1,6 @@
 {
-	"ars_nouveau.glyph_desc.test": "This is my test!",
-	"ars_nouveau.glyph_name.test": "Test",
-	"item.ars_nouveau.glyph_test": "Glyph of Testing",
+	"an_addon.glyph_desc.glyph_test": "This is my test!",
+	"an_addon.glyph_name.glyph_test": "Test",
 
 	"item.an_addon.star_hat": "Example hat"
 }
