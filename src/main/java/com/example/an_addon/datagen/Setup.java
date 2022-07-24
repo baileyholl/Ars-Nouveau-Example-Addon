@@ -9,16 +9,16 @@ import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 @Mod.EventBusSubscriber(modid = ExampleANAddon.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Setup {
 
-    //use runData configuration to generate stuff
+    //use runData configuration to generate stuff, event.includeServer() for data, event.includeClient() for assets
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event) {
         DataGenerator gen = event.getGenerator();
 
-        gen.addProvider(new ArsProviders.ImbuementProvider(gen));
-        gen.addProvider(new ArsProviders.GlyphProvider(gen));
-        gen.addProvider(new ArsProviders.EnchantingAppProvider(gen));
+        gen.addProvider(event.includeServer(), new ArsProviders.ImbuementProvider(gen));
+        gen.addProvider(event.includeServer(), new ArsProviders.GlyphProvider(gen));
+        gen.addProvider(event.includeServer(), new ArsProviders.EnchantingAppProvider(gen));
 
-        gen.addProvider(new ArsProviders.PatchouliProvider(gen));
+        gen.addProvider(event.includeServer(), new ArsProviders.PatchouliProvider(gen));
     }
 
 }
