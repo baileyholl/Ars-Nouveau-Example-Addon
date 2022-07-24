@@ -1,7 +1,6 @@
 package com.example.an_addon;
 
 import com.example.an_addon.registry.ModRegistry;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -28,10 +27,6 @@ public class ExampleANAddon
         modbus.addListener(this::setup);
         modbus.addListener(this::doClientStuff);
         MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    public static ResourceLocation prefix(String path){
-        return new ResourceLocation(MODID, path);
     }
 
     private void setup(final FMLCommonSetupEvent event)

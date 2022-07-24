@@ -1,23 +1,24 @@
 package com.example.an_addon.glyphs;
 
-import com.hollingsworth.arsnouveau.api.spell.*;
+import com.hollingsworth.arsnouveau.api.spell.AbstractAugment;
+import com.hollingsworth.arsnouveau.api.spell.AbstractEffect;
+import com.hollingsworth.arsnouveau.api.spell.SpellContext;
+import com.hollingsworth.arsnouveau.api.spell.SpellStats;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Set;
 
-import static com.example.an_addon.ExampleANAddon.prefix;
-
 public class TestEffect extends AbstractEffect {
 
-    public static TestEffect INSTANCE = new TestEffect(prefix("glyph_test"), "Test");
+    public static TestEffect INSTANCE = new TestEffect("test", "Test");
 
-    public TestEffect(ResourceLocation tag, String description) {
+    public TestEffect(String tag, String description) {
         super(tag, description);
     }
 
@@ -27,8 +28,8 @@ public class TestEffect extends AbstractEffect {
     }
 
     @Override
-    public void onResolve(HitResult rayTraceResult, Level world, @Nonnull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
-        super.onResolve(rayTraceResult, world, shooter, spellStats, spellContext, resolver);
+    public void onResolve(HitResult rayTraceResult, Level world, @Nullable LivingEntity shooter, SpellStats spellStats, SpellContext spellContext) {
+        super.onResolve(rayTraceResult, world, shooter, spellStats, spellContext);
 
         System.out.println("Hello from my resolve!");
     }

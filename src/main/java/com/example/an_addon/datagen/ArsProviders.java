@@ -6,8 +6,6 @@ import com.example.an_addon.glyphs.TestEffect;
 import com.hollingsworth.arsnouveau.api.enchanting_apparatus.EnchantingApparatusRecipe;
 import com.hollingsworth.arsnouveau.api.familiar.AbstractFamiliarHolder;
 import com.hollingsworth.arsnouveau.api.ritual.AbstractRitual;
-import com.hollingsworth.arsnouveau.api.spell.AbstractCastMethod;
-import com.hollingsworth.arsnouveau.api.spell.AbstractEffect;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
 import com.hollingsworth.arsnouveau.common.crafting.recipes.GlyphRecipe;
 import com.hollingsworth.arsnouveau.common.crafting.recipes.ImbuementRecipe;
@@ -15,11 +13,10 @@ import com.hollingsworth.arsnouveau.common.datagen.ApparatusRecipeProvider;
 import com.hollingsworth.arsnouveau.common.datagen.GlyphRecipeProvider;
 import com.hollingsworth.arsnouveau.common.datagen.ImbuementRecipeProvider;
 import com.hollingsworth.arsnouveau.common.datagen.patchouli.*;
-import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.HashCache;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
@@ -27,11 +24,7 @@ import net.minecraft.world.level.ItemLike;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import static com.hollingsworth.arsnouveau.api.RegistryHelper.getRegistryName;
-
 public class ArsProviders {
-
-    static String root = ExampleANAddon.MODID;
 
     public static class GlyphProvider extends GlyphRecipeProvider {
 
@@ -40,7 +33,7 @@ public class ArsProviders {
         }
 
         @Override
-        public void run(CachedOutput cache) throws IOException {
+        public void run(HashCache cache) throws IOException {
 
             Path output = this.generator.getOutputFolder();
 
@@ -48,12 +41,9 @@ public class ArsProviders {
 
             for (GlyphRecipe recipe : recipes) {
                 Path path = getScribeGlyphPath(output, recipe.output.getItem());
-                DataProvider.saveStable(cache, recipe.asRecipe(), path);
+                DataProvider.save(GSON, cache, recipe.asRecipe(), path);
             }
 
-        }
-        protected static Path getScribeGlyphPath(Path pathIn, Item glyph) {
-            return pathIn.resolve("data/" + root + "/recipes/" + getRegistryName(glyph).getPath() + ".json");
         }
 
         @Override
@@ -69,14 +59,13 @@ public class ArsProviders {
         }
 
         @Override
-        public void run(CachedOutput cache) throws IOException {
+        public void run(HashCache cache) throws IOException {
             //example of an apparatus recipe
             /*
             recipes.add(builder()
                     .withReagent(ItemsRegistry.SOURCE_GEM)
                     .withPedestalItem(4, Recipes.SOURCE_GEM)
                     .withResult(ItemsRegistry.BUCKET_OF_SOURCE)
-                    .withSource(100)
                     .build()
             );
              */
@@ -85,7 +74,7 @@ public class ArsProviders {
             for (EnchantingApparatusRecipe g : recipes){
                 if (g != null){
                     Path path = getRecipePath(output, g.getId().getPath());
-                    DataProvider.saveStable(cache, g.asRecipe(), path);
+                    DataProvider.save(GSON, cache, g.asRecipe(), path);
                 }
             }
 
@@ -108,7 +97,7 @@ public class ArsProviders {
         }
 
         @Override
-        public void run(CachedOutput cache) throws IOException {
+        public void run(HashCache cache) throws IOException {
 
             /*
             recipes.add(new ImbuementRecipe("example_focus", Ingredient.of(Items.AMETHYST_SHARD), new ItemStack(ItemsRegistry.SUMMONING_FOCUS, 1), 5000)
@@ -119,7 +108,7 @@ public class ArsProviders {
             Path output = generator.getOutputFolder();
             for(ImbuementRecipe g : recipes){
                 Path path = getRecipePath(output, g.getId().getPath());
-                DataProvider.saveStable(cache, g.asRecipe(), path);
+                DataProvider.save(GSON, cache, g.asRecipe(), path);
             }
 
         }
@@ -135,6 +124,7 @@ public class ArsProviders {
 
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static class PatchouliProvider extends com.hollingsworth.arsnouveau.common.datagen.PatchouliProvider {
 
         public PatchouliProvider(DataGenerator generatorIn) {
@@ -142,7 +132,7 @@ public class ArsProviders {
         }
 
         @Override
-        public void run(CachedOutput cache) throws IOException {
+        public void run(HashCache cache) throws IOException {
 
             for (AbstractSpellPart spell : ArsNouveauRegistry.registeredSpells) {
                 addGlyphPage(spell);
@@ -151,7 +141,7 @@ public class ArsProviders {
             //check the superclass for examples
 
             for (PatchouliPage patchouliPage : pages) {
-                DataProvider.saveStable(cache, patchouliPage.build(), patchouliPage.path());
+                DataProvider.save(GSON, cache, patchouliPage.build(), patchouliPage.path());
             }
 
         }
@@ -160,52 +150,37 @@ public class ArsProviders {
         public void addBasicItem(ItemLike item, ResourceLocation category, IPatchouliPage recipePage){
             PatchouliBuilder builder = new PatchouliBuilder(category, item.asItem().getDescriptionId())
                     .withIcon(item.asItem())
-                    .withPage(new TextPage(root + ".page." + getRegistryName(item.asItem()).getPath()))
+                    .withPage(new TextPage(root + ".page." + item.asItem().getRegistryName().getPath()))
                     .withPage(recipePage);
-            this.pages.add(new PatchouliPage(builder, getPath(category, getRegistryName(item.asItem()).getPath())));
+            this.pages.add(new PatchouliPage(builder, getPath(category, item.asItem().getRegistryName().getPath())));
         }
 
         public void addFamiliarPage(AbstractFamiliarHolder familiarHolder) {
-            PatchouliBuilder builder = new PatchouliBuilder(FAMILIARS, "entity." + root + "." + familiarHolder.getRegistryName().getPath())
-                    .withIcon(root + ":" + familiarHolder.getRegistryName().getPath())
-                    .withTextPage(root + ".familiar_desc." + familiarHolder.getRegistryName().getPath())
-                    .withPage(new EntityPage(familiarHolder.getRegistryName().toString()));
-            this.pages.add(new PatchouliPage(builder, getPath(FAMILIARS, familiarHolder.getRegistryName().getPath())));
+            PatchouliBuilder builder = new PatchouliBuilder(FAMILIARS, "entity."+ root + "." + familiarHolder.getId() + "_familiar")
+                    .withIcon("ars_nouveau:familiar_" + familiarHolder.getId())
+                    .withTextPage("ars_nouveau.familiar_desc." + familiarHolder.getId())
+                    .withPage(new EntityPage(prefix(familiarHolder.getEntityKey() + "_familiar").toString()));
+            this.pages.add(new PatchouliPage(builder, getPath(FAMILIARS, familiarHolder.getId())));
         }
 
         public void addRitualPage(AbstractRitual ritual) {
-            PatchouliBuilder builder = new PatchouliBuilder(RITUALS, "item.ars_elemental." + ritual.getRegistryName().getPath())
-                    .withIcon(ritual.getRegistryName().toString())
-                    .withTextPage(ritual.getDescriptionKey())
-                    .withPage(new CraftingPage("ars_elemental:tablet_" + ritual.getRegistryName().getPath()));
+            PatchouliBuilder builder = new PatchouliBuilder(RITUALS, "item.ars_nouveau.ritual_" + ritual.getID())
+                    .withIcon("ars_nouveau:ritual_" + ritual.getID())
+                    .withTextPage("ars_nouveau.ritual_desc." + ritual.getID())
+                    .withPage(new CraftingPage(root + ":ritual_" + ritual.getID()));
 
-            this.pages.add(new PatchouliPage(builder, getPath(RITUALS, ritual.getRegistryName().getPath())));
+            this.pages.add(new PatchouliPage(builder, getPath(RITUALS, ritual.getID())));
         }
 
         public void addEnchantmentPage(Enchantment enchantment) {
             PatchouliBuilder builder = new PatchouliBuilder(ENCHANTMENTS, enchantment.getDescriptionId())
-                    .withIcon(getRegistryName(Items.ENCHANTED_BOOK).toString())
-                    .withTextPage(root + ".enchantment_desc." + getRegistryName(enchantment).getPath());
+                    .withIcon(Items.ENCHANTED_BOOK.getRegistryName().toString())
+                    .withTextPage(root + ".enchantment_desc." + enchantment.getRegistryName().getPath());
 
             for (int i = enchantment.getMinLevel(); i <= enchantment.getMaxLevel(); i++) {
-                builder.withPage(new EnchantingPage("ars_nouveau:" + getRegistryName(enchantment).getPath() + "_" + i));
+                builder.withPage(new EnchantingPage("ars_nouveau:" + enchantment.getRegistryName().getPath() + "_" + i));
             }
-            this.pages.add(new PatchouliPage(builder, getPath(ENCHANTMENTS, getRegistryName(enchantment).getPath())));
-        }
-
-        public void addGlyphPage(AbstractSpellPart spellPart) {
-            ResourceLocation category = switch (spellPart.getTier().value) {
-                case 1 -> GLYPHS_1;
-                case 2 -> GLYPHS_2;
-                default -> GLYPHS_3;
-            };
-            PatchouliBuilder builder = new PatchouliBuilder(category, spellPart.getName())
-                    .withName(root + ".glyph_name." + spellPart.getRegistryName().getPath())
-                    .withIcon(spellPart.getRegistryName().toString())
-                    .withSortNum(spellPart instanceof AbstractCastMethod ? 1 : spellPart instanceof AbstractEffect ? 2 : 3)
-                    .withPage(new TextPage(root + ".glyph_desc." + spellPart.getRegistryName().getPath()))
-                    .withPage(new GlyphScribePage(spellPart));
-            this.pages.add(new PatchouliPage(builder, getPath(category, spellPart.getRegistryName().getPath())));
+            this.pages.add(new PatchouliPage(builder, getPath(ENCHANTMENTS, enchantment.getRegistryName().getPath())));
         }
 
         /**
@@ -222,9 +197,14 @@ public class ArsProviders {
         }
 
         ImbuementPage ImbuementPage(ItemLike item){
-            return new ImbuementPage(root + ":imbuement_" + getRegistryName(item.asItem()).getPath());
+            return new ImbuementPage(root + ":imbuement_" + item.asItem().getRegistryName().getPath());
         }
 
+    }
+
+    static String root = ExampleANAddon.MODID;
+    static ResourceLocation prefix(String path){
+        return new ResourceLocation(ExampleANAddon.MODID, path);
     }
 
 }

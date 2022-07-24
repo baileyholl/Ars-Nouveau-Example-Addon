@@ -1,7 +1,6 @@
 {
   "type": "ars_nouveau:glyph",
   "count": 1,
-  "exp": 27,
   "inputItems": [
     {
       "item": {
@@ -9,5 +8,6 @@
       }
     }
   ],
-  "output": "an_addon:glyph_test"
+  "exp": 27,
+  "output": "ars_nouveau:glyph_test"
 }
