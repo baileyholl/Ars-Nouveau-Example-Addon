@@ -35,14 +35,7 @@ archivesBaseName = 'an_addon'
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 minecraft {
 
-
-    // The mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   Snapshot are built nightly.
-    // stable_#            Stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not always work.
-    // Simply re-run your setup task after changing the mappings to update your workspace.
-
-    mappings channel: 'parchment', version: '1.18.2-2022.08.07-1.19.2'
+    mappings channel: 'parchment', version: '2022.08.14-1.19.2'
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -138,21 +131,19 @@ repositories {
 }
 dependencies {
 
-    minecraft "net.minecraftforge:forge:${mc_version}.2-${forge_version}"
+    minecraft "net.minecraftforge:forge:1.19.2-${forge_version}"
 
-    implementation fg.deobf("com.hollingsworth.ars_nouveau:ars_nouveau-${mc_version}.1:${ars_version}")
-    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${gecko_version}")
-    //compile only with the api package
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}.1-common-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}.1-forge-api:${jei_version}")
+    implementation fg.deobf("com.hollingsworth.ars_nouveau:ars_nouveau-1.19.1:${ars_version}")
+
+    implementation fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
+    compileOnly fg.deobf("mezz.jei:jei-1.19.2-common-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-1.19.2-forge-api:${jei_version}")
     // at runtime, use the full JEI
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}.1-common:${jei_version}")
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}.1-forge:${jei_version}")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.19.2-common:${jei_version}")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.19.2-forge:${jei_version}")
 
-    implementation fg.deobf("top.theillusivec4.curios:curios-forge:${mc_version}.2-${curio_version}")
-    implementation fg.deobf("vazkii.patchouli:Patchouli:${mc_version}-75")
-
-    //runtimeOnly fg.deobf("curse.maven:elemental-561470:3900441")
+    implementation fg.deobf("top.theillusivec4.curios:curios-forge:${mc_version}-${curios_version}")
+    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${gecko_version}")
 
     implementation fg.deobf("com.github.glitchfiend:TerraBlender-forge:${mc_version}-2.0.0.120")
 
