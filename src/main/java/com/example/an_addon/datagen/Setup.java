@@ -2,9 +2,9 @@ package com.example.an_addon.datagen;
 
 import com.example.an_addon.ExampleANAddon;
 import net.minecraft.data.DataGenerator;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 @Mod.EventBusSubscriber(modid = ExampleANAddon.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Setup {
