@@ -125,7 +125,6 @@ repositories {
             includeGroup "curse.maven"
         }
     }
-    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
     mavenCentral()
     mavenLocal()
 }
@@ -133,7 +132,7 @@ dependencies {
 
     minecraft "net.minecraftforge:forge:1.19.2-${forge_version}"
 
-    implementation fg.deobf("com.hollingsworth.ars_nouveau:ars_nouveau-1.19.1:${ars_version}")
+    implementation fg.deobf("com.hollingsworth.ars_nouveau:ars_nouveau-1.19.2:${ars_version}")
 
     implementation fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
     compileOnly fg.deobf("mezz.jei:jei-1.19.2-common-api:${jei_version}")
@@ -143,7 +142,6 @@ dependencies {
     runtimeOnly fg.deobf("mezz.jei:jei-1.19.2-forge:${jei_version}")
 
     implementation fg.deobf("top.theillusivec4.curios:curios-forge:${mc_version}-${curios_version}")
-    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${gecko_version}")
 
     implementation fg.deobf("com.github.glitchfiend:TerraBlender-forge:${mc_version}-2.0.0.120")
 
