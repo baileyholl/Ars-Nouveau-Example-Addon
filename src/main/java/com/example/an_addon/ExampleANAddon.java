@@ -36,7 +36,7 @@ public class ExampleANAddon
 
     private void setup(final FMLCommonSetupEvent event)
     {
-
+        ArsNouveauRegistry.registerSounds();
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {

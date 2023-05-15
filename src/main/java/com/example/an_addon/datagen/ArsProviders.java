@@ -157,12 +157,14 @@ public class ArsProviders {
         }
 
         @Override
-        public void addBasicItem(ItemLike item, ResourceLocation category, IPatchouliPage recipePage){
+        public PatchouliPage addBasicItem(ItemLike item, ResourceLocation category, IPatchouliPage recipePage){
             PatchouliBuilder builder = new PatchouliBuilder(category, item.asItem().getDescriptionId())
                     .withIcon(item.asItem())
                     .withPage(new TextPage(root + ".page." + getRegistryName(item.asItem()).getPath()))
                     .withPage(recipePage);
-            this.pages.add(new PatchouliPage(builder, getPath(category, getRegistryName(item.asItem()).getPath())));
+            var page = new PatchouliPage(builder, getPath(category, getRegistryName(item.asItem()).getPath()));
+            this.pages.add(page);
+            return page;
         }
 
         public void addFamiliarPage(AbstractFamiliarHolder familiarHolder) {
@@ -174,10 +176,10 @@ public class ArsProviders {
         }
 
         public void addRitualPage(AbstractRitual ritual) {
-            PatchouliBuilder builder = new PatchouliBuilder(RITUALS, "item.ars_elemental." + ritual.getRegistryName().getPath())
+            PatchouliBuilder builder = new PatchouliBuilder(RITUALS, "item." + root + '.' + ritual.getRegistryName().getPath())
                     .withIcon(ritual.getRegistryName().toString())
                     .withTextPage(ritual.getDescriptionKey())
-                    .withPage(new CraftingPage("ars_elemental:tablet_" + ritual.getRegistryName().getPath()));
+                    .withPage(new CraftingPage(root + ":tablet_" + ritual.getRegistryName().getPath()));
 
             this.pages.add(new PatchouliPage(builder, getPath(RITUALS, ritual.getRegistryName().getPath())));
         }
@@ -194,7 +196,7 @@ public class ArsProviders {
         }
 
         public void addGlyphPage(AbstractSpellPart spellPart) {
-            ResourceLocation category = switch (spellPart.getTier().value) {
+            ResourceLocation category = switch (spellPart.defaultTier().value) {
                 case 1 -> GLYPHS_1;
                 case 2 -> GLYPHS_2;
                 default -> GLYPHS_3;
