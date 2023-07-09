@@ -1,7 +1,6 @@
 package com.example.an_addon.registry;
 
 import com.example.an_addon.item.ExampleCosmetic;
-import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.hollingsworth.arsnouveau.api.sound.SpellSound;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -36,11 +35,11 @@ public class ModRegistry {
 
 
     static {
-        EXAMPLE = ITEMS.register("star_hat", () -> new ExampleCosmetic(new Item.Properties().tab(ArsNouveau.itemGroup)));
+        EXAMPLE = ITEMS.register("star_hat", () -> new ExampleCosmetic(new Item.Properties()));
     }
 
     static SoundEvent makeSound(String name) {
-        return new SoundEvent(new ResourceLocation(MODID, name));
+        return SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, name));
     }
 
 }

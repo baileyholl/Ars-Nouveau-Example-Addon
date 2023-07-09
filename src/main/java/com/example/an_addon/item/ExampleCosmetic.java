@@ -5,13 +5,14 @@ import com.hollingsworth.arsnouveau.api.item.ICosmeticItem;
 import com.hollingsworth.arsnouveau.common.entity.Starbuncle;
 import com.hollingsworth.arsnouveau.common.entity.familiar.FamiliarStarbuncle;
 import com.hollingsworth.arsnouveau.common.items.ModItem;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class ExampleCosmetic extends ModItem implements ICosmeticItem {
 
@@ -20,7 +21,7 @@ public class ExampleCosmetic extends ModItem implements ICosmeticItem {
     }
 
     @Override
-    public InteractionResult interactLivingEntity(ItemStack pStack, Player pPlayer, LivingEntity entity, InteractionHand pUsedHand) {
+    public @NotNull InteractionResult interactLivingEntity(@NotNull ItemStack pStack, @NotNull Player pPlayer, @NotNull LivingEntity entity, @NotNull InteractionHand pUsedHand) {
         if(entity instanceof IDecoratable starbuncle ){ //&& canWear(entity)
             starbuncle.setCosmeticItem(pStack.split(1));
             return InteractionResult.SUCCESS;
@@ -34,8 +35,8 @@ public class ExampleCosmetic extends ModItem implements ICosmeticItem {
     }
 
     @Override
-    public ItemTransforms.TransformType getTransformType() {
-        return ItemTransforms.TransformType.HEAD;
+    public ItemDisplayContext getTransformType() {
+        return ItemDisplayContext.HEAD;
     }
 
     @Override
