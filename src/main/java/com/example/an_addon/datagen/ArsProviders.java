@@ -24,10 +24,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
 
-import java.io.IOException;
 import java.nio.file.Path;
 
-import static com.hollingsworth.arsnouveau.api.RegistryHelper.getRegistryName;
+import static com.hollingsworth.arsnouveau.setup.registry.RegistryHelper.getRegistryName;
 
 public class ArsProviders {
 
@@ -40,15 +39,15 @@ public class ArsProviders {
         }
 
         @Override
-        public void run(CachedOutput cache) throws IOException {
+        public void collectJsons(CachedOutput cache) {
 
-            Path output = this.generator.getOutputFolder();
+            Path output = this.generator.getPackOutput().getOutputFolder();
 
             recipes.add(get(TestEffect.INSTANCE).withItem(Items.DIRT));
 
             for (GlyphRecipe recipe : recipes) {
                 Path path = getScribeGlyphPath(output, recipe.output.getItem());
-                DataProvider.saveStable(cache, recipe.asRecipe(), path);
+                saveStable(cache, recipe.asRecipe(), path);
             }
 
         }
@@ -69,7 +68,7 @@ public class ArsProviders {
         }
 
         @Override
-        public void run(CachedOutput cache) throws IOException {
+        public void collectJsons(CachedOutput cache) {
             //example of an apparatus recipe
             /*
             recipes.add(builder()
@@ -81,11 +80,11 @@ public class ArsProviders {
             );
              */
 
-            Path output = this.generator.getOutputFolder();
+            Path output = this.generator.getPackOutput().getOutputFolder();
             for (EnchantingApparatusRecipe g : recipes){
                 if (g != null){
                     Path path = getRecipePath(output, g.getId().getPath());
-                    DataProvider.saveStable(cache, g.asRecipe(), path);
+                    saveStable(cache, g.asRecipe(), path);
                 }
             }
 
@@ -108,7 +107,7 @@ public class ArsProviders {
         }
 
         @Override
-        public void run(CachedOutput cache) throws IOException {
+        public void collectJsons(CachedOutput cache) {
 
             /*
             recipes.add(new ImbuementRecipe("example_focus", Ingredient.of(Items.AMETHYST_SHARD), new ItemStack(ItemsRegistry.SUMMONING_FOCUS, 1), 5000)
@@ -116,10 +115,10 @@ public class ArsProviders {
             );
             */
 
-            Path output = generator.getOutputFolder();
+            Path output = generator.getPackOutput().getOutputFolder();
             for(ImbuementRecipe g : recipes){
                 Path path = getRecipePath(output, g.getId().getPath());
-                DataProvider.saveStable(cache, g.asRecipe(), path);
+                saveStable(cache, g.asRecipe(), path);
             }
 
         }
@@ -142,7 +141,7 @@ public class ArsProviders {
         }
 
         @Override
-        public void run(CachedOutput cache) throws IOException {
+        public void collectJsons(CachedOutput cache) {
 
             for (AbstractSpellPart spell : ArsNouveauRegistry.registeredSpells) {
                 addGlyphPage(spell);
@@ -220,7 +219,7 @@ public class ArsProviders {
 
         @Override
         public Path getPath(ResourceLocation category, String fileName) {
-            return this.generator.getOutputFolder().resolve("data/"+ root +"/patchouli_books/example/en_us/entries/" + category.getPath() + "/" + fileName + ".json");
+            return this.generator.getPackOutput().getOutputFolder().resolve("data/"+ root +"/patchouli_books/example/en_us/entries/" + category.getPath() + "/" + fileName + ".json");
         }
 
         ImbuementPage ImbuementPage(ItemLike item){
