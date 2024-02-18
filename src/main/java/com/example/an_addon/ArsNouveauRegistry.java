@@ -6,6 +6,7 @@ import com.hollingsworth.arsnouveau.api.registry.SpellSoundRegistry;
 import com.hollingsworth.arsnouveau.api.sound.SpellSound;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
 import com.hollingsworth.arsnouveau.setup.registry.APIRegistry;
+
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
@@ -25,5 +26,4 @@ public class ArsNouveauRegistry {
         APIRegistry.registerSpell(spellPart);
         registeredSpells.add(spellPart);
     }
-
 }

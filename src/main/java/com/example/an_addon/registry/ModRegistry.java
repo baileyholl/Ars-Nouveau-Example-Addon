@@ -41,5 +41,4 @@ public class ModRegistry {
     static SoundEvent makeSound(String name) {
         return SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, name));
     }
-
 }
