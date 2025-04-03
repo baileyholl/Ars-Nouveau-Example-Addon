@@ -11,8 +11,8 @@ import java.util.Set;
 
 public class RandomCancel extends AbstractEffect {
     public static final RandomCancel QUARTER = new RandomCancel("quarter_cancel", "cancels the spell 1/4th of the time", 0.25f);
-    public static final RandomCancel HALF = new RandomCancel("half_cancel", "cancels the spell 1/4th of the time", 0.25f);
-    public static final RandomCancel THREE_FOURTHS = new RandomCancel("three_fourths_cancel", "cancels the spell 1/4th of the time", 0.25f);
+    public static final RandomCancel HALF = new RandomCancel("half_cancel", "cancels the spell 1/4th of the time", 0.5f);
+    public static final RandomCancel THREE_FOURTHS = new RandomCancel("three_fourths_cancel", "cancels the spell 1/4th of the time", 0.75f);
 
     float odd; // odd to cancle the cast
     public RandomCancel(String tag, String description, float odd) {
