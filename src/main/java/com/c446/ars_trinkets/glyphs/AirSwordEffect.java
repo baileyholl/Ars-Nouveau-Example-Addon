@@ -1,6 +1,6 @@
-package com.example.an_addon.glyphs;
+package com.c446.ars_trinkets.glyphs;
 
-import com.example.an_addon.ArsTrinkets;
+import com.c446.ars_trinkets.ArsTrinkets;
 import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.api.util.DamageUtil;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;

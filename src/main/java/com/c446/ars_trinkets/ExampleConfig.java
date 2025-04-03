@@ -1,4 +1,4 @@
-package com.example.an_addon;
+package com.c446.ars_trinkets;
 
 
 import net.neoforged.bus.api.SubscribeEvent;

@@ -1,6 +1,6 @@
-package com.example.an_addon.datagen;
+package com.c446.ars_trinkets.datagen;
 
-import com.example.an_addon.ArsTrinkets;
+import com.c446.ars_trinkets.ArsTrinkets;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -28,7 +28,7 @@ public class Setup {
         gen.addProvider(event.includeServer(), new ArsProviders.GlyphProvider(gen));
         gen.addProvider(event.includeServer(), new ArsProviders.EnchantingAppProvider(gen));
 
-        gen.addProvider(event.includeServer(), new ArsProviders.PatchouliProvider(gen));
+        //gen.addProvider(event.includeServer(), new ArsProviders.PatchouliProvider(gen));
     }
 
 }

@@ -1,12 +1,12 @@
-package com.example.an_addon;
+package com.c446.ars_trinkets;
 
-import com.example.an_addon.glyphs.TestEffect;
-import com.example.an_addon.registry.ModRegistry;
+import com.c446.ars_trinkets.glyphs.AirSwordEffect;
+import com.c446.ars_trinkets.glyphs.TestEffect;
+import com.c446.ars_trinkets.glyphs.filters.RandomCancel;
+import com.c446.ars_trinkets.registry.ModRegistry;
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
 import com.hollingsworth.arsnouveau.api.registry.SpellSoundRegistry;
-import com.hollingsworth.arsnouveau.api.sound.SpellSound;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
-import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,10 @@ public class ArsNouveauRegistry {
     public static List<AbstractSpellPart> registeredSpells = new ArrayList<>(); //this will come handy for datagen
 
     public static void registerGlyphs(){
-        register(TestEffect.INSTANCE);
+        register(AirSwordEffect.instance);
+        register(RandomCancel.HALF);
+        register(RandomCancel.QUARTER);
+        register(RandomCancel.THREE_FOURTHS);
     }
     public static void registerSounds(){
         SpellSoundRegistry.registerSpellSound(ModRegistry.EXAMPLE_SPELL_SOUND);

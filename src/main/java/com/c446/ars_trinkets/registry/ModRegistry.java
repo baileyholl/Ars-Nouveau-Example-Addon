@@ -1,17 +1,16 @@
-package com.example.an_addon.registry;
+package com.c446.ars_trinkets.registry;
 
 import com.hollingsworth.arsnouveau.api.sound.SpellSound;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.an_addon.ArsTrinkets.MODID;
-import static com.example.an_addon.ArsTrinkets.prefix;
+import static com.c446.ars_trinkets.ArsTrinkets.MODID;
+import static com.c446.ars_trinkets.ArsTrinkets.prefix;
 import static net.minecraft.core.registries.Registries.SOUND_EVENT;
 
 public class ModRegistry {

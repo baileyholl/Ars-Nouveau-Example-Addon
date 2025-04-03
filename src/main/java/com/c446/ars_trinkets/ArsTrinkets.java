@@ -1,6 +1,6 @@
-package com.example.an_addon;
+package com.c446.ars_trinkets;
 
-import com.example.an_addon.registry.ModRegistry;
+import com.c446.ars_trinkets.registry.ModRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
