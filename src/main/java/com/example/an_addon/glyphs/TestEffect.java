@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
 
 import java.util.Set;
 
-import static com.example.an_addon.ExampleANAddon.prefix;
+import static com.example.an_addon.ArsTrinkets.prefix;
 
 public class TestEffect extends AbstractEffect {
 

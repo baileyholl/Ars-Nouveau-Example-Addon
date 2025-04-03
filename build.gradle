@@ -1,214 +1,203 @@
-//file:noinspection GroovyAssignabilityCheck
 plugins {
     id 'java-library'
-    id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0+'
+    id 'net.neoforged.gradle.userdev' version '7.0.145'
 }
-
-
+group = mod_group_id
+version = mod_version
 base {
-    version = mod_version
-    group = 'com.c446.ars_trinkets' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-    archivesName = mod_id + '-' + minecraft_version
+    archivesName = mod_id
 }
-
-if (System.getenv('BUILD_NUMBER') != null) {
-    version += "." + System.getenv('BUILD_NUMBER')
-}
-
-// Mojang ships Java 21 to end users in 1.21+
+// Mojang ships Java 21 to end users starting in 1.20.5, so mods should target Java 21.
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
-java.withSourcesJar()
-
-tasks.named('wrapper', Wrapper).configure {
-    // Define wrapper values here so as to not have to always do so when updating gradlew.properties.
-    // Switching this to Wrapper.DistributionType.ALL will download the full gradle sources that comes with
-    // documentation attached on cursor hover of gradle classes and methods. However, this comes with increased
-    // file size for Gradle. If you do switch this to ALL, run the Gradle wrapper task twice afterwards.
-    // (Verify by checking gradle/wrapper/gradle-wrapper.properties to see if distributionUrl now points to `-all`)
-    distributionType = Wrapper.DistributionType.BIN
-}
-
-neoForge {
-    // Specify the version of NeoForge to use.
-    version = project.neo_version
-
-    parchment {
-        mappingsVersion = project.parchment_version
-        minecraftVersion = "1.21.1"
-    }
 
 
-    runs {
-        client {
-            client()
+println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-        }
-
-        server {
-            server()
-            programArgument '--nogui'
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-        }
-
-        // This run config launches GameTestServer and runs all registered gametests, then exits.
-        // By default, the server will crash when no gametests are provided.
-        // The gametest system is also enabled by default for other run configs under the /test command.
-        gameTestServer {
-            type = "gameTestServer"
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-        }
-
-        data {
-            data()
-
-            // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
-            // gameDirectory = project.file('run-data')
-
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
-        }
-
-        // applies to all the run configs above
-        configureEach {
-            // Recommended logging data for a userdev environment
-            // The markers can be added/remove as needed separated by commas.
-            // "SCAN": For mods scan.
-            // "REGISTRIES": For firing of registry events.
-            // "REGISTRYDUMP": For getting the contents of all registries.
-            systemProperty 'forge.logging.markers', 'REGISTRIES'
-
-            // Recommended logging level for the console
-            // You can set various levels here.
-            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-            logLevel = org.slf4j.event.Level.DEBUG
-        }
-    }
-
-    mods {
-        // define mod <-> source bindings
-        // these are used to tell the game which sources are for which mod
-        // mostly optional in a single mod project
-        // but multi mod projects should define one per mod
-        "${mod_id}" {
-            sourceSet(sourceSets.main)
-        }
+minecraft {
+    accessTransformers {
+        file('src/main/resources/META-INF/accesstransformer.cfg')
     }
 }
+
+
+runs {
+    configureEach {
+        systemProperty 'forge.logging.markers', 'REGISTRIES'
+        systemProperty 'forge.logging.console.level', 'debug'
+        modSource project.sourceSets.main
+    }
+
+    client {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+    }
+
+    server {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+        programArgument '--nogui'
+    }
+
+    gameTestServer {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+    }
+
+    data {
+        programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+    }
+}
+
+// Include resources generated by data generators.
+sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 configurations {
     runtimeClasspath.extendsFrom localRuntime
 }
 
-//minecraft.accessTransformers.files(
-//       file('src/main/resources/META-INF/accesstransformer.cfg')
-//)
-
-sourceSets.main.resources { srcDir "src/generated/resources" }
-
 repositories {
-    mavenCentral()
     flatDir {
-        dirs 'externalmods'
+        dir 'libs'
     }
 
-    mavenLocal()
+    maven { url = "https://maven.enginehub.org/repo/" }
     maven {
-        name = 'GeckoLib'
-        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        url = "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/"
         content {
             includeGroup("software.bernie.geckolib")
         }
     }
-    exclusiveContent {
-        forRepository {
-            maven {
-                url "https://cursemaven.com"
-            }
-        }
-        filter {
-            includeGroup "curse.maven"
-        }
-    }
-    maven {
-        name = "Illusive Soulworks maven"
-        url = "https://maven.theillusivec4.top/"
-    }
-    maven {
-        name = "Jared's maven"
-        url = "https://maven.blamejared.com/"
-    }
-    maven {
-        name = 'Forge'
-        url = "https://maven.minecraftforge.net"
-    }
-    maven {
-        name = "OctoStudios"
-        url = uri("https://maven.octo-studios.com/releases")
-    }
-    maven { url 'https://jitpack.io' }
 
+    maven { url = "https://maven.theillusivec4.top" }
+    maven { url = "https://cursemaven.com" }
+    maven { url = "https://maven.blamejared.com" }
+    maven { url = "https://maven.kosmx.dev/" }
+    maven { url = "https://code.redspace.io/releases" }
+    maven {
+        url = uri("https://jitpack.io")
+        content {
+            includeGroup("com.github.IGN-Styly")
+            includeGroup("com.github.Ironbound-Studios")
+        }
+    }
+    maven { url = 'https://maven.azuredoom.com/mods'}
+    maven {
+        // saps.dev Maven (KubeJS and Rhino)
+        url = uri("https://maven.saps.dev/releases")
+        content {
+            includeGroup("dev.latvian.mods")
+            includeGroup("dev.latvian.apps")
+        }
+    }
+    maven {
+        setUrl("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
+        content {
+            includeGroup("software.bernie.geckolib")
+        }
+    }
 }
 
-dependencies {
+jarJar.enable()
 
+
+dependencies {
     implementation("com.hollingsworth.ars_nouveau:ars_nouveau-${minecraft_version}:${ars_version}")
 
     // only need the compileOnly, the runtime dependency is handled by Ars Nouveau
     compileOnly "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
+    compileOnly "vazkii.patchouli:Patchouli:1.21-${patchouli_version}"
     compileOnly 'com.github.glitchfiend:TerraBlender-neoforge:1.21-4.0.0.0'
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
-    compileOnly "com.hollingsworth.nuggets:nuggets-neoforge-1.21:${nuggets_version}"
-    compileOnly "vazkii.patchouli:Patchouli:1.21-${patchouli_version}"
-    //implementation "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
-
-    // cyanide to debug worldgen
-    localRuntime "curse.maven:cyanide-541676:5782674"
-
 }
 
-// Example for how to get properties into the manifest for reading at runtime.
+
+tasks.withType(ProcessResources).configureEach {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            neo_version_range      : neo_version_range,
+            loader_version_range   : loader_version_range,
+            geckolib_version       : geckolib_version,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_version            : version,
+            mod_license            : mod_license,
+            mod_authors            : mod_author,
+            mod_credits            : mod_credits,
+            mod_description        : mod_description,
+            mod_display_url        : "https://discord.gg/BgepPadNRZ",
+            mod_issue_tracker      : "https://discord.gg/BgepPadNRZ",
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/neoforge.mods.toml']) {
+        expand replaceProperties
+    }
+}
+
+
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "ars_trinkets",
-                "Specification-Vendor"    : "c446",
+                "Specification-Title"     : mod_name,
+                "Specification-Vendor"    : mod_author,
                 "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Implementation-Version"  : project.version,
                 "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "c446",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                "Implementation-Vendor"   : mod_author,
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
         ])
     }
+    exclude('**/*.psd')
+    exclude('**/*.bbmodel')
 }
 
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId project.group
-            artifactId project.archivesBaseName
-            version project.version
-            from components.java
-        }
+jar {
+    manifest {
+        attributes([
+                "Specification-Title"     : mod_name,
+                "Specification-Vendor"    : mod_author,
+                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : archiveVersion,
+                "Implementation-Vendor"   : mod_author,
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")//,
+                //"MixinConfigs"            : "mixins.${modId}.json"
+        ])
     }
-    repositories {
-        maven {
-            url "file://" + System.getenv("local_maven")
-        }
-    }
+    exclude('**/*.psd')
+    exclude('**/*.bbmodel')
+}
+
+java {
+    withSourcesJar()
+    //withJavadocJar()
+}
+
+artifacts {
+    archives sourcesJar
 }
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
 
-// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
+tasks.register('copyAnimations', Copy) {
+    from "src/main/resources/assets/${mod_id}/player_animation"
+    include 'casting_animations.json'
+    into "src/main/resources/assets/${mod_id}/animations"
+}
+
+tasks.classes.dependsOn(tasks.copyAnimations)
+tasks.processResources.dependsOn(tasks.copyAnimations)
+tasks.sourcesJar.dependsOn(tasks.copyAnimations)
+
 idea {
     module {
         downloadSources = true

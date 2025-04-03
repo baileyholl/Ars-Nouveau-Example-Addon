@@ -19,7 +19,7 @@ public class ArsNouveauRegistry {
         register(TestEffect.INSTANCE);
     }
     public static void registerSounds(){
-        ModRegistry.EXAMPLE_SPELL_SOUND = SpellSoundRegistry.registerSpellSound(new SpellSound(ModRegistry.EXAMPLE_FAMILY.get(), Component.literal("Example")));
+        SpellSoundRegistry.registerSpellSound(ModRegistry.EXAMPLE_SPELL_SOUND);
     }
     public static void register(AbstractSpellPart spellPart){
         GlyphRegistry.registerSpell(spellPart);

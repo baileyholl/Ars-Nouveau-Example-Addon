@@ -1,18 +1,28 @@
 package com.example.an_addon.datagen;
 
-import com.example.an_addon.ExampleANAddon;
+import com.example.an_addon.ArsTrinkets;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraft.data.PackOutput;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 
-@Mod.EventBusSubscriber(modid = ExampleANAddon.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+import java.util.concurrent.CompletableFuture;
+
+@EventBusSubscriber(modid = ArsTrinkets.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class Setup {
+    public static CompletableFuture<HolderLookup.Provider> provider;
+    public static PackOutput output;
 
     //use runData configuration to generate stuff, event.includeServer() for data, event.includeClient() for assets
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event) {
         DataGenerator gen = event.getGenerator();
+        ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
+        provider = event.getLookupProvider();
+        output = gen.getPackOutput();
 
         gen.addProvider(event.includeServer(), new ArsProviders.ImbuementProvider(gen));
         gen.addProvider(event.includeServer(), new ArsProviders.GlyphProvider(gen));

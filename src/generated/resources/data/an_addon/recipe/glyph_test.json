@@ -1,0 +1,13 @@
+{
+  "type": "ars_nouveau:glyph",
+  "exp": 27,
+  "inputs": [
+    {
+      "item": "minecraft:dirt"
+    }
+  ],
+  "output": {
+    "count": 1,
+    "id": "an_addon:glyph_test"
+  }
+}
