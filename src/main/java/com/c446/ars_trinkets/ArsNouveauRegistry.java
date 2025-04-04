@@ -1,7 +1,9 @@
 package com.c446.ars_trinkets;
 
 import com.c446.ars_trinkets.glyphs.AirSwordEffect;
+import com.c446.ars_trinkets.glyphs.SunFlare;
 import com.c446.ars_trinkets.glyphs.TestEffect;
+import com.c446.ars_trinkets.glyphs.WaterSpear;
 import com.c446.ars_trinkets.glyphs.filters.RandomCancel;
 import com.c446.ars_trinkets.registry.ModRegistry;
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
@@ -17,10 +19,13 @@ public class ArsNouveauRegistry {
 
     public static void registerGlyphs(){
         register(AirSwordEffect.instance);
+        register(SunFlare.INSTANCE);
+        register(WaterSpear.INSTANCE);
         register(RandomCancel.HALF);
         register(RandomCancel.QUARTER);
         register(RandomCancel.THREE_FOURTHS);
     }
+
     public static void registerSounds(){
         SpellSoundRegistry.registerSpellSound(ModRegistry.EXAMPLE_SPELL_SOUND);
     }

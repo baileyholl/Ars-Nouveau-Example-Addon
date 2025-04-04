@@ -70,10 +70,6 @@ runs {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-minecraft.accessTransformers.files(
-        file('src/main/resources/META-INF/accesstransformer.cfg')
-)
-
 repositories {
     mavenCentral()
     mavenLocal()
@@ -202,6 +198,9 @@ jar {
     exclude('**/*.bbmodel')
 }
 
+minecraft.accessTransformers.files(
+        file('src/main/resources/META-INF/accesstransformer.cfg')
+)
 
 publishing {
     publications {

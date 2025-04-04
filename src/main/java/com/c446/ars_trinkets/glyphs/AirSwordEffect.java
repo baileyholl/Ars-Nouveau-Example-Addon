@@ -80,7 +80,7 @@ public class AirSwordEffect extends AbstractEffect implements IDamageEffect {
 
     @Override
     public int getDefaultManaCost() {
-        return 3000;
+        return 1500;
     }
 
     @Override
