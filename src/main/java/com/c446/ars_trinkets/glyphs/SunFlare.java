@@ -1,11 +1,13 @@
 package com.c446.ars_trinkets.glyphs;
 
+import com.c446.ars_trinkets.ArsTrinkets;
 import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.api.util.DamageUtil;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
 import com.hollingsworth.arsnouveau.setup.registry.ModPotions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -22,13 +24,14 @@ import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
 public class SunFlare extends AbstractEffect implements IDamageEffect {
-    public static final SunFlare INSTANCE = new SunFlare("sun_flare", "Sun Flare");
+    public static final SunFlare INSTANCE = new SunFlare(ArsTrinkets.prefix("glyph_sun_flare"), "Sun Flare");
 
-    public SunFlare(String tag, String description) {
+    public SunFlare(ResourceLocation tag, String description) {
         super(tag, description);
     }
 
@@ -99,5 +102,12 @@ public class SunFlare extends AbstractEffect implements IDamageEffect {
     @Override
     protected @NotNull Set<SpellSchool> getSchools() {
         return this.setOf(SpellSchools.ELEMENTAL_FIRE);
+    }
+
+    @Override
+    protected void addDefaultAugmentLimits(Map<ResourceLocation, Integer> defaults) {
+        super.addDefaultAugmentLimits(defaults);
+        defaults.put(AugmentAmplify.INSTANCE.getRegistryName(), 4);
+        defaults.put(AugmentAOE.INSTANCE.getRegistryName(), 4);
     }
 }

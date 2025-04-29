@@ -2,9 +2,9 @@ package com.c446.ars_trinkets;
 
 import com.c446.ars_trinkets.glyphs.AirSwordEffect;
 import com.c446.ars_trinkets.glyphs.SunFlare;
-import com.c446.ars_trinkets.glyphs.TestEffect;
 import com.c446.ars_trinkets.glyphs.WaterSpear;
 import com.c446.ars_trinkets.glyphs.filters.RandomCancel;
+import com.c446.ars_trinkets.glyphs.forms.AuraForm;
 import com.c446.ars_trinkets.registry.ModRegistry;
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
 import com.hollingsworth.arsnouveau.api.registry.SpellSoundRegistry;
@@ -18,12 +18,13 @@ public class ArsNouveauRegistry {
     public static List<AbstractSpellPart> registeredSpells = new ArrayList<>(); //this will come handy for datagen
 
     public static void registerGlyphs(){
-        register(AirSwordEffect.instance);
+        register(AirSwordEffect.INSTANCE);
         register(SunFlare.INSTANCE);
         register(WaterSpear.INSTANCE);
         register(RandomCancel.HALF);
         register(RandomCancel.QUARTER);
         register(RandomCancel.THREE_FOURTHS);
+        register(AuraForm.INSTANCE);
     }
 
     public static void registerSounds(){

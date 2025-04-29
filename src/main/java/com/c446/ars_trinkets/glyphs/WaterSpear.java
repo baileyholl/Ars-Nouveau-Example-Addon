@@ -98,6 +98,4 @@ public class WaterSpear extends AbstractEffect implements IDamageEffect {
         defaults.put(AugmentAmplify.INSTANCE.getRegistryName(), 4);
         defaults.put(AugmentAOE.INSTANCE.getRegistryName(), 4);
     }
-
-
 }

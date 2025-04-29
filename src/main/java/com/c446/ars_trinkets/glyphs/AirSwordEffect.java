@@ -3,7 +3,6 @@ package com.c446.ars_trinkets.glyphs;
 import com.c446.ars_trinkets.ArsTrinkets;
 import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.api.util.DamageUtil;
-import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
 import com.hollingsworth.arsnouveau.setup.registry.DamageTypesRegistry;
 import com.hollingsworth.arsnouveau.setup.registry.ModPotions;
@@ -23,7 +22,7 @@ import java.util.Objects;
 import java.util.Set;
 
 public class AirSwordEffect extends AbstractEffect implements IDamageEffect {
-    public static AirSwordEffect instance = new AirSwordEffect(ArsTrinkets.prefix("air_sword"), "conjures a blade of wind that pierces the enemy, negating invulnerability");
+    public static AirSwordEffect INSTANCE = new AirSwordEffect(ArsTrinkets.prefix("glyph_sword"), "conjures a blade of wind that pierces the enemy, negating invulnerability");
 
     public AirSwordEffect(String tag, String description) {
         super(tag, description);
@@ -90,7 +89,5 @@ public class AirSwordEffect extends AbstractEffect implements IDamageEffect {
     @Override
     public void addDefaultAugmentLimits(Map<ResourceLocation, Integer> defaults) {
         defaults.put(AugmentAmplify.INSTANCE.getRegistryName(),4);
-        defaults.put(AugmentAOE.INSTANCE.getRegistryName(),4);
-
     }
 }

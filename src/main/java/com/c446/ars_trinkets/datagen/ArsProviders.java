@@ -42,7 +42,7 @@ public class ArsProviders {
 
             Path output = this.generator.getPackOutput().getOutputFolder();
 
-            recipes.add(get(AirSwordEffect.instance).withItem(Items.NETHERITE_BLOCK,3).withItem(ItemsRegistry.AIR_ESSENCE, 3));
+            recipes.add(get(AirSwordEffect.INSTANCE).withItem(Items.NETHERITE_BLOCK,3).withItem(ItemsRegistry.AIR_ESSENCE, 3));
             recipes.add(get(RandomCancel.QUARTER).withItem(Items.COMPARATOR));
             recipes.add(get(RandomCancel.HALF).withItem(RandomCancel.QUARTER.glyphItem).withItem(Items.COMPARATOR));
             recipes.add(get(RandomCancel.THREE_FOURTHS).withItem(RandomCancel.HALF.glyphItem).withItem(Items.COMPARATOR));
