@@ -1,0 +1,16 @@
+{
+  "type": "ars_nouveau:glyph",
+  "exp": 27,
+  "inputs": [
+    {
+      "item": "ars_trinkets:glyph_random_50"
+    },
+    {
+      "item": "minecraft:comparator"
+    }
+  ],
+  "output": {
+    "count": 1,
+    "id": "ars_trinkets:glyph_random_75"
+  }
+}
