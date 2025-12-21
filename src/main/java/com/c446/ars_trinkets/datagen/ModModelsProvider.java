@@ -6,6 +6,7 @@ import com.c446.ars_trinkets.glyphs.SunFlare;
 import com.c446.ars_trinkets.glyphs.WaterSpear;
 import com.c446.ars_trinkets.glyphs.filters.RandomCancel;
 import com.c446.ars_trinkets.glyphs.forms.AuraForm;
+import com.c446.ars_trinkets.registry.ItemRegistry;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
@@ -27,6 +28,8 @@ public class ModModelsProvider extends ItemModelProvider {
         return handHeld(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item)));
     }
 
+
+
     public ItemModelBuilder handHeld(ResourceLocation item) {
         return getBuilder(item.toString())
                 .parent(new ModelFile.UncheckedModelFile("item/handheld"))
@@ -42,9 +45,29 @@ public class ModModelsProvider extends ItemModelProvider {
         glyph(AirSwordEffect.INSTANCE);
         glyph(SunFlare.INSTANCE);
         glyph(WaterSpear.INSTANCE);
-        glyph(RandomCancel.HALF);
-        glyph(RandomCancel.QUARTER);
-        glyph(RandomCancel.THREE_FOURTHS);
+        //glyph(RandomCancel.HALF);
+        //glyph(RandomCancel.QUARTER);
+        //glyph(RandomCancel.THREE_FOURTHS);
         glyph(AuraForm.INSTANCE);
+
+        basicItem(ItemRegistry.Lotus3.getId());
+        basicItem(ItemRegistry.Lotus4.getId());
+        basicItem(ItemRegistry.Lotus5.getId());
+        basicItem(ItemRegistry.Lotus6.getId());
+        basicItem(ItemRegistry.Lotus7.getId());
+        basicItem(ItemRegistry.Lotus8.getId());
+        basicItem(ItemRegistry.Lotus9.getId());
+        basicItem(ItemRegistry.Lotus10.getId());
+
+        basicItem(ItemRegistry.Ring3.getId());
+        basicItem(ItemRegistry.Ring4.getId());
+        basicItem(ItemRegistry.Ring5.getId());
+        basicItem(ItemRegistry.Ring6.getId());
+        basicItem(ItemRegistry.Ring7.getId());
+        basicItem(ItemRegistry.Ring8.getId());
+        basicItem(ItemRegistry.Ring9.getId());
+        basicItem(ItemRegistry.Ring10.getId());
+
+
     }
 }

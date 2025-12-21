@@ -76,8 +76,6 @@ public class ArsTrinkets {
 
         @SubscribeEvent
         public void onTick(ServerTickEvent.Pre event) {
-
-
             //subtract 1 tickInterval from the time to live to account for the extra tick that runs when
             //unregistering the listener
             if (ticks >= (timeToLive - tickInterval)) {
@@ -90,7 +88,6 @@ public class ArsTrinkets {
                 this.method.run();
             }
             ticks++;
-
         }
     }
 }

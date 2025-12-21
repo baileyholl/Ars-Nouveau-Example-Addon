@@ -10,8 +10,8 @@ import static com.hollingsworth.arsnouveau.api.perk.PerkAttributes.*;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_VALUE;
 
 public interface IManaBonusItem {
-    float getManaBonus();
-    float getManaRegen();
+    double getManaBonus();
+    double getManaRegen();
 
     default void doManaOp(ResourceLocation id, Multimap<Holder<Attribute>, AttributeModifier> map){
         map.put(MAX_MANA, new AttributeModifier(id, this.getManaBonus(), ADD_VALUE));

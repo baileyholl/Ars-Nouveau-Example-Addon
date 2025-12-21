@@ -17,5 +17,6 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
 
     @Override
     protected void addTags(HolderLookup.Provider pProvider) {
+
     }
 }
