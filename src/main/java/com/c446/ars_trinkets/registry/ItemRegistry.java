@@ -2,6 +2,7 @@ package com.c446.ars_trinkets.registry;
 
 import com.c446.ars_trinkets.item.EssenceLotus;
 import com.c446.ars_trinkets.item.EssenceRing;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -14,6 +15,7 @@ public class ItemRegistry {
     static Item.Properties tierEpicCurioProperties;
     static Item.Properties tierRareCurioProperties;
     static Item.Properties tierGenericCurioProperties;
+    static Item.Properties manaCoreProperties = new Item.Properties().food(new FoodProperties.Builder().alwaysEdible().fast().nutrition(0).saturationModifier(0).build()).stacksTo(16);
 
     static {
         tierEpicCurioProperties = new Item.Properties().fireResistant().stacksTo(1).setNoRepair();

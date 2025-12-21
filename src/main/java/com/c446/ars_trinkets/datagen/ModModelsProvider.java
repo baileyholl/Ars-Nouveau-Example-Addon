@@ -67,7 +67,5 @@ public class ModModelsProvider extends ItemModelProvider {
         basicItem(ItemRegistry.Ring8.getId());
         basicItem(ItemRegistry.Ring9.getId());
         basicItem(ItemRegistry.Ring10.getId());
-
-
     }
 }

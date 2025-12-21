@@ -25,6 +25,7 @@ public class PlayerLevelHandling {
         }
     }
 
+    //TODO: patchouli book, add titles back in, on level-up broadcasting etc...
     @SubscribeEvent
     public static void onDamage(LivingDamageEvent.Pre d){
         if (d.getSource().getEntity() instanceof Player attacker && attacker.hasData(CapabilityRegistry.LEVEL_CAP)){
