@@ -1,11 +1,10 @@
-package com.c446.ars_trinkets;
+package com.c446.ars_trinkets.registry;
 
 import com.c446.ars_trinkets.glyphs.AirSwordEffect;
 import com.c446.ars_trinkets.glyphs.SunFlare;
 import com.c446.ars_trinkets.glyphs.WaterSpear;
 import com.c446.ars_trinkets.glyphs.filters.RandomCancel;
 import com.c446.ars_trinkets.glyphs.forms.AuraForm;
-import com.c446.ars_trinkets.registry.ModRegistry;
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
 import com.hollingsworth.arsnouveau.api.registry.SpellSoundRegistry;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;

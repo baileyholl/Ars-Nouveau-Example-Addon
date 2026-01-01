@@ -1,8 +1,6 @@
 package com.c446.ars_trinkets;
 
-import com.c446.ars_trinkets.registry.EffectsRegistry;
-import com.c446.ars_trinkets.registry.ItemRegistry;
-import com.c446.ars_trinkets.registry.ModRegistry;
+import com.c446.ars_trinkets.registry.*;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -11,7 +9,6 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
@@ -27,9 +24,13 @@ public class ArsTrinkets {
 
     public ArsTrinkets(IEventBus modEventBus, ModContainer modContainer) {
         ArsNouveauRegistry.registerGlyphs();
-        ModRegistry.SOUNDS.register(modEventBus);
+        AttributeRegistry.ATTRIBUTES.register(modEventBus);
+        BlockRegistry.BLOCKS.register(modEventBus);
+        CapabilityRegistry.ATTACHMENT_TYPES.register(modEventBus);
         EffectsRegistry.EFFECTS.register(modEventBus);
         ItemRegistry.ITEMS.register(modEventBus);
+        ModRegistry.SOUNDS.register(modEventBus);
+
 
         modEventBus.addListener(this::setup);
         modEventBus.addListener(this::doClientStuff);

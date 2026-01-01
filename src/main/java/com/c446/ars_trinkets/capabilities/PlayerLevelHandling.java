@@ -1,7 +1,9 @@
 package com.c446.ars_trinkets.capabilities;
 
+import com.c446.ars_trinkets.registry.AttributeRegistry;
 import com.c446.ars_trinkets.registry.CapabilityRegistry;
 import com.hollingsworth.arsnouveau.api.event.MaxManaCalcEvent;
+import com.hollingsworth.arsnouveau.api.event.SpellDamageEvent;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -35,5 +37,10 @@ public class PlayerLevelHandling {
         if (d.getEntity() instanceof Player victim) {
             d.setNewDamage((float) (d.getNewDamage() / victim.getData(CapabilityRegistry.LEVEL_CAP).getDamageMult()));
         }
+    }
+
+    @SubscribeEvent
+    public static void spellDamageEvent(SpellDamageEvent e){
+        e.damage *= (float) e.caster.getAttributeValue(AttributeRegistry.SPELL_DAMAGE_ABSOLUTE);
     }
 }
