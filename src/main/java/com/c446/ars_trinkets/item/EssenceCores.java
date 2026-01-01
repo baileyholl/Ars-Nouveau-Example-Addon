@@ -18,7 +18,7 @@ public class EssenceCores extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity) {
         if (pLivingEntity instanceof Player p && pStack.getItem() instanceof EssenceCores c) {
-            LevelingCapability.tryAddCore(p, 1, c.coreLevel);
+           // LevelingCapability.tryAddCore(p, 1, c.coreLevel);
         }
         return super.finishUsingItem(pStack, pLevel, pLivingEntity);
     }

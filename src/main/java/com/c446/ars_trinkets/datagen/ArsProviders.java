@@ -3,6 +3,7 @@ package com.c446.ars_trinkets.datagen;
 import com.c446.ars_trinkets.ArsTrinkets;
 import com.c446.ars_trinkets.glyphs.AirSwordEffect;
 import com.c446.ars_trinkets.glyphs.filters.RandomCancel;
+import com.c446.ars_trinkets.registry.ItemRegistry;
 import com.hollingsworth.arsnouveau.common.crafting.recipes.EnchantingApparatusRecipe;
 import com.hollingsworth.arsnouveau.common.crafting.recipes.GlyphRecipe;
 import com.hollingsworth.arsnouveau.common.crafting.recipes.ImbuementRecipe;
@@ -80,6 +81,11 @@ public class ArsProviders {
                     .build()
             );
              */
+
+            /*recipes.add(builder()
+                    .withReagent(Items.SUNFLOWER)
+                    .withPedestalItem()
+            )*/
 
             Path output = this.generator.getPackOutput().getOutputFolder();
             for (ApparatusRecipeBuilder.RecipeWrapper<? extends EnchantingApparatusRecipe> g : recipes) {

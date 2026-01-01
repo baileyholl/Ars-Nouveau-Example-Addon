@@ -9,17 +9,21 @@ public abstract class LevelModifiedEvent extends Event {
     public Integer levelCurrent;
 
     public static class Pre extends LevelModifiedEvent implements ICancellableEvent {
-        protected Integer levelNext;
+        public short newLevel;
 
-        public Pre(Player p, Integer newLevel, Integer oldLevel) {
+        public short getNewLevel() {
+            return newLevel;
+        }
+
+        public Pre(Player p, short newLevel, Integer oldLevel) {
             this.entity = p;
-            this.levelNext = newLevel;
+            this.newLevel = newLevel;
             this.levelCurrent = oldLevel;
         }
     }
 
-    static class Post extends LevelModifiedEvent {
-        Post(Player p, Integer newLevel) {
+   public static class Post extends LevelModifiedEvent {
+        public Post(Player p, Integer newLevel) {
             this.entity = p;
             this.levelCurrent = newLevel;
         }

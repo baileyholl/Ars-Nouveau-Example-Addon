@@ -20,17 +20,17 @@ import org.apache.logging.log4j.Logger;
 public class ArsTrinkets {
     public static final String MODID = "ars_trinkets";
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
 
     public ArsTrinkets(IEventBus modEventBus, ModContainer modContainer) {
         ArsNouveauRegistry.registerGlyphs();
         AttributeRegistry.ATTRIBUTES.register(modEventBus);
         BlockRegistry.BLOCKS.register(modEventBus);
         CapabilityRegistry.ATTACHMENT_TYPES.register(modEventBus);
+        CreativeTabRegistry.CREATIVE_MOD_TABS.register(modEventBus);
         EffectsRegistry.EFFECTS.register(modEventBus);
         ItemRegistry.ITEMS.register(modEventBus);
         ModRegistry.SOUNDS.register(modEventBus);
-
 
         modEventBus.addListener(this::setup);
         modEventBus.addListener(this::doClientStuff);

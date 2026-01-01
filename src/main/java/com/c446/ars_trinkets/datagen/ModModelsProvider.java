@@ -67,5 +67,34 @@ public class ModModelsProvider extends ItemModelProvider {
         basicItem(ItemRegistry.Ring8.getId());
         basicItem(ItemRegistry.Ring9.getId());
         basicItem(ItemRegistry.Ring10.getId());
+
+        basicItem(ItemRegistry.Essence1.getId());
+        basicItem(ItemRegistry.Essence2.getId());
+        basicItem(ItemRegistry.Essence3.getId());
+        basicItem(ItemRegistry.Essence4.getId());
+        basicItem(ItemRegistry.Essence5.getId());
+        basicItem(ItemRegistry.Essence6.getId());
+        basicItem(ItemRegistry.Essence7.getId());
+        basicItem(ItemRegistry.Essence8.getId());
+        basicItem(ItemRegistry.Essence9.getId());
+        basicItem(ItemRegistry.Essence10.getId());
+
+        basicItem(ItemRegistry.MAGE_RUNE_1.getId());
+        basicItem(ItemRegistry.MAGE_RUNE_2.getId());
+        basicItem(ItemRegistry.MAGE_RUNE_3.getId());
+
+        basicItem(ItemRegistry.WARRIOR_RUNE_1.getId());
+        basicItem(ItemRegistry.WARRIOR_RUNE_2.getId());
+        basicItem(ItemRegistry.WARRIOR_RUNE_3.getId());
+
+        basicItem(ItemRegistry.LIFE_RUNE_1.getId());
+        basicItem(ItemRegistry.LIFE_RUNE_2.getId());
+        basicItem(ItemRegistry.LIFE_RUNE_3.getId());
+
+        basicItem(ItemRegistry.DEATH_RUNE_1.getId());
+        basicItem(ItemRegistry.DEATH_RUNE_2.getId());
+        basicItem(ItemRegistry.DEATH_RUNE_3.getId());
+
+        basicItem(ItemRegistry.DIVINITY.getId());
     }
 }

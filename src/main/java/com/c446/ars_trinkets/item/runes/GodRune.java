@@ -1,5 +1,6 @@
 package com.c446.ars_trinkets.item.runes;
 
+import com.c446.ars_trinkets.registry.AttributeRegistry;
 import com.google.common.collect.Multimap;
 import com.hollingsworth.arsnouveau.api.perk.PerkAttributes;
 import net.minecraft.core.Holder;
@@ -21,7 +22,7 @@ import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operati
 
 public class GodRune extends AbstractRune{
     public GodRune(Properties pProperties, int level) {
-        super(pProperties, 4);
+        super(pProperties, 3);
     }
 
     @Override
@@ -44,7 +45,6 @@ public class GodRune extends AbstractRune{
         map.put(PerkAttributes.MAX_MANA, new AttributeModifier(id, getMult(), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         map.put(PerkAttributes.MANA_REGEN_BONUS, new AttributeModifier(id, getMult(), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         map.put(PerkAttributes.SPELL_DAMAGE_BONUS, new AttributeModifier(id, getMult(), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-
         return map;
     }
 

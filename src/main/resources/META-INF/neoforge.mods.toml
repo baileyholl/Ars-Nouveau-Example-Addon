@@ -33,7 +33,8 @@ authors="Alexthw & BaileyHoll for base example, whoever forgot to change this fo
 description='''
 Starbuncles will conquer the world.
 '''
-# A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
+
+# enumExtensions="META-INF/enumextensions.json
 
 [[accessTransformers]]
 file="META-INF/accesstransformer.cfg"

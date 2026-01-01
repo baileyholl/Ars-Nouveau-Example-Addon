@@ -1,13 +1,13 @@
 {
   "replace": false,
   "values": [
-    "essence_ring_10",
-    "essence_ring_9",
-    "essence_ring_8",
-    "essence_ring_7",
-    "essence_ring_6",
-    "essence_ring_5",
-    "essence_ring_4",
-    "essence_ring_3"
+    "ars_trinkets:essence_ring_10",
+    "ars_trinkets:essence_ring_9",
+    "ars_trinkets:essence_ring_8",
+    "ars_trinkets:essence_ring_7",
+    "ars_trinkets:essence_ring_6",
+    "ars_trinkets:essence_ring_5",
+    "ars_trinkets:essence_ring_4",
+    "ars_trinkets:essence_ring_3"
   ]
 }

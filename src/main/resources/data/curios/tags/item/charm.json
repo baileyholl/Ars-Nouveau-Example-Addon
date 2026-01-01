@@ -1,0 +1,19 @@
+{
+//  "replace": false,
+  "values": [
+    "ars_trinkets:life_rune",
+    "ars_trinkets:mage_rune",
+    "ars_trinkets:warrior_rune",
+    "ars_trinkets:death_rune",
+
+    "ars_trinkets:life_rune_lesser",
+    "ars_trinkets:mage_rune_lesser",
+    "ars_trinkets:warrior_rune_lesser",
+    "ars_trinkets:death_rune_lesser",
+
+    "ars_trinkets:life_rune_greater",
+    "ars_trinkets:mage_rune_greater",
+    "ars_trinkets:warrior_rune_greater",
+    "ars_trinkets:death_rune_greater"
+  ]
+}

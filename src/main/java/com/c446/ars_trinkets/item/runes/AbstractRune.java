@@ -12,6 +12,6 @@ public abstract class AbstractRune extends Item implements ICurioItem {
     }
 
     float getMult(){
-        return ((float) (this.level * 0.5 + 1));
+        return ((float) (this.level * 0.5));
     }
 }

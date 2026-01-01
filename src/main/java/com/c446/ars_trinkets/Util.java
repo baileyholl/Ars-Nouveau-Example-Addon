@@ -123,5 +123,9 @@ public class Util {
     public static long randomLongFromRange(int lower, int upper) {
         return (lower + (long) (Math.random() * (upper - lower)));
     }
+
+    public static int rgbToInt(int red, int green, int blue) {
+        return ((red << 16) | (green << 8) | blue);
+    }
 }
 

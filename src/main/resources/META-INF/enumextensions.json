@@ -1,0 +1,13 @@
+{
+  "entries": [
+    {
+      "enum": "net/minecraft/world/item/Rarity",
+      "name": "EXAMPLEMOD_CUSTOM",
+      "constructor": "(ILjava/lang/String;Ljava/util/function/UnaryOperator;)V",
+      "parameters": {
+        "class": "com/c446/ars_trinkets/rarity_enum/RarityProxy",
+        "field": "CUSTOM_RARITY_ENUM_PROXY"
+      }
+    }
+  ]
+}

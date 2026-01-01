@@ -1,23 +1,27 @@
 package com.c446.ars_trinkets.capabilities;
 
+import com.c446.ars_trinkets.ArsTrinkets;
 import com.c446.ars_trinkets.Config;
-import com.c446.ars_trinkets.events.CoresModifiedEvent;
 import com.c446.ars_trinkets.events.LevelModifiedEvent;
+import com.c446.ars_trinkets.registry.AttributeRegistry;
 import com.c446.ars_trinkets.registry.CapabilityRegistry;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
+import top.theillusivec4.curios.platform.NeoForgeCurios;
 
 public class LevelingCapability implements INBTSerializable<CompoundTag> {
-    short level; // in range of 0-10 ; 10: divine 0: NONE
-    int cores; // in range of 0-9
-    long souls; //
-    boolean cursed = false;
+    public short level; // in range of 0-10 ; 10: divine 0: NONE
+    public int cores; // in range of 0-9
+    public long souls; //
+    public boolean cursed = false;
 
     @Override
     public @UnknownNullability CompoundTag serializeNBT(HolderLookup.Provider provider) {
@@ -35,35 +39,39 @@ public class LevelingCapability implements INBTSerializable<CompoundTag> {
         this.cursed = cTag.getBoolean("cursed");
     }
 
-    public static void addSoul(Player p, int soulNbr) {
-        if (!p.hasData(CapabilityRegistry.LEVEL_CAP)) {
-            p.setData(CapabilityRegistry.LEVEL_CAP, new LevelingCapability());
-        }
+    public static void applyDivinity(LivingEntity t) {
 
-        var cap = p.getData(CapabilityRegistry.LEVEL_CAP);
+    }
 
-        if (cap.souls + soulNbr >= Config.Common.SOUL_QUANTITY_FOR_LEVEL.get().get(cap.level)) {
-            cap.level += 1;
-            var pre = new LevelModifiedEvent.Pre(p, (int) cap.level, cap.level + 1);
+    public static LevelingCapability get(Player p) {
+        return p.getData(CapabilityRegistry.LEVEL_CAP);
+    }
+
+    public void addSoul(int soulsToAdd, Player player) {
+        var soulQuantityNeeded = Config.Common.SOUL_QUANTITY_FOR_LEVEL.get().get(this.level);
+        ArsTrinkets.LOGGER.debug("souls for level-up : {}", soulQuantityNeeded);
+        if (souls + soulsToAdd >= soulQuantityNeeded) {
+            ArsTrinkets.LOGGER.debug("attempting to level up");
+
+            var pre = new LevelModifiedEvent.Pre(player, (short) (this.level+1), (int) this.level);
             NeoForge.EVENT_BUS.post(pre);
 
-            if (!pre.isCanceled()) {
-                cap.level += 1;
-            }
+            if (pre.isCanceled()) return;
+            level = pre.newLevel;
+
+            var post = new LevelModifiedEvent.Post(player, (int) this.level);
+            NeoForge.EVENT_BUS.post(post);
+
+        } else {
+
+            //TODO: implement soul-steal
+            this.souls += soulsToAdd;//* player.getAttributeValue();
         }
     }
 
-    public static void tryAddCore(Player p, int coreNumbers, int coreLevel) {
-        var cap = p.getData(CapabilityRegistry.LEVEL_CAP);
-        if (cap.level > coreLevel) {
-            return;
-        } else{
-            var event = new CoresModifiedEvent(p, cap.cores, cap.cores+1);
-            NeoForge.EVENT_BUS.post(event);
-            if (!event.isCanceled()) {
-                cap.cores = event.newCore;
-            }
-
+    public void tryAddCore(int coreNumbers, int coreLevel) {
+        if (this.level <= coreLevel) {
+            this.cores += coreLevel;
         }
     }
 
@@ -81,5 +89,9 @@ public class LevelingCapability implements INBTSerializable<CompoundTag> {
 
     public Component getTitle() {
         return Component.translatable("text.ars_trinkets.titles." + (this.cursed ? "dsc" + this.level : "asc" + this.level));
+    }
+
+    public void update() {
+
     }
 }
