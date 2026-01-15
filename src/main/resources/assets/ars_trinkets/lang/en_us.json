@@ -72,8 +72,10 @@
   "ars_trinkets.glyph_name.glyph_exp_sac": "Corrupted Blessing",
   "ars_trinkets.glyph_desc.glyph_shadow_veil": "Traps the enemy in a veil of slowing darkness.",
   "ars_trinkets.glyph_name.glyph_shadow_veil": "Shadow Veil",
-  "ars_trinkets.glyph_name.glyph_sound_boom": "Sonic Boom",
-  "ars_trinkets.glyph_desc.glyph_sound_boom": "Creates an explosion of sound, which will ripple across multiple enemies. Does not harm the caster. Scales with amplify and AOE",
+  "ars_trinkets.glyph_name.glyph_sonic_boom": "Sonic Boom",
+  "ars_trinkets.glyph_desc.glyph_sonic_boom": "Creates an explosion of sound, which will ripple across multiple enemies. Does not harm the caster. Scales with amplify and AOE",
+  "ars_trinkets.glyph_name.glyph_inversion": "Inversion",
+  "ars_trinkets.glyph_desc.glyph_inversion": "Inverts Caster and Target in the spell-context.",
   "ars_trinkets.glyph_desc.glyph_sun_flare": "Deals extra damage to 'Undead' and black mages. ",
   "ars_trinkets.glyph_name.glyph_sun_flare": "Sun Flare",
   "ars_trinkets.glyph_desc.glyph_mana_bomb": "Launches a spiritual bomb at the target, dealing damage based on the used mana. Consume ALL mana.\nAugment with AOE to get more range.",
@@ -152,9 +154,9 @@
   "item.ars_trinkets.putrid_heart": "Heart of Blasphemy",
   "item.ars_trinkets.holy_heart": "Sanctified Heart",
   "item.ars_trinkets.thearch_crown": "Exalted Thearch Worthy of Heaven and Earth's Crown.",
-  "item.ars_trinkets.mana_core_1": "Human's Heart",
-  "item.ars_trinkets.mana_core_2": "Mage's Heart",
-  "item.ars_trinkets.mana_core_3": "Archmage's Source Heart",
+  "item.ars_trinkets.essence_core_1": "Human's Heart",
+  "item.ars_trinkets.essence_core_2": "Mage's Heart",
+  "item.ars_trinkets.essence_core_3": "Archmage's Source Heart",
   "text.ars_trinkets.titles.circle_1": "First Circle",
   "text.ars_trinkets.titles.circle_2": "Second Circle",
   "text.ars_trinkets.titles.circle_3": "Third Circle",
@@ -187,5 +189,6 @@
   "text.ars_trinkets.souls.whispers.forbidden": "You can not peer through this soul !",
   "text.ars_trinkets.souls.cored": "cored ",
   "text.ars_trinkets.souls.warning_corruption": "You approach madness as you feast on your killed foes.",
-  "tooltips.ars_trinkets.crown0": "Those Worthy of the Crown are few."
+  "tooltips.ars_trinkets.crown0": "Those Worthy of the Crown are few.",
+  "tab.ars_trinkets.main": "Ars Trinkets Items"
 }

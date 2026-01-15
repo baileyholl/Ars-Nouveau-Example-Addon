@@ -28,6 +28,7 @@ public class LevelingCapability implements INBTSerializable<CompoundTag> {
         var cTag = new CompoundTag();
         cTag.putLong("souls", this.souls);
         cTag.putShort("level", this.level);
+        cTag.putInt("cores", this.cores);
         cTag.putBoolean("cursed", this.cursed);
         return cTag;
     }
@@ -36,11 +37,8 @@ public class LevelingCapability implements INBTSerializable<CompoundTag> {
     public void deserializeNBT(HolderLookup.@NotNull Provider provider, CompoundTag cTag) {
         this.level = cTag.getShort("level");
         this.souls = cTag.getLong("souls");
+        this.cores = cTag.getInt("cores");
         this.cursed = cTag.getBoolean("cursed");
-    }
-
-    public static void applyDivinity(LivingEntity t) {
-
     }
 
     public static LevelingCapability get(Player p) {
@@ -53,7 +51,7 @@ public class LevelingCapability implements INBTSerializable<CompoundTag> {
         if (souls + soulsToAdd >= soulQuantityNeeded) {
             ArsTrinkets.LOGGER.debug("attempting to level up");
 
-            var pre = new LevelModifiedEvent.Pre(player, (short) (this.level+1), (int) this.level);
+            var pre = new LevelModifiedEvent.Pre(player, (short) (this.level + 1), (int) this.level);
             NeoForge.EVENT_BUS.post(pre);
 
             if (pre.isCanceled()) return;
@@ -70,28 +68,36 @@ public class LevelingCapability implements INBTSerializable<CompoundTag> {
     }
 
     public void tryAddCore(int coreNumbers, int coreLevel) {
-        if (this.level <= coreLevel) {
-            this.cores += coreLevel;
+        if (this.level <= coreLevel * 3) {
+            this.cores += coreNumbers;
+            ArsTrinkets.LOGGER.debug("adding {} core @ {} cores ; level {} @ level {}", coreNumbers, this.cores, coreLevel, level);
         }
     }
 
+    public int getCoreMult() {
+        return (this.cores + 1);
+    }
+
     public int getBonusMana() {
-        return Config.Common.MANA_BONUS_PER_LEVEL.get().get(this.level - 1);
+        return this.level == 0 ? 0 : Config.Common.MANA_BONUS_PER_LEVEL.get().get(this.level - 1) * getCoreMult();
     }
 
     public int getBonusRegen() {
-        return Config.Common.MANA_REGEN_BONUS_PER_LEVEL.get().get(this.level - 1);
+        return this.level == 0 ? 0 : Config.Common.MANA_REGEN_BONUS_PER_LEVEL.get().get(this.level - 1) * getCoreMult();
     }
 
     public double getDamageMult() {
-        return Config.Common.DAMAGE_BONUS_PER_LEVEL.get().get(this.level - 1);
+        return this.level == 0 ? 1d : Config.Common.DAMAGE_BONUS_PER_LEVEL.get().get(this.level - 1);
     }
 
     public Component getTitle() {
-        return Component.translatable("text.ars_trinkets.titles." + (this.cursed ? "dsc" + this.level : "asc" + this.level));
+        return Component.translatable("text.ars_trinkets.titles." + (this.cursed ? "dsc" + this.level + 1 : "asc" + this.level));
     }
 
-    public void update() {
-
+    public void reset() {
+        this.level = 0;
+        this.souls = 0;
+        this.cores = 0;
+        this.cursed = false;
     }
 }

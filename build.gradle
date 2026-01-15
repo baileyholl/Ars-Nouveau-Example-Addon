@@ -146,12 +146,21 @@ configurations.configureEach {
 
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
+    // attributeslib / apoth
+    implementation "curse.maven:apothic-attributes-898963:6751650"
+    implementation "curse.maven:placebo-283644:6926281"
+    implementation "curse.maven:ldlib-626676:7418897"
+
+    runtimeOnly "curse.maven:ars-elemental-561470:7398326"
+    runtimeOnly "curse.maven:not-enough-glyphs-1023517:7398332"
+
+    // base AN dependencies
     implementation "software.bernie.geckolib:geckolib-neoforge-1.21.1:${geckolib_version}"
     compileOnly('vazkii.patchouli:Patchouli:1.21-87-NEOFORGE')
     runtimeOnly "curse.maven:mmmmmmmmmmmm-225738:5779508"
     runtimeOnly "curse.maven:selene-499980:6114818"
     //implementation("com.hollingsworth.ars_nouveau:ars_nouveau-${minecraft_version}:${ars_version}")
-    implementation "curse.maven:ars-nouveau-401955:6379806"
+    implementation "curse.maven:ars-nouveau-401955:7394698"
     localRuntime "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}"
     compileOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}:api"
 
@@ -160,7 +169,7 @@ dependencies {
     compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
     implementation 'com.github.glitchfiend:TerraBlender-neoforge:1.21-4.0.0.0'
     implementation "curse.maven:jade-324717:5444008"
-    implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}+1.21"
+    implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}+1.21.1"
 
     localRuntime "dev.emi:emi-neoforge:${emi_version}"
     localRuntime 'curse.maven:ftb-teams-forge-404468:5631446'

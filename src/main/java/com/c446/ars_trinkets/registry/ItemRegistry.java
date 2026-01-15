@@ -1,9 +1,6 @@
 package com.c446.ars_trinkets.registry;
 
-import com.c446.ars_trinkets.item.EssenceConsumable;
-import com.c446.ars_trinkets.item.EssenceLotus;
-import com.c446.ars_trinkets.item.EssenceRing;
-import com.c446.ars_trinkets.item.OmnipotenceRune;
+import com.c446.ars_trinkets.item.*;
 import com.c446.ars_trinkets.item.runes.DeathRune;
 import com.c446.ars_trinkets.item.runes.LifeRune;
 import com.c446.ars_trinkets.item.runes.MageRune;
@@ -33,23 +30,27 @@ public class ItemRegistry {
         tierCommonCurioProperties = new Item.Properties().fireResistant().stacksTo(1).rarity(Rarity.COMMON);
     }
 
-    static final public DeferredHolder<Item, EssenceLotus> Lotus10 = ITEMS.register("essence_lotus_10", () -> new EssenceLotus(tierEpicCurioProperties, 1024d, 256));
-    static final public DeferredHolder<Item, EssenceLotus> Lotus9 = ITEMS.register("essence_lotus_9", () -> new EssenceLotus(tierEpicCurioProperties, 512d, 128));
-    static final public DeferredHolder<Item, EssenceLotus> Lotus8 = ITEMS.register("essence_lotus_8", () -> new EssenceLotus(tierRareCurioProperties, 256d, 64));
-    static final public DeferredHolder<Item, EssenceLotus> Lotus7 = ITEMS.register("essence_lotus_7", () -> new EssenceLotus(tierRareCurioProperties, 128d, 32));
-    static final public DeferredHolder<Item, EssenceLotus> Lotus6 = ITEMS.register("essence_lotus_6", () -> new EssenceLotus(tierUncommonCurioProperties, 64d, 0));
-    static final public DeferredHolder<Item, EssenceLotus> Lotus5 = ITEMS.register("essence_lotus_5", () -> new EssenceLotus(tierUncommonCurioProperties, 32d, 0));
-    static final public DeferredHolder<Item, EssenceLotus> Lotus4 = ITEMS.register("essence_lotus_4", () -> new EssenceLotus(tierCommonCurioProperties, 16d, 0));
-    static final public DeferredHolder<Item, EssenceLotus> Lotus3 = ITEMS.register("essence_lotus_3", () -> new EssenceLotus(tierCommonCurioProperties, 8d, 0));
+    static final public DeferredHolder<Item, EssenceLotus> Lotus10 = ITEMS.register("essence_lotus_10", () -> new EssenceLotus(tierEpicCurioProperties, 1024d, 256, 7));
+    static final public DeferredHolder<Item, EssenceLotus> Lotus9 = ITEMS.register("essence_lotus_9", () -> new EssenceLotus(tierEpicCurioProperties, 512d, 128, 6));
+    static final public DeferredHolder<Item, EssenceLotus> Lotus8 = ITEMS.register("essence_lotus_8", () -> new EssenceLotus(tierRareCurioProperties, 256d, 64, 5));
+    static final public DeferredHolder<Item, EssenceLotus> Lotus7 = ITEMS.register("essence_lotus_7", () -> new EssenceLotus(tierRareCurioProperties, 128d, 32, 4));
+    static final public DeferredHolder<Item, EssenceLotus> Lotus6 = ITEMS.register("essence_lotus_6", () -> new EssenceLotus(tierUncommonCurioProperties, 64d, 0, 3));
+    static final public DeferredHolder<Item, EssenceLotus> Lotus5 = ITEMS.register("essence_lotus_5", () -> new EssenceLotus(tierUncommonCurioProperties, 32d, 0, 2));
+    static final public DeferredHolder<Item, EssenceLotus> Lotus4 = ITEMS.register("essence_lotus_4", () -> new EssenceLotus(tierCommonCurioProperties, 16d, 0, 1));
+    static final public DeferredHolder<Item, EssenceLotus> Lotus3 = ITEMS.register("essence_lotus_3", () -> new EssenceLotus(tierCommonCurioProperties, 8d, 0, 0));
 
-    static final public DeferredHolder<Item, EssenceRing> Ring10 = ITEMS.register("essence_ring_10", () -> new EssenceRing(tierEpicCurioProperties, 2048, 0));
-    static final public DeferredHolder<Item, EssenceRing> Ring9 = ITEMS.register("essence_ring_9", () -> new EssenceRing(tierEpicCurioProperties, 1536, 0));
-    static final public DeferredHolder<Item, EssenceRing> Ring8 = ITEMS.register("essence_ring_8", () -> new EssenceRing(tierRareCurioProperties, 1024, 0));
-    static final public DeferredHolder<Item, EssenceRing> Ring7 = ITEMS.register("essence_ring_7", () -> new EssenceRing(tierRareCurioProperties, 768, 0));
-    static final public DeferredHolder<Item, EssenceRing> Ring6 = ITEMS.register("essence_ring_6", () -> new EssenceRing(tierUncommonCurioProperties, 512, 0));
-    static final public DeferredHolder<Item, EssenceRing> Ring5 = ITEMS.register("essence_ring_5", () -> new EssenceRing(tierUncommonCurioProperties, 384, 0));
-    static final public DeferredHolder<Item, EssenceRing> Ring4 = ITEMS.register("essence_ring_4", () -> new EssenceRing(tierCommonCurioProperties, 256, 0));
-    static final public DeferredHolder<Item, EssenceRing> Ring3 = ITEMS.register("essence_ring_3", () -> new EssenceRing(tierCommonCurioProperties, 128, 0));
+    static final public DeferredHolder<Item, EssenceRing> Ring10 = ITEMS.register("essence_ring_10", () -> new EssenceRing(tierEpicCurioProperties, 2048, 0, 7));
+    static final public DeferredHolder<Item, EssenceRing> Ring9 = ITEMS.register("essence_ring_9", () -> new EssenceRing(tierEpicCurioProperties, 1536, 0, 6));
+    static final public DeferredHolder<Item, EssenceRing> Ring8 = ITEMS.register("essence_ring_8", () -> new EssenceRing(tierRareCurioProperties, 1024, 0, 5));
+    static final public DeferredHolder<Item, EssenceRing> Ring7 = ITEMS.register("essence_ring_7", () -> new EssenceRing(tierRareCurioProperties, 768, 0, 4));
+    static final public DeferredHolder<Item, EssenceRing> Ring6 = ITEMS.register("essence_ring_6", () -> new EssenceRing(tierUncommonCurioProperties, 512, 0, 3));
+    static final public DeferredHolder<Item, EssenceRing> Ring5 = ITEMS.register("essence_ring_5", () -> new EssenceRing(tierUncommonCurioProperties, 384, 0, 2));
+    static final public DeferredHolder<Item, EssenceRing> Ring4 = ITEMS.register("essence_ring_4", () -> new EssenceRing(tierCommonCurioProperties, 256, 0, 1));
+    static final public DeferredHolder<Item, EssenceRing> Ring3 = ITEMS.register("essence_ring_3", () -> new EssenceRing(tierCommonCurioProperties, 128, 0, 0));
+
+    static final public DeferredHolder<Item, EssenceCores> CORE_1 = ITEMS.register("essence_core_1", () -> new EssenceCores(tierUncommonCurioProperties, 1));
+    static final public DeferredHolder<Item, EssenceCores> CORE_2 = ITEMS.register("essence_core_2", () -> new EssenceCores(tierRareCurioProperties, 2));
+    static final public DeferredHolder<Item, EssenceCores> CORE_3 = ITEMS.register("essence_core_3", () -> new EssenceCores(tierEpicCurioProperties, 3));
 
     static final public Item.Properties essenceProperties = new Item.Properties().fireResistant();
 

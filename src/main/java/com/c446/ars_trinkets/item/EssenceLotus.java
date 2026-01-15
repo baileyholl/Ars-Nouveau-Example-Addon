@@ -1,5 +1,6 @@
 package com.c446.ars_trinkets.item;
 
+import com.c446.ars_trinkets.Config;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
@@ -13,11 +14,13 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 public class EssenceLotus extends Item implements ICurioItem, IManaBonusItem {
     final double manaRegen;
     final double manaBonus;
+    final int id;
 
-    public EssenceLotus(Properties p, Double manaRegen, double manaBonus) {
+    public EssenceLotus(Properties p, Double manaRegen, double manaBonus, int id) {
         super(p);
         this.manaRegen = manaRegen;
         this.manaBonus = manaBonus;
+        this.id=id;
     }
 
     @Override
@@ -27,13 +30,27 @@ public class EssenceLotus extends Item implements ICurioItem, IManaBonusItem {
         return map;
     }
 
+    public double getMult(){
+        double mult = 0f;
+
+        try {
+            if (Config.Common.RING_VALUES != null) {
+                mult = Config.Common.RING_VALUES.get().get(this.id);
+            }
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            mult = 1f;
+        }
+
+        return mult;
+    }
+
     @Override
     public double getManaBonus() {
-        return this.manaBonus;
+        return this.manaBonus * getMult();
     }
 
     @Override
     public double getManaRegen() {
-        return this.manaRegen;
+        return this.manaRegen * getMult();
     }
 }

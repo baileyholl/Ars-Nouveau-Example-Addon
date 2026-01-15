@@ -33,7 +33,7 @@ public class SonicBoom extends AbstractEffect
         super(tag, description);
     }
 
-    public static final SonicBoom INSTANCE = new SonicBoom(new ResourceLocation(ArsTrinkets.MODID, "glyph_sound_boom"), "Sonic Boom");
+    public static final SonicBoom INSTANCE = new SonicBoom(new ResourceLocation(ArsTrinkets.MODID, "glyph_sonic_boom"), "Sonic Boom");
 
     double damage;
     double damageBonusTimes;
@@ -43,6 +43,7 @@ public class SonicBoom extends AbstractEffect
     public Set<AbstractAugment> getCompatibleAugments() {
         return augmentSetOf(AugmentAmplify.INSTANCE, AugmentAOE.INSTANCE);
     }
+    //
 
     @Override
     public SpellTier defaultTier() {

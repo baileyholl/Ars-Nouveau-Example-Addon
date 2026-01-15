@@ -20,9 +20,9 @@ public class Config {
         public static ModConfigSpec.IntValue AURA_BASE_ACCELERATE;
         public static ModConfigSpec.IntValue MAX_LEVEL_ALLOWED;
 
-        public static ModConfigSpec.ConfigValue<List<? extends Float>> LOTUS_VALUES;
-        public static ModConfigSpec.ConfigValue<List<? extends Float>> RING_VALUES;
-        public static ModConfigSpec.ConfigValue<List<? extends Float>> MONOCLE_VALUES;
+        public static ModConfigSpec.ConfigValue<List<? extends Double>> LOTUS_VALUES;
+        public static ModConfigSpec.ConfigValue<List<? extends Double>> RING_VALUES;
+        public static ModConfigSpec.ConfigValue<List<? extends Double>> MONOCLE_VALUES;
         public static ModConfigSpec.ConfigValue<List<? extends Integer>> SOUL_QUANTITY_FOR_LEVEL;
         public static ModConfigSpec.ConfigValue<List<? extends Integer>> MANA_BONUS_PER_LEVEL;
         public static ModConfigSpec.ConfigValue<List<? extends Double>> DAMAGE_BONUS_PER_LEVEL;
@@ -37,26 +37,22 @@ public class Config {
 
             MAX_LEVEL_ALLOWED = builder.defineInRange("max_level_allowed", 9, 0, 9);
 
-            LOTUS_VALUES = builder.defineList("lotus_curios_amplifications", List.of(1f, 2.5f, 5f, 10f, 25f, 50f, 100f, 200f), element -> true);
-            RING_VALUES = builder.defineList("ring_curios_amplifications", List.of(1f, 2.5f, 5f, 10f, 25f, 50f, 100f, 200f), element -> true);
-            MONOCLE_VALUES = builder.defineList("_curios_amplifications", List.of(1f, 2.5f, 5f, 10f, 25f, 50f, 100f, 200f), element -> true);
+            LOTUS_VALUES = builder.defineList("lotus_curios_amplifications", List.of(1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d), element -> true);
+            RING_VALUES = builder.defineList("ring_curios_amplifications", List.of(1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d), element -> true);
+            MONOCLE_VALUES = builder.defineList("monocle_curios_amplifications", List.of(1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d), element -> true);
 
             SOUL_QUANTITY_FOR_LEVEL = builder.defineList("soul_quantity", List.of(500, 1000, 2500, 5000, 10000, 25000, 50000, 100000, 250000), e -> true);
             SOUL_QUANTITY_FOR_ESSENCE_LEVEL = builder.defineList("soul_quantity", List.of(25, 50, 125, 250, 500, 1500, 3000, 6000, 15000), e -> true);
 
             DAMAGE_BONUS_PER_LEVEL = builder.defineList("damage_bonus", List.of(1.1d, 1.15d, 1.2d, 1.3d, 1.5d, 2d, 4d, 8d, 15d), e -> true);
-            MANA_BONUS_PER_LEVEL = builder.defineList("mana_bonus", List.of(25*3, 50*3, 125*3, 250*3, 500*3, 1500*3, 3000*3, 6000*3, 15000*3), e -> true);
-            MANA_REGEN_BONUS_PER_LEVEL = builder.defineList("regen_bonus", List.of(25*3, 50*3, 125*3, 250*3, 500*3, 1500*3, 3000*3, 6000*3, 15000*3), e -> true);
+            MANA_BONUS_PER_LEVEL = builder.defineList("mana_bonus", List.of(25 * 3, 50 * 3, 125 * 3, 250 * 3, 500 * 3, 1500 * 3, 3000 * 3, 6000 * 3, 15000 * 3), e -> true);
+            MANA_REGEN_BONUS_PER_LEVEL = builder.defineList("regen_bonus", List.of(25 * 3, 50 * 3, 125 * 3, 250 * 3, 500 * 3, 1500 * 3, 3000 * 3, 6000 * 3, 15000 * 3), e -> true);
 
-        }
-
-        public static ModConfigSpec.ConfigValue<List<? extends Float>> getLotusValues() {
-            return null;
         }
     }
 
     @SubscribeEvent
-    public static void  onLoad(final ModConfigEvent.Loading configEvent) {
+    public static void onLoad(final ModConfigEvent.Loading configEvent) {
 
     }
 

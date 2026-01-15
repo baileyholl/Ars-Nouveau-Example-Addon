@@ -1,5 +1,6 @@
 package com.c446.ars_trinkets;
 
+import com.c446.ars_trinkets.brigadier.ArsTrinketsLevelCommand;
 import com.c446.ars_trinkets.registry.*;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -10,6 +11,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.apache.logging.log4j.LogManager;
@@ -51,11 +53,9 @@ public class ArsTrinkets {
 
     }
 
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
-        // do something when the server starts
-        LOGGER.info("HELLO from server starting");
+    public static void onRegisterCommands(RegisterCommandsEvent event) {
+        ArsTrinketsLevelCommand.register(event.getDispatcher());
     }
 
     public static void setInterval(Runnable method, int tickInterval, int timeToLive) {

@@ -1,9 +1,7 @@
 package com.c446.ars_trinkets.datagen;
 
 import com.c446.ars_trinkets.ArsTrinkets;
-import com.c446.ars_trinkets.glyphs.AirSwordEffect;
-import com.c446.ars_trinkets.glyphs.SunFlare;
-import com.c446.ars_trinkets.glyphs.WaterSpear;
+import com.c446.ars_trinkets.glyphs.*;
 import com.c446.ars_trinkets.glyphs.filters.RandomCancel;
 import com.c446.ars_trinkets.glyphs.forms.AuraForm;
 import com.c446.ars_trinkets.registry.ItemRegistry;
@@ -45,11 +43,18 @@ public class ModModelsProvider extends ItemModelProvider {
         glyph(AirSwordEffect.INSTANCE);
         glyph(SunFlare.INSTANCE);
         glyph(WaterSpear.INSTANCE);
+        glyph(SonicBoom.INSTANCE);
+        glyph(AuraForm.INSTANCE);
+//        glyph(Inversion.INSTANCE);
+
+
         //glyph(RandomCancel.HALF);
         //glyph(RandomCancel.QUARTER);
         //glyph(RandomCancel.THREE_FOURTHS);
-        glyph(AuraForm.INSTANCE);
 
+        basicItem(ItemRegistry.CORE_1.getId());
+        basicItem(ItemRegistry.CORE_2.getId());
+        basicItem(ItemRegistry.CORE_3.getId());
         basicItem(ItemRegistry.Lotus3.getId());
         basicItem(ItemRegistry.Lotus4.getId());
         basicItem(ItemRegistry.Lotus5.getId());
