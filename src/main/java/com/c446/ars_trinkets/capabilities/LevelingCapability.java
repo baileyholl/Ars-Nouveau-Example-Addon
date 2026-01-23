@@ -54,11 +54,15 @@ public class LevelingCapability implements INBTSerializable<CompoundTag> {
             var pre = new LevelModifiedEvent.Pre(player, (short) (this.level + 1), (int) this.level);
             NeoForge.EVENT_BUS.post(pre);
 
-            if (pre.isCanceled()) return;
-            level = pre.newLevel;
+            if (pre.isCanceled() || pre.newLevel > Config.Common.MAX_LEVEL_ALLOWED.getAsInt()) {
+                ArsTrinkets.LOGGER.debug("level-up event cancelled !\nnew level : {}\nold level : {}", pre.getNewLevel(), this.level);
+            } else{
+                level = pre.newLevel;
 
-            var post = new LevelModifiedEvent.Post(player, (int) this.level);
-            NeoForge.EVENT_BUS.post(post);
+                var post = new LevelModifiedEvent.Post(player, (int) this.level);
+                NeoForge.EVENT_BUS.post(post);
+            }
+
 
         } else {
 
@@ -91,7 +95,9 @@ public class LevelingCapability implements INBTSerializable<CompoundTag> {
     }
 
     public Component getTitle() {
-        return Component.translatable("text.ars_trinkets.titles." + (this.cursed ? "dsc" + this.level + 1 : "asc" + this.level));
+        if (this.level == 0) return Component.translatable("text.ars_trinkets.titles.asc0");
+
+        return Component.translatable("text.ars_trinkets.titles." + (this.cursed ? "dsc" + (this.level): "asc" + (this.level )));
     }
 
     public void reset() {

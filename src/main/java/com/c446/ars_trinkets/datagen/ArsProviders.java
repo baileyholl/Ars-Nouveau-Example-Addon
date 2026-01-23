@@ -4,7 +4,6 @@ import com.c446.ars_trinkets.ArsTrinkets;
 import com.c446.ars_trinkets.glyphs.*;
 import com.c446.ars_trinkets.glyphs.filters.IsNotSelf;
 import com.c446.ars_trinkets.glyphs.filters.IsSelf;
-import com.c446.ars_trinkets.glyphs.filters.RandomCancel;
 import com.c446.ars_trinkets.glyphs.forms.AuraForm;
 import com.c446.ars_trinkets.registry.ItemRegistry;
 import com.hollingsworth.arsnouveau.common.crafting.recipes.EnchantingApparatusRecipe;
@@ -14,7 +13,6 @@ import com.hollingsworth.arsnouveau.common.datagen.ApparatusRecipeBuilder;
 import com.hollingsworth.arsnouveau.common.datagen.ApparatusRecipeProvider;
 import com.hollingsworth.arsnouveau.common.datagen.GlyphRecipeProvider;
 import com.hollingsworth.arsnouveau.common.datagen.ImbuementRecipeProvider;
-import com.hollingsworth.arsnouveau.common.spell.effect.EffectExchange;
 import com.hollingsworth.arsnouveau.common.spell.method.MethodSelf;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import com.mojang.serialization.JsonOps;
@@ -55,10 +53,10 @@ public class ArsProviders {
             //recipes.add(get(RandomCancel.QUARTER).withItem(Items.COMPARATOR));
             //recipes.add(get(RandomCancel.HALF).withItem(RandomCancel.QUARTER.glyphItem).withItem(Items.COMPARATOR));
             //recipes.add(get(RandomCancel.THREE_FOURTHS).withItem(RandomCancel.HALF.glyphItem).withItem(Items.COMPARATOR));
-            recipes.add(get(AirSwordEffect.INSTANCE).withItem(Items.NETHERITE_BLOCK, 3).withItem(ItemsRegistry.AIR_ESSENCE, 3));
-            recipes.add(get(WaterSpear.INSTANCE).withItem(Items.NETHERITE_BLOCK, 3).withItem(ItemsRegistry.WATER_ESSENCE, 3));
-            recipes.add(get(SonicBoom.INSTANCE).withItem(Items.NETHERITE_BLOCK, 3).withItem(ItemsRegistry.AIR_ESSENCE, 3));
-            recipes.add(get(SunFlare.INSTANCE).withItem(Items.NETHERITE_BLOCK, 3).withItem(ItemsRegistry.FIRE_ESSENCE, 3));
+            recipes.add(get(EffectAirSword.INSTANCE).withItem(Items.NETHERITE_BLOCK, 3).withItem(ItemsRegistry.AIR_ESSENCE, 3));
+            recipes.add(get(EffectWaterSpear.INSTANCE).withItem(Items.NETHERITE_BLOCK, 3).withItem(ItemsRegistry.WATER_ESSENCE, 3));
+            recipes.add(get(EffectSonicBoom.INSTANCE).withItem(Items.NETHERITE_BLOCK, 3).withItem(ItemsRegistry.AIR_ESSENCE, 3));
+            recipes.add(get(EffectSunFlare.INSTANCE).withItem(Items.NETHERITE_BLOCK, 3).withItem(ItemsRegistry.FIRE_ESSENCE, 3));
             recipes.add(get(IsSelf.INSTANCE).withItem(Items.LAPIS_LAZULI, 3).withItem(ItemsRegistry.MANIPULATION_ESSENCE, 3));
             recipes.add(get(IsNotSelf.INSTANCE).withItem(Items.REDSTONE, 3).withItem(IsSelf.INSTANCE.getGlyph().asItem()));
             //recipes.add(get(Inversion.INSTANCE).withItem(Items.REDSTONE, 3).withItem(EffectExchange.INSTANCE.getGlyph().asItem()).withItem(Items.NETHERITE_INGOT, 3));
@@ -324,6 +322,138 @@ public class ArsProviders {
                             .withSourceCost(5000) // capped at 5000
                             .build()
                     );
+
+                    recipes.add(builder()
+                            .withReagent(ENCHANTED_GOLDEN_APPLE)
+                            .withPedestalItem(4, Essence6.get())
+                            .withResult(OBLIVION.get())
+                            .build()
+                    );
+
+                    // T10 ring & lotus + netherite block at center + "foci"
+
+                    recipes.add(builder()
+                            .withReagent(NETHERITE_INGOT)
+                            .withPedestalItem(2, Ring10.get())
+                            .withPedestalItem(2, Lotus10.get())
+                            .withPedestalItem(4, ItemsRegistry.FIRE_ESSENCE)
+                            .withSourceCost(1000)
+                            .withResult(WARRIOR_RUNE_1.get())
+                            .build()
+                    );
+
+                    recipes.add(builder()
+                            .withReagent(NETHERITE_INGOT)
+                            .withPedestalItem(2, Ring10.get())
+                            .withPedestalItem(2, Lotus10.get())
+                            .withPedestalItem(4, ItemsRegistry.WATER_ESSENCE)
+                            .withSourceCost(1000)
+                            .withResult(MAGE_RUNE_1.get())
+                            .build()
+                    );
+
+                    recipes.add(builder()
+                            .withReagent(NETHERITE_INGOT)
+                            .withPedestalItem(2, Ring10.get())
+                            .withPedestalItem(2, Lotus10.get())
+                            .withPedestalItem(4, ItemsRegistry.EARTH_ESSENCE)
+                            .withSourceCost(1000)
+                            .withResult(LIFE_RUNE_1.get())
+                            .build()
+                    );
+
+                    recipes.add(builder()
+                            .withReagent(NETHERITE_INGOT)
+                            .withPedestalItem(2, Ring10.get())
+                            .withPedestalItem(2, Lotus10.get())
+                            .withPedestalItem(4, ItemsRegistry.AIR_ESSENCE)
+                            .withSourceCost(1000)
+                            .withResult(DEATH_RUNE_1.get())
+                            .build()
+                    );
+
+                    recipes.add(builder()
+                            .withReagent(NETHERITE_BLOCK)
+                            .withPedestalItem(2, WARRIOR_RUNE_1.get())
+                            .withSourceCost(1000)
+                            .withResult(WARRIOR_RUNE_2.get())
+                            .build()
+                    );
+
+                    recipes.add(builder()
+                            .withReagent(NETHERITE_BLOCK)
+                            .withPedestalItem(2, MAGE_RUNE_1.get())
+                            .withSourceCost(1000)
+                            .withResult(MAGE_RUNE_2.get())
+                            .build()
+                    );
+
+                    recipes.add(builder()
+                            .withReagent(NETHERITE_BLOCK)
+                            .withPedestalItem(2, LIFE_RUNE_1.get())
+                            .withSourceCost(1000)
+                            .withResult(LIFE_RUNE_2.get())
+                            .build()
+                    );
+
+                    recipes.add(builder()
+                            .withReagent(NETHERITE_BLOCK)
+                            .withPedestalItem(2, DEATH_RUNE_1.get())
+                            .withSourceCost(1000)
+                            .withResult(DEATH_RUNE_2.get())
+                            .build()
+                    );
+
+                    recipes.add(builder()
+                            .withReagent(NETHERITE_BLOCK)
+                            .withPedestalItem(2, WARRIOR_RUNE_2.get())
+                            .withSourceCost(1000)
+                            .withResult(WARRIOR_RUNE_3.get())
+                            .build()
+                    );
+
+                    recipes.add(builder()
+                            .withReagent(NETHERITE_BLOCK)
+                            .withPedestalItem(2, MAGE_RUNE_2.get())
+                            .withSourceCost(1000)
+                            .withResult(MAGE_RUNE_3.get())
+                            .build()
+                    );
+
+                    recipes.add(builder()
+                            .withReagent(NETHERITE_BLOCK)
+                            .withPedestalItem(2, LIFE_RUNE_2.get())
+                            .withSourceCost(1000)
+                            .withResult(LIFE_RUNE_3.get())
+                            .build()
+                    );
+
+                    recipes.add(builder()
+                            .withReagent(NETHERITE_BLOCK)
+                            .withPedestalItem(2, DEATH_RUNE_2.get())
+                            .withSourceCost(1000)
+                            .withResult(DEATH_RUNE_3.get())
+                            .build()
+                    );
+
+                    recipes.add(builder()
+                            .withReagent(ItemsRegistry.SOURCE_GEM)
+                            .withPedestalItem(MAGE_RUNE_3.get())
+                            .withPedestalItem(WARRIOR_RUNE_3.get())
+                            .withPedestalItem(LIFE_RUNE_3.get())
+                            .withPedestalItem(DEATH_RUNE_3.get())
+                            .withResult(ETERNITY_RUNE.get())
+                            .build()
+                    );
+
+                    /*recipes.add(builder()
+                            .withPedestalItem(8, ETERNITY_RUNE.get())
+                            .withReagent(ETERNITY_RUNE.get())
+                            .withResult(DIVINITY.get())
+                            .build()
+                    );*/
+
+
                 }
             }
 
@@ -456,6 +586,28 @@ public class ArsProviders {
                     .withPedestalItem(Essence9.get())
             );
 
+            // Gold to Iron recipe.
+            recipes.add(new ImbuementRecipe("gold_to_iron", Ingredient.of(GOLD_BLOCK), new ItemStack(IRON_BLOCK), 450)
+                    .withPedestalItem(GOLD_INGOT)
+                    .withPedestalItem(GOLD_BLOCK)
+                    .withPedestalItem(GOLD_NUGGET)
+            );
+
+            // Iron to Copper recipe
+            recipes.add(new ImbuementRecipe("iron_to_copper", Ingredient.of(IRON_BLOCK), new ItemStack(COPPER_BLOCK), 450)
+                    .withPedestalItem(IRON_INGOT)
+                    .withPedestalItem(IRON_BLOCK)
+                    .withPedestalItem(IRON_BLOCK)
+            );
+
+            // Copper to Gold recipe
+            recipes.add(new ImbuementRecipe("copper_to_gold", Ingredient.of(COPPER_BLOCK), new ItemStack(GOLD_BLOCK), 450)
+                    .withPedestalItem(COPPER_INGOT)
+                    .withPedestalItem(COPPER_BLOCK)
+                    .withPedestalItem(COPPER_BLOCK)
+            );
+
+            //todo : iron to copper and copper to gold
 
 
 

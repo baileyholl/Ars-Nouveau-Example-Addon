@@ -2,7 +2,6 @@ package com.c446.ars_trinkets.datagen;
 
 import com.c446.ars_trinkets.ArsTrinkets;
 import com.c446.ars_trinkets.glyphs.*;
-import com.c446.ars_trinkets.glyphs.filters.RandomCancel;
 import com.c446.ars_trinkets.glyphs.forms.AuraForm;
 import com.c446.ars_trinkets.registry.ItemRegistry;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
@@ -40,11 +39,12 @@ public class ModModelsProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        glyph(AirSwordEffect.INSTANCE);
-        glyph(SunFlare.INSTANCE);
-        glyph(WaterSpear.INSTANCE);
-        glyph(SonicBoom.INSTANCE);
+        glyph(EffectAirSword.INSTANCE);
+        glyph(EffectSunFlare.INSTANCE);
+        glyph(EffectWaterSpear.INSTANCE);
+        glyph(EffectSonicBoom.INSTANCE);
         glyph(AuraForm.INSTANCE);
+        glyph(EffectInspectSoul.INSTANCE);
 //        glyph(Inversion.INSTANCE);
 
 
@@ -55,6 +55,8 @@ public class ModModelsProvider extends ItemModelProvider {
         basicItem(ItemRegistry.CORE_1.getId());
         basicItem(ItemRegistry.CORE_2.getId());
         basicItem(ItemRegistry.CORE_3.getId());
+        basicItem(ItemRegistry.OBLIVION.getId());
+
         basicItem(ItemRegistry.Lotus3.getId());
         basicItem(ItemRegistry.Lotus4.getId());
         basicItem(ItemRegistry.Lotus5.getId());
@@ -99,6 +101,8 @@ public class ModModelsProvider extends ItemModelProvider {
         basicItem(ItemRegistry.DEATH_RUNE_1.getId());
         basicItem(ItemRegistry.DEATH_RUNE_2.getId());
         basicItem(ItemRegistry.DEATH_RUNE_3.getId());
+
+        basicItem(ItemRegistry.ETERNITY_RUNE.getId());
 
         basicItem(ItemRegistry.DIVINITY.getId());
     }

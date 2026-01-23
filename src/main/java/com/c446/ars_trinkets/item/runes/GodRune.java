@@ -21,14 +21,15 @@ import top.theillusivec4.curios.platform.services.ICuriosPlatform;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL;
 
 public class GodRune extends AbstractRune{
-    public GodRune(Properties pProperties, int level) {
-        super(pProperties, 3);
+    public GodRune(Properties pProperties, int level, ResourceLocation registeredName) {
+        super(pProperties, level, registeredName);
     }
 
     @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
         var map = super.getAttributeModifiers(slotContext, id, stack);
 
+        if (this.wasOverridden)return map;
         //TODO : add apoth life steal
         //death
         map.put(Attributes.ATTACK_SPEED, new AttributeModifier(id, getMult(), ADD_MULTIPLIED_TOTAL));

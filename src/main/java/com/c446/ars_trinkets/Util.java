@@ -3,6 +3,9 @@ package com.c446.ars_trinkets;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import com.c446.ars_trinkets.registry.ModRegistry;
@@ -15,16 +18,27 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.logging.Level;
 ;
 
 public class Util {
     ArrayList<Item> focus = new ArrayList<>();
+
+    public static boolean hasLineOfSight(ServerLevel level, Vec3 start, Vec3 end) {
+        return level.clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, CollisionContext.empty())).getType() == HitResult.Type.MISS;
+    }
+
+    public static boolean hasLineOfSight(ServerLevel level, Entity entity1, Entity entity2) {
+        return hasLineOfSight(level, entity1.getEyePosition(), entity2.getBoundingBox().getCenter());
+    }
+
 
     public static void CreateParticleBeam(Vec3 start, Vec3 end, ServerLevel level, ParticleColor color) {
         /**

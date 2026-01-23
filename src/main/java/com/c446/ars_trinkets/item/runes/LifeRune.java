@@ -12,13 +12,14 @@ import top.theillusivec4.curios.api.SlotContext;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL;
 
 public class LifeRune extends AbstractRune {
-    public LifeRune(Properties pProperties, int level) {
-        super(pProperties, level);
+    public LifeRune(Properties pProperties, int level, ResourceLocation registeredName) {
+        super(pProperties, level, registeredName);
     }
 
     @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
         var map = super.getAttributeModifiers(slotContext, id, stack);
+        if (this.wasOverridden)return map;
 
         //TODO : add apoth bonus regen
         map.put(Attributes.MAX_HEALTH, new AttributeModifier(id, getMult(), ADD_MULTIPLIED_TOTAL));

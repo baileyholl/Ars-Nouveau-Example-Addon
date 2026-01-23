@@ -1,0 +1,29 @@
+{
+  "ars_trinkets:death_rune": { // as of now, only the "RUNE" items support this. in the future, more will do like Lotuses and others, but for now this will do.
+    //TODO: make lotuses/rings supported.
+    "mode": "OVERRIDE",
+    "attributes": {
+      "minecraft:generic.attack_damage": [
+        {
+          "id": "auto",
+          "amount": 2.0,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "minecraft:generic.armor": [
+        {
+          "id": "auto",
+          "amount": 2.0,
+          "operation": "add_multiplied_total"
+        }
+      ],
+      "minecraft:generic.knockback_resistance": [ // put the complete attribute registered name here.
+        {
+          "id": "ars_trinkets:death_rune_kb_res", // put a specific ID to prevent the same item from having stackable buffs.
+          "amount": 2.0, // this should always be a boolean/double value.
+          "operation": "add_value" // should always be in [add_value, add_multiplied_base, add_multiplied_total]
+        }
+      ]
+    }
+  }
+}

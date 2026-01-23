@@ -1,10 +1,8 @@
 package com.c446.ars_trinkets.registry;
 
+import com.c446.ars_trinkets.ArsTrinkets;
 import com.c446.ars_trinkets.item.*;
-import com.c446.ars_trinkets.item.runes.DeathRune;
-import com.c446.ars_trinkets.item.runes.LifeRune;
-import com.c446.ars_trinkets.item.runes.MageRune;
-import com.c446.ars_trinkets.item.runes.WarriorRune;
+import com.c446.ars_trinkets.item.runes.*;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
@@ -52,6 +50,8 @@ public class ItemRegistry {
     static final public DeferredHolder<Item, EssenceCores> CORE_2 = ITEMS.register("essence_core_2", () -> new EssenceCores(tierRareCurioProperties, 2));
     static final public DeferredHolder<Item, EssenceCores> CORE_3 = ITEMS.register("essence_core_3", () -> new EssenceCores(tierEpicCurioProperties, 3));
 
+    static final public DeferredHolder<Item, ResetLevelItemGeneric> OBLIVION = ITEMS.register("putrid_heart", () -> new ResetLevelItemGeneric(new Item.Properties()));
+
     static final public Item.Properties essenceProperties = new Item.Properties().fireResistant();
 
     static final public DeferredHolder<Item, EssenceConsumable> Essence1 = ITEMS.register("essence_1", () -> new EssenceConsumable(essenceProperties, 1, 25));
@@ -65,21 +65,23 @@ public class ItemRegistry {
     static final public DeferredHolder<Item, EssenceConsumable> Essence9 = ITEMS.register("essence_9", () -> new EssenceConsumable(essenceProperties, 9, 400));
     static final public DeferredHolder<Item, EssenceConsumable> Essence10 = ITEMS.register("essence_10", () -> new EssenceConsumable(essenceProperties, 10, 500));
 
-    static final public DeferredHolder<Item, MageRune> MAGE_RUNE_1 = ITEMS.register("mage_rune_lesser", () -> new MageRune(tierEpicCurioProperties, 1));
-    static final public DeferredHolder<Item, MageRune> MAGE_RUNE_2 = ITEMS.register("mage_rune", () -> new MageRune(tierEpicCurioProperties, 2));
-    static final public DeferredHolder<Item, MageRune> MAGE_RUNE_3 = ITEMS.register("mage_rune_greater", () -> new MageRune(tierEpicCurioProperties, 3));
+    static final public DeferredHolder<Item, MageRune> MAGE_RUNE_1 = ITEMS.register("mage_rune_lesser", (location) -> new MageRune(tierEpicCurioProperties, 1, location));
+    static final public DeferredHolder<Item, MageRune> MAGE_RUNE_2 = ITEMS.register("mage_rune", (location) -> new MageRune(tierEpicCurioProperties, 2, location));
+    static final public DeferredHolder<Item, MageRune> MAGE_RUNE_3 = ITEMS.register("mage_rune_greater", (location) -> new MageRune(tierEpicCurioProperties, 3, location));
 
-    static final public DeferredHolder<Item, WarriorRune> WARRIOR_RUNE_1 = ITEMS.register("warrior_rune_lesser", () -> new WarriorRune(tierEpicCurioProperties, 1));
-    static final public DeferredHolder<Item, WarriorRune> WARRIOR_RUNE_2 = ITEMS.register("warrior_rune", () -> new WarriorRune(tierEpicCurioProperties, 2));
-    static final public DeferredHolder<Item, WarriorRune> WARRIOR_RUNE_3 = ITEMS.register("warrior_rune_greater", () -> new WarriorRune(tierEpicCurioProperties, 3));
+    static final public DeferredHolder<Item, WarriorRune> WARRIOR_RUNE_1 = ITEMS.register("warrior_rune_lesser", (location) -> new WarriorRune(tierEpicCurioProperties, 1, location));
+    static final public DeferredHolder<Item, WarriorRune> WARRIOR_RUNE_2 = ITEMS.register("warrior_rune", (location) -> new WarriorRune(tierEpicCurioProperties, 2, location));
+    static final public DeferredHolder<Item, WarriorRune> WARRIOR_RUNE_3 = ITEMS.register("warrior_rune_greater", (location) -> new WarriorRune(tierEpicCurioProperties, 3, location));
 
-    static final public DeferredHolder<Item, LifeRune> LIFE_RUNE_1 = ITEMS.register("life_rune_lesser", () -> new LifeRune(tierEpicCurioProperties, 1));
-    static final public DeferredHolder<Item, LifeRune> LIFE_RUNE_2 = ITEMS.register("life_rune", () -> new LifeRune(tierEpicCurioProperties, 2));
-    static final public DeferredHolder<Item, LifeRune> LIFE_RUNE_3 = ITEMS.register("life_rune_greater", () -> new LifeRune(tierEpicCurioProperties, 3));
+    static final public DeferredHolder<Item, LifeRune> LIFE_RUNE_1 = ITEMS.register("life_rune_lesser", (location) -> new LifeRune(tierEpicCurioProperties, 1, location));
+    static final public DeferredHolder<Item, LifeRune> LIFE_RUNE_2 = ITEMS.register("life_rune", (location) -> new LifeRune(tierEpicCurioProperties, 2, location));
+    static final public DeferredHolder<Item, LifeRune> LIFE_RUNE_3 = ITEMS.register("life_rune_greater", (location) -> new LifeRune(tierEpicCurioProperties, 3, location));
 
-    static final public DeferredHolder<Item, DeathRune> DEATH_RUNE_1 = ITEMS.register("death_rune_lesser", () -> new DeathRune(tierEpicCurioProperties, 1));
-    static final public DeferredHolder<Item, DeathRune> DEATH_RUNE_2 = ITEMS.register("death_rune", () -> new DeathRune(tierEpicCurioProperties, 2));
-    static final public DeferredHolder<Item, DeathRune> DEATH_RUNE_3 = ITEMS.register("death_rune_greater", () -> new DeathRune(tierEpicCurioProperties, 3));
+    static final public DeferredHolder<Item, DeathRune> DEATH_RUNE_1 = ITEMS.register("death_rune_lesser", (location) -> new DeathRune(tierEpicCurioProperties, 1, location));
+    static final public DeferredHolder<Item, DeathRune> DEATH_RUNE_2 = ITEMS.register("death_rune", (location) -> new DeathRune(tierEpicCurioProperties, 2, location));
+    static final public DeferredHolder<Item, DeathRune> DEATH_RUNE_3 = ITEMS.register("death_rune_greater", (location) -> new DeathRune(tierEpicCurioProperties, 3, location));
 
-    static final public DeferredHolder<Item, OmnipotenceRune> DIVINITY = ITEMS.register("omnipotence_crown", () -> new OmnipotenceRune(tierEpicCurioProperties, 5));
+    static final public DeferredHolder<Item, EternityRune> ETERNITY_RUNE = ITEMS.register("eternity_rune", (location) -> new EternityRune(tierEpicCurioProperties, 0, location));
+
+    static final public DeferredHolder<Item, OmnipotenceRune> DIVINITY = ITEMS.register("omnipotence_crown", (loc) -> new OmnipotenceRune(tierEpicCurioProperties, 5, loc));
 }

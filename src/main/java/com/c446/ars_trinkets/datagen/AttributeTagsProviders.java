@@ -39,6 +39,7 @@ public class AttributeTagsProviders extends TagsProvider<Attribute> {
                 .add(Objects.requireNonNull(Attributes.SCALE.getKey()))
                 .add(Objects.requireNonNull(Attributes.SNEAKING_SPEED.getKey()))
                 .add(Objects.requireNonNull(Attributes.FALL_DAMAGE_MULTIPLIER.getKey()))
+                .add(Objects.requireNonNull(Attributes.JUMP_STRENGTH.getKey()))
                 .add(Attributes.SNEAKING_SPEED.getKey())
                 .add(PerkAttributes.DRYGMY.getKey())
                 .add(PerkAttributes.WIXIE.getKey())

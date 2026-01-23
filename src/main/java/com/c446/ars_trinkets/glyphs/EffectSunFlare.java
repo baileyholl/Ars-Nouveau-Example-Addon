@@ -16,11 +16,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -28,10 +26,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-public class SunFlare extends AbstractEffect implements IDamageEffect {
-    public static final SunFlare INSTANCE = new SunFlare(ArsTrinkets.prefix("glyph_sun_flare"), "Sun Flare");
+public class EffectSunFlare extends AbstractEffect implements IDamageEffect {
+    public static final EffectSunFlare INSTANCE = new EffectSunFlare(ArsTrinkets.prefix("glyph_sun_flare"), "Sun Flare");
 
-    public SunFlare(ResourceLocation tag, String description) {
+    public EffectSunFlare(ResourceLocation tag, String description) {
         super(tag, description);
     }
 

@@ -21,14 +21,14 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-public class AirSwordEffect extends AbstractEffect implements IDamageEffect {
-    public static AirSwordEffect INSTANCE = new AirSwordEffect(ArsTrinkets.prefix("glyph_sword"), "conjures a blade of wind that pierces the enemy, negating invulnerability");
+public class EffectAirSword extends AbstractEffect implements IDamageEffect {
+    public static EffectAirSword INSTANCE = new EffectAirSword(ArsTrinkets.prefix("glyph_sword"), "conjures a blade of wind that pierces the enemy, negating invulnerability");
 
-    public AirSwordEffect(String tag, String description) {
+    public EffectAirSword(String tag, String description) {
         super(tag, description);
     }
 
-    public AirSwordEffect(ResourceLocation tag, String description) {
+    public EffectAirSword(ResourceLocation tag, String description) {
         super(tag, description);
     }
 

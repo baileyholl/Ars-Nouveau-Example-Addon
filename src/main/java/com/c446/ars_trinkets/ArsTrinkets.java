@@ -1,8 +1,10 @@
 package com.c446.ars_trinkets;
 
 import com.c446.ars_trinkets.brigadier.ArsTrinketsLevelCommand;
+import com.c446.ars_trinkets.datagen.ComponentRegistry;
 import com.c446.ars_trinkets.registry.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -17,26 +19,35 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(ArsTrinkets.MODID)
 public class ArsTrinkets {
     public static final String MODID = "ars_trinkets";
 
     public static final Logger LOGGER = LogManager.getLogger();
+    public static Set<UUID> OMNIPOTENT_PLAYER = new HashSet<>();
 
     public ArsTrinkets(IEventBus modEventBus, ModContainer modContainer) {
         ArsNouveauRegistry.registerGlyphs();
         AttributeRegistry.ATTRIBUTES.register(modEventBus);
         BlockRegistry.BLOCKS.register(modEventBus);
         CapabilityRegistry.ATTACHMENT_TYPES.register(modEventBus);
+        ComponentRegistry.COMPONENTS.register(modEventBus);
         CreativeTabRegistry.CREATIVE_MOD_TABS.register(modEventBus);
         EffectsRegistry.EFFECTS.register(modEventBus);
         ItemRegistry.ITEMS.register(modEventBus);
         ModRegistry.SOUNDS.register(modEventBus);
+        EntityRegistry.ENTITIES.register(modEventBus);
 
         modEventBus.addListener(this::setup);
         modEventBus.addListener(this::doClientStuff);
-        NeoForge.EVENT_BUS.register(this);
+//        modEventBus.addListener(this::onRegisterCommands);
+//        NeoForge.EVENT_BUS.register(this);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.COMMON);
     }
@@ -53,10 +64,7 @@ public class ArsTrinkets {
 
     }
 
-    @SubscribeEvent
-    public static void onRegisterCommands(RegisterCommandsEvent event) {
-        ArsTrinketsLevelCommand.register(event.getDispatcher());
-    }
+
 
     public static void setInterval(Runnable method, int tickInterval, int timeToLive) {
         NeoForge.EVENT_BUS.register(new SetInterval(method, tickInterval, timeToLive));

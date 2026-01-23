@@ -14,6 +14,7 @@ import java.util.List;
 public class Config {
 
     public static class Common {
+        public static ModConfigSpec.ConfigValue<String> CURIOS_FILE_PATH;
         public static ModConfigSpec.IntValue AURA_BASE_DURATION;
         public static ModConfigSpec.IntValue AURA_BASE_RADIUS;
         public static ModConfigSpec.IntValue AURA_BASE_DELAY;
@@ -29,7 +30,12 @@ public class Config {
         public static ModConfigSpec.ConfigValue<List<? extends Integer>> MANA_REGEN_BONUS_PER_LEVEL;
         public static ModConfigSpec.ConfigValue<List<? extends Integer>> SOUL_QUANTITY_FOR_ESSENCE_LEVEL;
 
+        public static ModConfigSpec.ConfigValue<List<List<? extends String>>> LEVEL_BONUSES_RAW;
+
         public Common(ModConfigSpec.Builder builder) {
+            CURIOS_FILE_PATH = builder.define("ars_trinkets_curios_config", "ars_trinkets/curios_config.json");
+            builder.comment("^^THE FILE ABOVE HAS TO BE SPECIFIED WITH THE PATH FORMATTING OF YOUR OS!\nPLACE IT WITHIN THE NEOFORGE CONFIG DIRECTORY!\nTHIS PATH IS RELATIVE.\nFOR A PATH IN \"~/Documents/my-instance/config/ars_trinkets/custom_eternity_rune.json\", PLEASE PUT \"ars_trinkets/custom_eternity_rune.json\"\nA DEFAULT CONFIG CAN BE FOUND HERE!!! (https://github.com/clcment446/ars_trinkets");
+
             AURA_BASE_DURATION = builder.defineInRange("aura_base_duration", 20 * 5, 1, 10000000);
             AURA_BASE_RADIUS = builder.defineInRange("aura_base_radius", 10, 1, 10000000);
             AURA_BASE_DELAY = builder.defineInRange("aura_base_delay", 10, 1, 10000000);

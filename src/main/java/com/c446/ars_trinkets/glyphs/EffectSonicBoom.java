@@ -12,7 +12,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
@@ -23,17 +22,16 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.c446.ars_trinkets.Util.CreateParticleBeam;
 
-public class SonicBoom extends AbstractEffect
+public class EffectSonicBoom extends AbstractEffect
         implements IDamageEffect {
-    public SonicBoom(ResourceLocation tag, String description) {
+    public EffectSonicBoom(ResourceLocation tag, String description) {
         super(tag, description);
     }
 
-    public static final SonicBoom INSTANCE = new SonicBoom(new ResourceLocation(ArsTrinkets.MODID, "glyph_sonic_boom"), "Sonic Boom");
+    public static final EffectSonicBoom INSTANCE = new EffectSonicBoom(new ResourceLocation(ArsTrinkets.MODID, "glyph_sonic_boom"), "Sonic Boom");
 
     double damage;
     double damageBonusTimes;

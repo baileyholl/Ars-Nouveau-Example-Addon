@@ -3,12 +3,14 @@ package com.c446.ars_trinkets.capabilities;
 import com.c446.ars_trinkets.ArsTrinkets;
 import com.c446.ars_trinkets.Config;
 import com.c446.ars_trinkets.datagen.AttributeTagsProviders;
+import com.c446.ars_trinkets.entities.red_lightning.RedLightning;
 import com.c446.ars_trinkets.events.LevelModifiedEvent;
 import com.c446.ars_trinkets.registry.AttributeRegistry;
 import com.c446.ars_trinkets.registry.CapabilityRegistry;
 import com.hollingsworth.arsnouveau.api.event.ManaRegenCalcEvent;
 import com.hollingsworth.arsnouveau.api.event.MaxManaCalcEvent;
 import com.hollingsworth.arsnouveau.api.event.SpellDamageEvent;
+import com.hollingsworth.arsnouveau.setup.registry.AttachmentsRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -22,8 +24,11 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
+import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
@@ -64,9 +69,12 @@ public class PlayerLevelHandling {
         }
     }
 
+
+
     //TODO: patchouli book, add titles back in, on level-up broadcasting etc...
     @SubscribeEvent
     public static void onDamage(LivingDamageEvent.Pre d) {
+        //System.out.println(FMLPaths.CONFIGDIR.get());
         if (d.getSource().getEntity() instanceof Player attacker && attacker.hasData(CapabilityRegistry.LEVEL_CAP)) {
             d.setNewDamage((float) (d.getNewDamage() * attacker.getData(CapabilityRegistry.LEVEL_CAP).getDamageMult()));
         }
@@ -88,15 +96,23 @@ public class PlayerLevelHandling {
         ArsTrinkets.LOGGER.debug("damage mult: {}", cap.getDamageMult());
 
         if (cap.level >= Config.Common.MAX_LEVEL_ALLOWED.getAsInt()) e.setCanceled(true);
+    }
 
-        if (e.entity instanceof ServerPlayer sp && !e.isCanceled()) {
-            sp.displayClientMessage(Component.literal("you are now a ").append(cap.getTitle()), false);
+    @SubscribeEvent
+    public static void onLevelUpPost(LevelModifiedEvent.Post e){
+        if (e.entity instanceof ServerPlayer sp) {
+            var cap = sp.getData(CapabilityRegistry.LEVEL_CAP);
+            sp.displayClientMessage(Component.translatable("text.ars_trinkets.ritual_" + (cap.level)).append(cap.getTitle()), false);
         }
     }
 
     @SubscribeEvent
     public static void spellDamageEvent(SpellDamageEvent e) {
-        e.damage *= (float) e.caster.getAttributeValue(AttributeRegistry.SPELL_DAMAGE_ABSOLUTE);
+        try {
+            e.damage *= (float) e.caster.getAttributeValue(AttributeRegistry.SPELL_DAMAGE_ABSOLUTE);
+        } catch (IllegalArgumentException ignored){
+
+        }
     }
 
     @SubscribeEvent
@@ -236,6 +252,10 @@ public class PlayerLevelHandling {
         UUID playerId = e.getEntity().getUUID();
         LAST_DIVINITY_VALUE.remove(playerId);
         LAST_ATTRIBUTE_VALUES.remove(playerId);
+    }
+
+    public static void onMobSpawn(FinalizeSpawnEvent e){
+
     }
 
 }

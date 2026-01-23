@@ -24,14 +24,14 @@ import java.util.Objects;
 import java.util.Set;
 
 
-public class WaterSpear extends AbstractEffect implements IDamageEffect {
-    public WaterSpear(String tag, String description) {
+public class EffectWaterSpear extends AbstractEffect implements IDamageEffect {
+    public EffectWaterSpear(String tag, String description) {
         super(tag, description);
     }
 
-    public static final WaterSpear INSTANCE = new WaterSpear(new ResourceLocation(ArsTrinkets.MODID, "glyph_water_spear"), "Water Spear");
+    public static final EffectWaterSpear INSTANCE = new EffectWaterSpear(new ResourceLocation(ArsTrinkets.MODID, "glyph_water_spear"), "Water Spear");
 
-    public WaterSpear(ResourceLocation tag, String description) {
+    public EffectWaterSpear(ResourceLocation tag, String description) {
         super(tag, description);
     }
 

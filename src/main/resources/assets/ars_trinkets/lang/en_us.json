@@ -51,7 +51,10 @@
   "ars_trinkets.item.unholy_focus.tooltip": "Empowers glyphs from the Elemental Void School.",
   "item.ars_trinkets.unholy_focus": "Cursed Focus",
   "ars_trinkets.perk.soul_steal": "Collected Souls",
-  "ars_trinkets.perk.spell_damage_pct": "Spell Damage",
+  "ars_trinkets.perk.spell_damage_increase_absolute": "Absolute Spell Damage Increase",
+  "ars_trinkets.perk.spell_damage_increase_absolute.desc": "Increases the damage of Ars Nouveau Spell Damage by an totalX multiplier instead of a flat+ value.",
+  "ars_trinkets.perk.divinity": "Absolute Spell Damage Increase",
+  "ars_trinkets.perk.divinity.desc": "Increases the value of all attributes that aren't blacklisted by tags by a multiply total value equal to it's own value.",
   "ars_trinkets.perk.total_mana_regen_boost": "Total Mana Regeneration",
   "ars_trinkets.perk.total_mana_boost": "Total Mana",
   "player_not_cursed.glyph_stopped": "You can not use this glyph yet...",
@@ -133,6 +136,8 @@
   "text.ars_trinkets.ritual_7": "You are now a ",
   "text.ars_trinkets.ritual_8": "You are now an ",
   "text.ars_trinkets.ritual_9": "You are now a ",
+  "text.ars_trinkets.titles.dsc0": "Mortal",
+  "text.ars_trinkets.titles.asc0": "Mortal",
   "text.ars_trinkets.titles.asc1": "First Circle Mage Apprentice",
   "text.ars_trinkets.titles.asc2": "Second Circle Mage Apprentice",
   "text.ars_trinkets.titles.asc3": "Third Circle Mage Apprentice",
@@ -153,7 +158,8 @@
   "text.ars_trinkets.titles.dsc9": "Ninth Circle Legendary Dark Archmage",
   "item.ars_trinkets.putrid_heart": "Heart of Blasphemy",
   "item.ars_trinkets.holy_heart": "Sanctified Heart",
-  "item.ars_trinkets.thearch_crown": "Exalted Thearch Worthy of Heaven and Earth's Crown.",
+  "item.ars_trinkets.omnipotence_crown": "Crown of the Exalted One",
+  "item.ars_trinkets.omnipotence_crown.desc" : "Cannot be unequipped.",
   "item.ars_trinkets.essence_core_1": "Human's Heart",
   "item.ars_trinkets.essence_core_2": "Mage's Heart",
   "item.ars_trinkets.essence_core_3": "Archmage's Source Heart",
@@ -190,5 +196,6 @@
   "text.ars_trinkets.souls.cored": "cored ",
   "text.ars_trinkets.souls.warning_corruption": "You approach madness as you feast on your killed foes.",
   "tooltips.ars_trinkets.crown0": "Those Worthy of the Crown are few.",
-  "tab.ars_trinkets.main": "Ars Trinkets Items"
+  "tab.ars_trinkets.main": "Ars Trinkets Items",
+  "item.ars_trinkets.putrid_heart.desc": "This item allows you to rid yourself of the powers you have gained."
 }

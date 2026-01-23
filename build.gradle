@@ -157,8 +157,8 @@ dependencies {
     // base AN dependencies
     implementation "software.bernie.geckolib:geckolib-neoforge-1.21.1:${geckolib_version}"
     compileOnly('vazkii.patchouli:Patchouli:1.21-87-NEOFORGE')
-    runtimeOnly "curse.maven:mmmmmmmmmmmm-225738:5779508"
-    runtimeOnly "curse.maven:selene-499980:6114818"
+    //runtimeOnly "curse.maven:mmmmmmmmmmmm-225738:5779508"
+    //runtimeOnly "curse.maven:selene-499980:6114818"
     //implementation("com.hollingsworth.ars_nouveau:ars_nouveau-${minecraft_version}:${ars_version}")
     implementation "curse.maven:ars-nouveau-401955:7394698"
     localRuntime "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}"
