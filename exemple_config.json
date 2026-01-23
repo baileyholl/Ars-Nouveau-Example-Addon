@@ -1,7 +1,7 @@
 {
   "ars_trinkets:death_rune": { // as of now, only the "RUNE" items support this. in the future, more will do like Lotuses and others, but for now this will do.
     //TODO: make lotuses/rings supported.
-    "mode": "OVERRIDE",
+    "mode": "OVERRIDE", // should always be in [MERGE, OVERRIDE]. default is MERGE if this line is missing.
     "attributes": {
       "minecraft:generic.attack_damage": [
         {
