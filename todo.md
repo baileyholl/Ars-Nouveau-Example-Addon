@@ -1,0 +1,10 @@
+- on kill XP gain
+- on kill purity loss
+- on kill core buildup
+- pocket dimension
+- trinket recipes
+- runes
+  - mage 
+  - warrior
+  - life
+  - death

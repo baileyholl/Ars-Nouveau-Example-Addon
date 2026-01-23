@@ -1,0 +1,22 @@
+{
+  "type": "ars_nouveau:imbuement",
+  "input": {
+    "item": "minecraft:gold_block"
+  },
+  "output": {
+    "count": 1,
+    "id": "minecraft:iron_block"
+  },
+  "pedestalItems": [
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:gold_block"
+    },
+    {
+      "item": "minecraft:gold_nugget"
+    }
+  ],
+  "source": 450
+}

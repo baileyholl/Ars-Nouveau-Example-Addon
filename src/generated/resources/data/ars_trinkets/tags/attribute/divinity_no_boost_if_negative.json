@@ -1,0 +1,40 @@
+{
+  "values": [
+    {
+      "id": "ars_nouveau:sauce.perk.air_resistance",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:sauce.perk.abjuration_resistance",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:sauce.perk.earth_resistance",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:sauce.perk.elemental_resistance",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:sauce.perk.fire_resistance",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:sauce.perk.necromancy_resistance",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:sauce.perk.manipulation_resistance",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:sauce.perk.summon_resistance",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:sauce.perk.water_resistance",
+      "required": false
+    }
+  ]
+}

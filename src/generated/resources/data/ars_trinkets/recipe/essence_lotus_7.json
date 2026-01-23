@@ -1,0 +1,38 @@
+{
+  "type": "ars_nouveau:enchanting_apparatus",
+  "keepNbtOfReagent": false,
+  "pedestalItems": [
+    {
+      "item": "ars_trinkets:essence_7"
+    },
+    {
+      "item": "ars_trinkets:essence_7"
+    },
+    {
+      "item": "ars_trinkets:essence_7"
+    },
+    {
+      "item": "ars_trinkets:essence_7"
+    },
+    {
+      "item": "ars_trinkets:essence_7"
+    },
+    {
+      "item": "ars_trinkets:essence_7"
+    },
+    {
+      "item": "ars_trinkets:essence_7"
+    },
+    {
+      "item": "ars_trinkets:essence_7"
+    }
+  ],
+  "reagent": {
+    "item": "ars_trinkets:essence_lotus_6"
+  },
+  "result": {
+    "count": 1,
+    "id": "ars_trinkets:essence_lotus_7"
+  },
+  "sourceCost": 3500
+}

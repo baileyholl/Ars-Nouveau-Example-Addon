@@ -1,0 +1,22 @@
+{
+  "type": "ars_nouveau:imbuement",
+  "input": {
+    "item": "minecraft:copper_block"
+  },
+  "output": {
+    "count": 1,
+    "id": "minecraft:gold_block"
+  },
+  "pedestalItems": [
+    {
+      "item": "minecraft:copper_ingot"
+    },
+    {
+      "item": "minecraft:copper_block"
+    },
+    {
+      "item": "minecraft:copper_block"
+    }
+  ],
+  "source": 450
+}

@@ -1,0 +1,21 @@
+{
+  "values": [
+    "minecraft:generic.gravity",
+    "minecraft:generic.scale",
+    "minecraft:player.sneaking_speed",
+    "minecraft:generic.fall_damage_multiplier",
+    "minecraft:generic.jump_strength",
+    "minecraft:player.sneaking_speed",
+    "ars_nouveau:ars_nouveau.perk.drygmy",
+    "ars_nouveau:ars_nouveau.perk.wixie",
+    "ars_nouveau:ars_nouveau.perk.feather",
+    "ars_nouveau:ars_nouveau.perk.warding",
+    "ars_nouveau:ars_nouveau.perk.saturation",
+    "ars_nouveau:ars_nouveau.perk.weight",
+    "ars_trinkets:ars_trinkets.perk.divinity",
+    {
+      "id": "caelus:fall_flying",
+      "required": false
+    }
+  ]
+}

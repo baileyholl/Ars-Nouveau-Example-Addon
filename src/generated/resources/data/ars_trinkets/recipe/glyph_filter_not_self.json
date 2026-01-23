@@ -1,0 +1,22 @@
+{
+  "type": "ars_nouveau:glyph",
+  "exp": 55,
+  "inputs": [
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "item": "ars_trinkets:glyph_filter_self"
+    }
+  ],
+  "output": {
+    "count": 1,
+    "id": "ars_trinkets:glyph_filter_not_self"
+  }
+}

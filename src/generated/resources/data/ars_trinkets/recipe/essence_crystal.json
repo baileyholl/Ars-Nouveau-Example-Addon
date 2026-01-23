@@ -1,0 +1,37 @@
+{
+  "type": "ars_nouveau:imbuement",
+  "input": {
+    "item": "ars_trinkets:essence_4"
+  },
+  "output": {
+    "count": 1,
+    "id": "ars_trinkets:essence_5"
+  },
+  "pedestalItems": [
+    {
+      "item": "ars_trinkets:essence_4"
+    },
+    {
+      "item": "ars_trinkets:essence_4"
+    },
+    {
+      "item": "ars_trinkets:essence_4"
+    },
+    {
+      "item": "ars_trinkets:essence_4"
+    },
+    {
+      "item": "ars_trinkets:essence_4"
+    },
+    {
+      "item": "ars_trinkets:essence_4"
+    },
+    {
+      "item": "minecraft:amethyst_block"
+    },
+    {
+      "item": "minecraft:amethyst_block"
+    }
+  ],
+  "source": 160
+}

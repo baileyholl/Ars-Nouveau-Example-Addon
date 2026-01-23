@@ -1,0 +1,26 @@
+{
+  "type": "ars_nouveau:enchanting_apparatus",
+  "keepNbtOfReagent": false,
+  "pedestalItems": [
+    {
+      "item": "ars_trinkets:essence_6"
+    },
+    {
+      "item": "ars_trinkets:essence_6"
+    },
+    {
+      "item": "ars_trinkets:essence_6"
+    },
+    {
+      "item": "ars_trinkets:essence_6"
+    }
+  ],
+  "reagent": {
+    "item": "minecraft:enchanted_golden_apple"
+  },
+  "result": {
+    "count": 1,
+    "id": "ars_trinkets:putrid_heart"
+  },
+  "sourceCost": 0
+}

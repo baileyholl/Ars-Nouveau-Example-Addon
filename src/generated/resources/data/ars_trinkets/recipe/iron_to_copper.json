@@ -1,0 +1,22 @@
+{
+  "type": "ars_nouveau:imbuement",
+  "input": {
+    "item": "minecraft:iron_block"
+  },
+  "output": {
+    "count": 1,
+    "id": "minecraft:copper_block"
+  },
+  "pedestalItems": [
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "minecraft:iron_block"
+    },
+    {
+      "item": "minecraft:iron_block"
+    }
+  ],
+  "source": 450
+}

@@ -1,0 +1,38 @@
+{
+  "type": "ars_nouveau:enchanting_apparatus",
+  "keepNbtOfReagent": false,
+  "pedestalItems": [
+    {
+      "item": "ars_trinkets:essence_3"
+    },
+    {
+      "item": "ars_trinkets:essence_3"
+    },
+    {
+      "item": "ars_trinkets:essence_3"
+    },
+    {
+      "item": "ars_trinkets:essence_3"
+    },
+    {
+      "item": "ars_trinkets:essence_3"
+    },
+    {
+      "item": "ars_trinkets:essence_3"
+    },
+    {
+      "item": "ars_trinkets:essence_3"
+    },
+    {
+      "item": "ars_trinkets:essence_3"
+    }
+  ],
+  "reagent": {
+    "item": "ars_nouveau:ring_of_potential"
+  },
+  "result": {
+    "count": 1,
+    "id": "ars_trinkets:essence_ring_3"
+  },
+  "sourceCost": 1500
+}

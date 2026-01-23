@@ -1,0 +1,38 @@
+{
+  "type": "ars_nouveau:enchanting_apparatus",
+  "keepNbtOfReagent": false,
+  "pedestalItems": [
+    {
+      "item": "ars_trinkets:essence_ring_10"
+    },
+    {
+      "item": "ars_trinkets:essence_ring_10"
+    },
+    {
+      "item": "ars_trinkets:essence_lotus_10"
+    },
+    {
+      "item": "ars_trinkets:essence_lotus_10"
+    },
+    {
+      "item": "ars_nouveau:fire_essence"
+    },
+    {
+      "item": "ars_nouveau:fire_essence"
+    },
+    {
+      "item": "ars_nouveau:fire_essence"
+    },
+    {
+      "item": "ars_nouveau:fire_essence"
+    }
+  ],
+  "reagent": {
+    "item": "minecraft:netherite_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "ars_trinkets:warrior_rune_lesser"
+  },
+  "sourceCost": 1000
+}

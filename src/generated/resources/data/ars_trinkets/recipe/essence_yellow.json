@@ -1,0 +1,31 @@
+{
+  "type": "ars_nouveau:imbuement",
+  "input": {
+    "item": "ars_trinkets:essence_8"
+  },
+  "output": {
+    "count": 1,
+    "id": "ars_trinkets:essence_9"
+  },
+  "pedestalItems": [
+    {
+      "item": "ars_trinkets:essence_8"
+    },
+    {
+      "item": "ars_trinkets:essence_8"
+    },
+    {
+      "item": "ars_trinkets:essence_8"
+    },
+    {
+      "item": "ars_trinkets:essence_8"
+    },
+    {
+      "item": "ars_trinkets:essence_8"
+    },
+    {
+      "item": "ars_trinkets:essence_8"
+    }
+  ],
+  "source": 900
+}
