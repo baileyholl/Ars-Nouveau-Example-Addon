@@ -1,10 +1,10 @@
 package com.c446.ars_trinkets.datagen;
 
 import com.c446.ars_trinkets.ArsTrinkets;
-import com.c446.ars_trinkets.glyphs.*;
-import com.c446.ars_trinkets.glyphs.filters.IsNotSelf;
-import com.c446.ars_trinkets.glyphs.filters.IsSelf;
-import com.c446.ars_trinkets.glyphs.forms.AuraForm;
+import com.c446.ars_trinkets.spells.glyphs.*;
+import com.c446.ars_trinkets.spells.glyphs.filters.IsNotSelf;
+import com.c446.ars_trinkets.spells.glyphs.filters.IsSelf;
+import com.c446.ars_trinkets.spells.glyphs.forms.AuraForm;
 import com.c446.ars_trinkets.registry.ItemRegistry;
 import com.hollingsworth.arsnouveau.common.crafting.recipes.EnchantingApparatusRecipe;
 import com.hollingsworth.arsnouveau.common.crafting.recipes.GlyphRecipe;
@@ -13,6 +13,8 @@ import com.hollingsworth.arsnouveau.common.datagen.ApparatusRecipeBuilder;
 import com.hollingsworth.arsnouveau.common.datagen.ApparatusRecipeProvider;
 import com.hollingsworth.arsnouveau.common.datagen.GlyphRecipeProvider;
 import com.hollingsworth.arsnouveau.common.datagen.ImbuementRecipeProvider;
+import com.hollingsworth.arsnouveau.common.spell.effect.EffectGrow;
+import com.hollingsworth.arsnouveau.common.spell.effect.EffectLightning;
 import com.hollingsworth.arsnouveau.common.spell.method.MethodSelf;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import com.mojang.serialization.JsonOps;
@@ -50,17 +52,16 @@ public class ArsProviders {
 
             Path output = this.generator.getPackOutput().getOutputFolder();
 
-            //recipes.add(get(RandomCancel.QUARTER).withItem(Items.COMPARATOR));
-            //recipes.add(get(RandomCancel.HALF).withItem(RandomCancel.QUARTER.glyphItem).withItem(Items.COMPARATOR));
-            //recipes.add(get(RandomCancel.THREE_FOURTHS).withItem(RandomCancel.HALF.glyphItem).withItem(Items.COMPARATOR));
-            recipes.add(get(EffectAirSword.INSTANCE).withItem(Items.NETHERITE_BLOCK, 3).withItem(ItemsRegistry.AIR_ESSENCE, 3));
-            recipes.add(get(EffectWaterSpear.INSTANCE).withItem(Items.NETHERITE_BLOCK, 3).withItem(ItemsRegistry.WATER_ESSENCE, 3));
-            recipes.add(get(EffectSonicBoom.INSTANCE).withItem(Items.NETHERITE_BLOCK, 3).withItem(ItemsRegistry.AIR_ESSENCE, 3));
-            recipes.add(get(EffectSunFlare.INSTANCE).withItem(Items.NETHERITE_BLOCK, 3).withItem(ItemsRegistry.FIRE_ESSENCE, 3));
+            recipes.add(get(EffectAirSword.INSTANCE).withItem(NETHERITE_INGOT, 3).withItem(ItemsRegistry.AIR_ESSENCE, 3));
+            recipes.add(get(EffectWaterSpear.INSTANCE).withItem(NETHERITE_INGOT, 3).withItem(ItemsRegistry.WATER_ESSENCE, 3));
+            recipes.add(get(EffectSonicBoom.INSTANCE).withItem(NETHERITE_INGOT, 3).withItem(ItemsRegistry.AIR_ESSENCE, 3));
+            recipes.add(get(EffectSunFlare.INSTANCE).withItem(NETHERITE_INGOT, 3).withItem(ItemsRegistry.FIRE_ESSENCE, 3));
             recipes.add(get(IsSelf.INSTANCE).withItem(Items.LAPIS_LAZULI, 3).withItem(ItemsRegistry.MANIPULATION_ESSENCE, 3));
             recipes.add(get(IsNotSelf.INSTANCE).withItem(Items.REDSTONE, 3).withItem(IsSelf.INSTANCE.getGlyph().asItem()));
             //recipes.add(get(Inversion.INSTANCE).withItem(Items.REDSTONE, 3).withItem(EffectExchange.INSTANCE.getGlyph().asItem()).withItem(Items.NETHERITE_INGOT, 3));
-            recipes.add(get(AuraForm.INSTANCE).withItem(MethodSelf.INSTANCE.getGlyph().asItem()).withItem(Items.NETHERITE_BLOCK, 8));
+            recipes.add(get(AuraForm.INSTANCE).withItem(MethodSelf.INSTANCE.getGlyph().asItem()).withItem(Items.NETHERITE_BLOCK, 3));
+            recipes.add(get(EffectAncientLightningBolt.INSTANCE).withItem(EffectLightning.INSTANCE.getGlyph().asItem()).withItem(Essence10.get(), 6));
+            recipes.add(get(EffectAdvancedGrowth.INSTANCE).withItem(EffectGrow.INSTANCE.getGlyph().asItem()).withItem(Essence6.get(), 5));
 
             for (GlyphRecipe recipe : recipes) {
                 Path path = getScribeGlyphPath(output, recipe.output.getItem());

@@ -1,9 +1,9 @@
 package com.c446.ars_trinkets.registry;
 
-import com.c446.ars_trinkets.glyphs.*;
-import com.c446.ars_trinkets.glyphs.filters.IsNotSelf;
-import com.c446.ars_trinkets.glyphs.filters.IsSelf;
-import com.c446.ars_trinkets.glyphs.forms.AuraForm;
+import com.c446.ars_trinkets.spells.glyphs.*;
+import com.c446.ars_trinkets.spells.glyphs.filters.IsNotSelf;
+import com.c446.ars_trinkets.spells.glyphs.filters.IsSelf;
+import com.c446.ars_trinkets.spells.glyphs.forms.AuraForm;
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
 import com.hollingsworth.arsnouveau.api.registry.SpellSoundRegistry;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
@@ -29,6 +29,7 @@ public class ArsNouveauRegistry {
         register(AuraForm.INSTANCE);
         register(EffectInspectSoul.INSTANCE);
         register(EffectAdvancedGrowth.INSTANCE);
+        register(EffectAncientLightningBolt.INSTANCE);
     }
 
     public static void registerSounds(){

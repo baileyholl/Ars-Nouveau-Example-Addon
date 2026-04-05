@@ -3,13 +3,13 @@
   "exp": 160,
   "inputs": [
     {
-      "item": "minecraft:netherite_block"
+      "item": "minecraft:netherite_ingot"
     },
     {
-      "item": "minecraft:netherite_block"
+      "item": "minecraft:netherite_ingot"
     },
     {
-      "item": "minecraft:netherite_block"
+      "item": "minecraft:netherite_ingot"
     },
     {
       "item": "ars_nouveau:water_essence"

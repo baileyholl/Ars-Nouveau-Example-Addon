@@ -1,4 +1,4 @@
-package com.c446.ars_trinkets.glyphs;
+package com.c446.ars_trinkets.spells.glyphs;
 
 import com.c446.ars_trinkets.ArsTrinkets;
 import com.hollingsworth.arsnouveau.api.spell.*;

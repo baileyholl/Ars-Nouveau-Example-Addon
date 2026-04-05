@@ -1,8 +1,8 @@
 package com.c446.ars_trinkets.datagen;
 
 import com.c446.ars_trinkets.ArsTrinkets;
-import com.c446.ars_trinkets.glyphs.*;
-import com.c446.ars_trinkets.glyphs.forms.AuraForm;
+import com.c446.ars_trinkets.spells.glyphs.*;
+import com.c446.ars_trinkets.spells.glyphs.forms.AuraForm;
 import com.c446.ars_trinkets.registry.ItemRegistry;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -46,7 +46,8 @@ public class ModModelsProvider extends ItemModelProvider {
         glyph(AuraForm.INSTANCE);
         glyph(EffectInspectSoul.INSTANCE);
 //        glyph(Inversion.INSTANCE);
-
+        glyph(EffectAncientLightningBolt.INSTANCE);
+        glyph(EffectAdvancedGrowth.INSTANCE);
 
         //glyph(RandomCancel.HALF);
         //glyph(RandomCancel.QUARTER);

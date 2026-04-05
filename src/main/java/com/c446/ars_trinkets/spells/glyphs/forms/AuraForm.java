@@ -1,14 +1,12 @@
-package com.c446.ars_trinkets.glyphs.forms;
+package com.c446.ars_trinkets.spells.glyphs.forms;
 
 import com.c446.ars_trinkets.ArsTrinkets;
 import com.c446.ars_trinkets.Config;
 import com.c446.ars_trinkets.registry.EffectsRegistry;
 import com.hollingsworth.arsnouveau.api.spell.*;
-import com.hollingsworth.arsnouveau.api.util.BlockUtil;
 import com.hollingsworth.arsnouveau.common.spell.augment.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -26,8 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Set;
-
-import com.c446.ars_trinkets.registry.ModRegistry;
 
 import static com.c446.ars_trinkets.ArsTrinkets.prefix;
 import static com.c446.ars_trinkets.Config.Common.AURA_BASE_RADIUS;

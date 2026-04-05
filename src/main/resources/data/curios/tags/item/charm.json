@@ -1,5 +1,5 @@
 {
-//  "replace": false,
+  "replace": false,
   "values": [
     "ars_trinkets:life_rune",
     "ars_trinkets:mage_rune",

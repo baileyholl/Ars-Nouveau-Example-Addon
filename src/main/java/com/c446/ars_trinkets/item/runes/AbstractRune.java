@@ -1,8 +1,7 @@
 package com.c446.ars_trinkets.item.runes;
 
-import com.c446.ars_trinkets.ArsTrinkets;
 import com.c446.ars_trinkets.Config;
-import com.c446.ars_trinkets.glyphs.AttributeMapParsing;
+import com.c446.ars_trinkets.spells.glyphs.AttributeMapParsing;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.Holder;
@@ -11,13 +10,9 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.fml.loading.FMLPaths;
-import org.spongepowered.asm.mixin.gen.throwables.InvalidAccessorException;
-import org.w3c.dom.Attr;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
-import java.nio.file.Path;
 import java.util.HashMap;
 
 public abstract class AbstractRune extends Item implements ICurioItem {
@@ -38,55 +33,52 @@ public abstract class AbstractRune extends Item implements ICurioItem {
             SlotContext slotContext,
             ResourceLocation id,
             ItemStack stack
-    ) throws RuntimeException {
-        var base = ICurioItem.super.getAttributeModifiers(slotContext, id, stack);
-        if (Config.COMMON.isLoaded()) {
+    ) {
+        // Get the base modifiers from the default Curio implementation
+        Multimap<Holder<Attribute>, AttributeModifier> base = ICurioItem.super.getAttributeModifiers(slotContext, id, stack);
 
-            if (!(stack.getItem() instanceof AbstractRune rune)) {
+        if (!Config.COMMON.isLoaded()) {
+            return base;
+        }
+
+        // Only run for AbstractRune items
+        if (!(stack.getItem() instanceof AbstractRune rune)) {
+            return base;
+        }
+
+        // Compute or fetch the cached config for this rune
+        AttributeMapParsing.AttributeConfigResult config = MAP.computeIfAbsent(
+                rune.registeredName,
+                loc -> AttributeMapParsing.buildMultiMapForItem(
+                        loc,
+                        AttributeMapParsing.cfg,
+                        id
+                )
+        );
+
+        Multimap<Holder<Attribute>, AttributeModifier> configMap = config.map();
+        AttributeMapParsing.AttributeConfigResult.Mode mode = config.mode();
+
+        switch (mode) {
+            case OVERRIDE -> {
+                this.wasOverridden = true;
+                // Return a COPY to avoid mutating the cached map
+                return HashMultimap.create(configMap);
+            }
+
+            case MERGE -> {
+                this.wasOverridden = false;
+                // Merge base and config modifiers
+                Multimap<Holder<Attribute>, AttributeModifier> merged = HashMultimap.create(base);
+                merged.putAll(configMap);
+                return merged;
+            }
+
+            default -> {
+                this.wasOverridden = false;
                 return base;
             }
-
-            var config = MAP.computeIfAbsent(
-                    rune.registeredName,
-                    loc -> AttributeMapParsing.buildMultiMap(
-                            loc,
-                            FMLPaths.CONFIGDIR.get().toAbsolutePath().resolve(Path.of(Config.Common.CURIOS_FILE_PATH.get())),
-                            id
-                    )
-            );
-
-            var configMap = config.map();
-            var mode = config.mode();
-
-            switch (mode) {
-                case OVERRIDE -> {
-//                    ArsTrinkets.LOGGER.debug("FOUND CONFIG IN OVERRIDE MODE for {}", rune.registeredName);
-                    this.wasOverridden = true;
-
-                    // Return a COPY to avoid shared mutable state bugs
-                    return HashMultimap.create(configMap);
-                }
-
-                case MERGE -> {
-  //                  ArsTrinkets.LOGGER.debug("FOUND CONFIG IN MERGE MODE for {}", rune.registeredName);
-                    this.wasOverridden = false;
-
-                    var merged = HashMultimap.create(base);
-                    merged.putAll(configMap);
-                    return merged;
-                }
-
-                default -> {
-    //                ArsTrinkets.LOGGER.debug("FOUND CONFIG IN DEFAULT MODE for {}", rune.registeredName);
-                    this.wasOverridden = false;
-                    return base;
-                }
-
-            }
-
-
         }
-        else {return base;}
     }
 
     float getMult() {

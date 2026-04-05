@@ -1,6 +1,5 @@
-package com.c446.ars_trinkets.glyphs;
+package com.c446.ars_trinkets.spells.glyphs;
 
-import com.c446.ars_trinkets.ArsTrinkets;
 import com.hollingsworth.arsnouveau.api.spell.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,17 +19,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 import com.hollingsworth.arsnouveau.api.ANFakePlayer;
-import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.api.util.BlockUtil;
 import com.hollingsworth.arsnouveau.api.util.SpellUtil;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentPierce;
-import net.minecraft.world.level.block.*;
-
-import java.util.*;
 
 public class EffectAdvancedGrowth extends AbstractEffect {
-    public static final EffectAdvancedGrowth INSTANCE = new EffectAdvancedGrowth(ArsTrinkets.prefix("glyph_advanced_growth"), "Advanced Growth");
+    public static final EffectAdvancedGrowth INSTANCE = new EffectAdvancedGrowth(ResourceLocation.parse("arsomega:glyph_advanced_grow"), "Advanced Growth");
 
     public EffectAdvancedGrowth(ResourceLocation tag, String description) {
         super(tag, description);

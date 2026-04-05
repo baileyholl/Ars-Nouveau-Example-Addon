@@ -1,7 +1,5 @@
 package com.c446.ars_trinkets.item.runes;
 
-import com.c446.ars_trinkets.glyphs.AttributeMapParsing;
-import com.c446.ars_trinkets.registry.ItemRegistry;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;

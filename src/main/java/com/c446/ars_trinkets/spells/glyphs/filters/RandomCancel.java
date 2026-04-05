@@ -1,6 +1,5 @@
-package com.c446.ars_trinkets.glyphs.filters;
+package com.c446.ars_trinkets.spells.glyphs.filters;
 
-import com.c446.ars_trinkets.ArsTrinkets;
 import com.hollingsworth.arsnouveau.api.spell.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
