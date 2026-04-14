@@ -17,8 +17,9 @@ public class EntityRegistry {
     public static final DeferredHolder<EntityType<?>, EntityType<RedLightning>> RED_LIGHTNING =
             registerEntity(
                     "red_lightning",
-                    EntityType.Builder.of(RedLightning::new, MobCategory.AMBIENT)
+                    EntityType.Builder.of(RedLightning::new, MobCategory.MISC)
                             .noSave()
+                            .noSummon()
                             .fireImmune()
             );
 

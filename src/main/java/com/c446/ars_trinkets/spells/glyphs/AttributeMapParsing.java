@@ -136,8 +136,9 @@ public class AttributeMapParsing {
     public static boolean tryApplyTo(@NotNull LivingEntity livingEntity) {
         ResourceLocation loc = BuiltInRegistries.ENTITY_TYPE.getKey(livingEntity.getType());
 
-        if (buildMultiMapForEntity(loc, cfg, resolveModifierId("auto", null)));
-        return false;
+/*        if (buildMultiMapForEntity(loc, cfg, resolveModifierId("auto", null)));
+        */return false;
+
     }
 
 }

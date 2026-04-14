@@ -1,5 +1,6 @@
 package com.c446.ars_trinkets.events;
 
+import com.c446.ars_trinkets.registry.ItemRegistry;
 import com.c446.ars_trinkets.tooltips.FlamingClientTooltipComponent;
 import com.c446.ars_trinkets.tooltips.SpinningClientTooltipComponent;
 import com.mojang.datafixers.util.Either;
@@ -61,7 +62,12 @@ public class ClientEvent {
                         if (type.equals(ArtefactStyles.TYPE_FLAME)) {
                             elements.add(currentPos++, Either.right(new FlamingClientTooltipComponent.FlamingTooltipData(styledContent)));
                         } else if (type.equals(ArtefactStyles.TYPE_GRAVITY)){
-                            elements.add(currentPos++, Either.right(new SpinningClientTooltipComponent.SpinningTooltipData(styledContent)));
+                            if (event.getItemStack().getItem().equals(ItemRegistry.DIVINITY)) {
+                                elements.add(currentPos++, Either.right(new SpinningClientTooltipComponent.SpinningTooltipData(styledContent,
+                                        "Most Supreme who Opens the World, Wielder of Talismans, Ruler of Calendrics, Truth Embracing Dao Embodying Future Radiance Nine Firmaments Time Governing Myriad Daos Non-Action All-Illuminating Great Hall Vast Heaven Golden Gate Fate Great Heavenly Venerable Black Martial High Supreme Deity"
+                                , event.getItemStack())));
+                            }
+                            elements.add(currentPos++, Either.right(new SpinningClientTooltipComponent.SpinningTooltipData(styledContent, event.getItemStack())));
                         }
 
                         if (!suffix.isEmpty()) {

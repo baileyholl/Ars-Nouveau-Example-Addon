@@ -218,7 +218,7 @@ public class PlayerLevelHandling {
 
                     // Only update if missing or meaningfully different
                     if (existing == null || existing.amount() != allValue) {
-                        ArsTrinkets.LOGGER.debug("adding/updating boost to: {}", attribute.getRegisteredName());
+                        //                        ArsTrinkets.LOGGER.debug("adding/updating boost to: {}", attribute.getRegisteredName());
                         instance.removeModifier(DIVINITY_STAT_BOOST_LOCATION);
                         instance.addTransientModifier(new AttributeModifier(
                                 DIVINITY_STAT_BOOST_LOCATION,

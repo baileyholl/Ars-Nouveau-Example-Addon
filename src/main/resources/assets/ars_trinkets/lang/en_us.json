@@ -163,7 +163,8 @@
   "item.ars_trinkets.putrid_heart": "Heart of Blasphemy",
   "item.ars_trinkets.holy_heart": "Sanctified Heart",
   "item.ars_trinkets.omnipotence_crown": "Crown of the Exalted One",
-  "item.ars_trinkets.omnipotence_crown.desc": "Cannot be unequipped.",
+  "item.ars_trinkets.omnipotence_crown.desc": "\uE446GThose Worthy of the Crown are few.\uE446",
+  "item.ars_trinkets.omnipotence_crown.desc.shift": "Cannot be unequipped.",
   "item.ars_trinkets.essence_core_1": "Human's Heart",
   "item.ars_trinkets.essence_core_2": "Mage's Heart",
   "item.ars_trinkets.essence_core_3": "Archmage's Source Heart",
@@ -199,7 +200,6 @@
   "text.ars_trinkets.souls.whispers.forbidden": "You can not peer through this soul !",
   "text.ars_trinkets.souls.cored": "cored ",
   "text.ars_trinkets.souls.warning_corruption": "You approach madness as you feast on your killed foes.",
-  "tooltips.ars_trinkets.crown0": "Those Worthy of the Crown are few.",
   "tab.ars_trinkets.main": "Ars Trinkets Items",
   "item.ars_trinkets.putrid_heart.desc": "This item allows you to rid yourself of the powers you have gained."
 }

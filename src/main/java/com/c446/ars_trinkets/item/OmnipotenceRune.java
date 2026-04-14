@@ -5,6 +5,7 @@ import com.c446.ars_trinkets.capabilities.LevelingCapability;
 import com.c446.ars_trinkets.item.runes.AbstractRune;
 import com.c446.ars_trinkets.registry.AttributeRegistry;
 import com.google.common.collect.Multimap;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -34,17 +35,24 @@ public class OmnipotenceRune extends AbstractRune {
     }
 
     @Override
+    public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
+        pTooltipComponents.add(Component.translatable("item.ars_trinkets.omnipotence_crown.desc"));
+
+
+
+        if (pTooltipFlag.hasShiftDown()) {
+            pTooltipComponents.add(Component.translatable("item.ars_trinkets.omnipotence_crown.desc.shift").withStyle(ChatFormatting.GRAY));
+        }
+        super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
+    }
+
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
         var map = super.getAttributeModifiers(slotContext, id, stack);
 
         map.put(AttributeRegistry.ALL, new AttributeModifier(id, 1.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
 
         return map;
-    }
-
-    @Override
-    public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
-        super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag);
     }
 
     @Override
