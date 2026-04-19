@@ -80,7 +80,7 @@ public class EffectAncientLightningBolt extends AbstractEffect implements IDamag
                     finalDamage *= damageMult;
 
                     //ArsTrinkets.LOGGER.debug("RLB found target {}\nmult: {}", target.getStringUUID(), damageMult);
-                    var type = damageMult > 1.5f?  DamageTypes.GENERIC : DamageTypes.LIGHTNING_BOLT;
+                    var type = damageMult > 1.5f ? DamageTypes.GENERIC : DamageTypes.LIGHTNING_BOLT;
 
                     attemptDamage(serverLevel, shooter, spellStats, spellContext, resolver,
                             target, DamageUtil.source(serverLevel, type, shooter), finalDamage);
@@ -88,8 +88,13 @@ public class EffectAncientLightningBolt extends AbstractEffect implements IDamag
                     if (target instanceof Creeper creeper) {
                         creeper.thunderHit(serverLevel, rlb);
                     }
+                    if (!spellContext.getRemainingSpell().isEmpty()) {
+                        SpellResolver childResolver = resolver.getNewResolver(spellContext.clone().makeChildContext());
+                        childResolver.onResolveEffect(world, new net.minecraft.world.phys.EntityHitResult(target));
+                    }
                 }
             });
+            //spellContext.setCanceled(true);
         }
     }
 

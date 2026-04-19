@@ -24,6 +24,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 ;
@@ -39,6 +40,22 @@ public class Util {
         return hasLineOfSight(level, entity1.getEyePosition(), entity2.getBoundingBox().getCenter());
     }
 
+    public static final double defaultEnemyBonusPerLevel[] = {1.0, 2.5, 5.0, 7.5, 10.0, 12.5, 15.0, 20.0, 25.0, 30.0};
+
+    /**
+     * @param level: int; the player's level. range is 0~9.
+     */
+    public static double getEnemyBonusForLevel(int level) {
+        List<? extends Float> configOption = Config.Common.WORLD_DIFFICULTY_PER_LEVEL.get();
+        if (configOption.size() > level) {
+
+            com.hollingsworth.arsnouveau.setup.config.Config.
+
+            return configOption.get(level);
+        } else {
+            return defaultEnemyBonusPerLevel[Math.min(level, defaultEnemyBonusPerLevel.length - 1)];
+        }
+    }
 
     public static void CreateParticleBeam(Vec3 start, Vec3 end, ServerLevel level, ParticleColor color) {
         /**

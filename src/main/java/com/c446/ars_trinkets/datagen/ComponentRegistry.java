@@ -2,7 +2,7 @@ package com.c446.ars_trinkets.datagen;
 
 import com.c446.ars_trinkets.ArsTrinkets;
 import com.c446.ars_trinkets.components.SourceOrbComponent;
-import com.c446.ars_trinkets.item.SourceOrb;
+//import com.c446.ars_trinkets.item.SourceOrb;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;

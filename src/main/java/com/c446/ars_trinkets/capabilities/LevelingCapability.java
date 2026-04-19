@@ -23,6 +23,24 @@ public class LevelingCapability implements INBTSerializable<CompoundTag> {
     public long souls; //
     public boolean cursed = false;
 
+    float getWorldDifficultyIncrease(){
+        switch (this.level){
+            default: return 1f;
+            case 1 : return 1.5f;
+            case 2 : return 2.5f;
+            case 3 : return 3f;
+            case 4 : return 4f;
+            case 5 : return 6f;
+            case 6 : return 8f;
+            case 7 : return 10f;
+            case 8 : return 15f;
+            case 9 : return 25f;
+            case 10: return 40f;
+        }
+
+
+    }
+
     @Override
     public @UnknownNullability CompoundTag serializeNBT(HolderLookup.Provider provider) {
         var cTag = new CompoundTag();

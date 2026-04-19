@@ -29,6 +29,7 @@ public class Config {
         public static ModConfigSpec.ConfigValue<List<? extends Double>> DAMAGE_BONUS_PER_LEVEL;
         public static ModConfigSpec.ConfigValue<List<? extends Integer>> MANA_REGEN_BONUS_PER_LEVEL;
         public static ModConfigSpec.ConfigValue<List<? extends Integer>> SOUL_QUANTITY_FOR_ESSENCE_LEVEL;
+        public static ModConfigSpec.ConfigValue<List<? extends Float>> WORLD_DIFFICULTY_PER_LEVEL;
 
         public static ModConfigSpec.ConfigValue<List<List<? extends String>>> LEVEL_BONUSES_RAW;
 
@@ -54,6 +55,19 @@ public class Config {
             MANA_BONUS_PER_LEVEL = builder.defineList("mana_bonus", List.of(25 * 3, 50 * 3, 125 * 3, 250 * 3, 500 * 3, 1500 * 3, 3000 * 3, 6000 * 3, 15000 * 3), e -> true);
             MANA_REGEN_BONUS_PER_LEVEL = builder.defineList("regen_bonus", List.of(25 * 3, 50 * 3, 125 * 3, 250 * 3, 500 * 3, 1500 * 3, 3000 * 3, 6000 * 3, 15000 * 3), e -> true);
 
+            WORLD_DIFFICULTY_PER_LEVEL = builder.defineList("world_difficulty_per_level",
+                    List.of(
+                            1f,
+                            2.5f,
+                            5.0f,
+                            7.5f,
+                            10.0f,
+                            12.5f,
+                            15.0f,
+                            20.0f,
+                            25.0f,
+                            30.0f
+                    ), e-> true);
         }
     }
 

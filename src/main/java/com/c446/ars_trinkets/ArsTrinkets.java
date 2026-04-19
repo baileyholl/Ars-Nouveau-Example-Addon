@@ -31,7 +31,7 @@ public class ArsTrinkets {
 
     public static final Logger LOGGER = LogManager.getLogger();
     public static Set<UUID> OMNIPOTENT_PLAYER = new HashSet<>();
-    public static Set<UUID> SOURCE_ORB_CHECK = new HashSet<>();
+    //public static Set<UUID> SOURCE_ORB_CHECK = new HashSet<>();
 
     public ArsTrinkets(IEventBus modEventBus, ModContainer modContainer) {
         ArsNouveauRegistry.registerGlyphs();

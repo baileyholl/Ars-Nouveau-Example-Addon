@@ -4,6 +4,7 @@ import com.c446.ars_trinkets.registry.ItemRegistry;
 import com.c446.ars_trinkets.tooltips.FlamingClientTooltipComponent;
 import com.c446.ars_trinkets.tooltips.SpinningClientTooltipComponent;
 import com.mojang.datafixers.util.Either;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
@@ -14,6 +15,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @EventBusSubscriber(value = Dist.CLIENT)
@@ -22,60 +24,138 @@ public class ClientEvent {
     @SubscribeEvent
     public static void onGatherTooltipComponents(RenderTooltipEvent.GatherComponents event) {
         List<Either<FormattedText, TooltipComponent>> elements = event.getTooltipElements();
+        List<Either<FormattedText, TooltipComponent>> rebuilt = new ArrayList<>();
+        List<SpiralLine> pendingSpiralBlock = new ArrayList<>();
+        int groupCounter = 0;
+        String phrase = event.getItemStack().getItem().equals(ItemRegistry.DIVINITY.get())
+                ? "Most Supreme who Opens the World, Wielder of Talismans, Ruler of Calendrics, Truth Embracing Dao Embodying Future Radiance Nine Firmaments Time Governing Myriad Daos Non-Action All-Illuminating Great Hall Vast Heaven Golden Gate Fate Great Heavenly Venerable Black Martial High Supreme Deity"
+                : null;
 
-        for (int i = 0; i < elements.size(); i++) {
-            var element = elements.get(i);
-            final int index = i;
+        for (Either<FormattedText, TooltipComponent> element : elements) {
+            var left = element.left();
+            if (left.isEmpty()) {
+                flushPendingSpiralBlock(pendingSpiralBlock, rebuilt, event, phrase, groupCounter++);
+                rebuilt.add(element);
+                continue;
+            }
 
-            element.left().ifPresent(formattedText -> {
-                String rawText = formattedText.getString();
+            FormattedText formattedText = left.get();
+            String rawText = formattedText.getString();
+            Style extractedStyle = formattedText instanceof Component comp ? comp.getStyle() : Style.EMPTY;
 
-                if (rawText.contains(ArtefactStyles.MARKER)) {
-                    int first = rawText.indexOf(ArtefactStyles.MARKER);
-                    int last = rawText.lastIndexOf(ArtefactStyles.MARKER);
-
-                    if (first != -1 && last != -1 && first != last) {
-                        String type = rawText.substring(first + 1, first + 2);
-                        String content = rawText.substring(first + 2, last);
-
-                        String prefix = rawText.substring(0, first);
-                        String suffix = rawText.substring(last + 1);
-
-                        // --- STYLE EXTRACTION ---
-                        // Since FormattedText doesn't have .getStyle(), we check if it's a Component.
-                        // If it's not, we fall back to Style.EMPTY.
-                        Style extractedStyle = Style.EMPTY;
-                        if (formattedText instanceof Component comp) {
-                            extractedStyle = comp.getStyle();
-                        }
-
-                        elements.remove(index);
-                        int currentPos = index;
-
-                        if (!prefix.isEmpty()) {
-                            elements.add(currentPos++, Either.left(Component.literal(prefix).withStyle(extractedStyle)));
-                        }
-
-                        // Reconstruct with the extracted style
-                        Component styledContent = Component.literal(content).withStyle(extractedStyle);
-
-                        if (type.equals(ArtefactStyles.TYPE_FLAME)) {
-                            elements.add(currentPos++, Either.right(new FlamingClientTooltipComponent.FlamingTooltipData(styledContent)));
-                        } else if (type.equals(ArtefactStyles.TYPE_GRAVITY)){
-                            if (event.getItemStack().getItem().equals(ItemRegistry.DIVINITY)) {
-                                elements.add(currentPos++, Either.right(new SpinningClientTooltipComponent.SpinningTooltipData(styledContent,
-                                        "Most Supreme who Opens the World, Wielder of Talismans, Ruler of Calendrics, Truth Embracing Dao Embodying Future Radiance Nine Firmaments Time Governing Myriad Daos Non-Action All-Illuminating Great Hall Vast Heaven Golden Gate Fate Great Heavenly Venerable Black Martial High Supreme Deity"
-                                , event.getItemStack())));
-                            }
-                            elements.add(currentPos++, Either.right(new SpinningClientTooltipComponent.SpinningTooltipData(styledContent, event.getItemStack())));
-                        }
-
-                        if (!suffix.isEmpty()) {
-                            elements.add(currentPos, Either.left(Component.literal(suffix).withStyle(extractedStyle)));
-                        }
-                    }
+            ParsedMarker parsed = ParsedMarker.from(rawText);
+            if (parsed == null) {
+                if (pendingSpiralBlock.isEmpty()) {
+                    rebuilt.add(element);
+                } else {
+                    flushPendingSpiralBlock(pendingSpiralBlock, rebuilt, event, phrase, groupCounter++);
+                    rebuilt.add(Either.left(asComponent(formattedText, extractedStyle)));
                 }
-            });
+                continue;
+            }
+
+            if (!parsed.prefix().isEmpty()) {
+                flushPendingSpiralBlock(pendingSpiralBlock, rebuilt, event, phrase, groupCounter++);
+                rebuilt.add(Either.left(Component.literal(parsed.prefix()).withStyle(extractedStyle)));
+            }
+
+            Component styledContent = Component.literal(parsed.content()).withStyle(extractedStyle);
+            if (parsed.type().equals(ArtefactStyles.TYPE_FLAME)) {
+                flushPendingSpiralBlock(pendingSpiralBlock, rebuilt, event, phrase, groupCounter++);
+                rebuilt.add(Either.right(new FlamingClientTooltipComponent.FlamingTooltipData(styledContent)));
+            } else if (parsed.type().equalsIgnoreCase(ArtefactStyles.TYPE_GRAVITY)
+                    || parsed.type().equalsIgnoreCase(ArtefactStyles.TYPE_SPIRAL_ORIGIN)) {
+                pendingSpiralBlock.add(new SpiralLine(
+                        styledContent,
+                        parsed.type().equalsIgnoreCase(ArtefactStyles.TYPE_SPIRAL_ORIGIN)));
+            } else {
+                flushPendingSpiralBlock(pendingSpiralBlock, rebuilt, event, phrase, groupCounter++);
+                rebuilt.add(Either.left(styledContent));
+            }
+
+            if (!parsed.suffix().isEmpty()) {
+                flushPendingSpiralBlock(pendingSpiralBlock, rebuilt, event, phrase, groupCounter++);
+                rebuilt.add(Either.left(Component.literal(parsed.suffix()).withStyle(extractedStyle)));
+            }
+        }
+
+        flushPendingSpiralBlock(pendingSpiralBlock, rebuilt, event, phrase, groupCounter);
+        elements.clear();
+        elements.addAll(rebuilt);
+    }
+
+    private static void flushPendingSpiralBlock(List<SpiralLine> pendingSpiralBlock,
+                                                List<Either<FormattedText, TooltipComponent>> rebuilt,
+                                                RenderTooltipEvent.GatherComponents event,
+                                                String phrase,
+                                                int groupIndex) {
+        if (pendingSpiralBlock.isEmpty()) {
+            return;
+        }
+
+        int explicitCenterIndex = -1;
+        int blockWidth = 0;
+        var font = Minecraft.getInstance().font;
+        for (int i = 0; i < pendingSpiralBlock.size(); i++) {
+            SpiralLine line = pendingSpiralBlock.get(i);
+            if (explicitCenterIndex == -1 && line.explicitCenter()) {
+                explicitCenterIndex = i;
+            }
+            blockWidth = Math.max(blockWidth, font.width(line.text()));
+        }
+
+        int particleOwnerIndex = explicitCenterIndex >= 0 ? explicitCenterIndex : 0;
+        String groupKey = buildGroupKey(event, groupIndex, pendingSpiralBlock.get(particleOwnerIndex).text().getString());
+
+        for (int i = 0; i < pendingSpiralBlock.size(); i++) {
+            SpiralLine line = pendingSpiralBlock.get(i);
+            rebuilt.add(Either.right(new SpinningClientTooltipComponent.SpinningTooltipData(
+                    line.text(),
+                    phrase,
+                    groupKey,
+                    i == particleOwnerIndex,
+                    true,
+                    blockWidth,
+                    pendingSpiralBlock.size(),
+                    particleOwnerIndex,
+                    explicitCenterIndex,
+                    event.getItemStack())));
+        }
+        pendingSpiralBlock.clear();
+    }
+
+    private static String buildGroupKey(RenderTooltipEvent.GatherComponents event, int groupIndex, String anchorText) {
+        String itemKey = String.valueOf(event.getItemStack().getItem());
+        return itemKey + "#" + groupIndex + "#" + anchorText;
+    }
+
+    private static Component asComponent(FormattedText text, Style extractedStyle) {
+        if (text instanceof Component component) {
+            return component.copy();
+        }
+        return Component.literal(text.getString()).withStyle(extractedStyle);
+    }
+
+    private record SpiralLine(Component text, boolean explicitCenter) {
+    }
+
+    private record ParsedMarker(String type, String content, String prefix, String suffix) {
+        static ParsedMarker from(String rawText) {
+            if (!rawText.contains(ArtefactStyles.MARKER)) {
+                return null;
+            }
+
+            int first = rawText.indexOf(ArtefactStyles.MARKER);
+            int last = rawText.lastIndexOf(ArtefactStyles.MARKER);
+            if (first == -1 || last == -1 || first == last || first + 1 >= rawText.length()) {
+                return null;
+            }
+
+            String type = rawText.substring(first + 1, first + 2);
+            String content = rawText.substring(first + 2, last);
+            String prefix = rawText.substring(0, first);
+            String suffix = rawText.substring(last + 1);
+            return new ParsedMarker(type, content, prefix, suffix);
         }
     }
 
@@ -84,6 +164,7 @@ public class ClientEvent {
         public static final String MARKER = "\uE446";
         public static final String TYPE_GRAVITY = "G";
         public static final String TYPE_FLAME = "F";
+        public static final String TYPE_SPIRAL_ORIGIN = "S";
 
         public static MutableComponent gravity(String text) {
             return Component.literal(MARKER + TYPE_GRAVITY + text + MARKER);
@@ -91,6 +172,10 @@ public class ClientEvent {
 
         public static MutableComponent flaming(String text) {
             return Component.literal(MARKER + TYPE_FLAME + text + MARKER);
+        }
+
+        public static MutableComponent spiral(String text) {
+            return Component.literal(MARKER + TYPE_SPIRAL_ORIGIN + text + MARKER);
         }
     }
 }

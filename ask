@@ -1,0 +1,21 @@
+#!/bin/zsh
+
+# Usage: ask "What is your favorite color?"
+# The script prints the question, waits for input, and echoes the answer to stdout.
+
+# Check if a question was provided
+if [[ -z "$1" ]]; then
+  echo "Usage: ask \"your question here\"" >&2
+  exit 1
+fi
+
+# 1. Print the question to stderr so it shows up in the terminal
+# but doesn't get captured by the agent's pipe/variable.
+echo -n "$1 " >&2
+
+# 2. Read the user input
+# -r: prevents backslashes from acting as escape characters
+read -r response
+
+# 3. Output the response to stdout for the agent to capture
+echo "$response"
