@@ -19,17 +19,14 @@ public class ArsNouveauRegistry {
         register(EffectAirSword.INSTANCE);
         register(EffectSunFlare.INSTANCE);
         register(EffectWaterSpear.INSTANCE);
-/*        register(RandomCancel.HALF);
-        register(RandomCancel.QUARTER);
-        register(RandomCancel.THREE_FOURTHS);*/
         register(EffectSonicBoom.INSTANCE);
         register(IsSelf.INSTANCE);
         register(IsNotSelf.INSTANCE);
-        //register(Inversion.INSTANCE);
         register(AuraForm.INSTANCE);
         register(EffectInspectSoul.INSTANCE);
         register(EffectAdvancedGrowth.INSTANCE);
         register(EffectAncientLightningBolt.INSTANCE);
+        register(EffectAttack.INSTANCE);
     }
 
     public static void registerSounds(){
