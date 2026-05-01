@@ -121,6 +121,10 @@ repositories {
         url = uri("https://maven.octo-studios.com/releases")
     }
     maven {
+        name = "BlameJared"
+        url = 'https://maven.blamejared.com'
+    }
+    maven {
         name = 'TerraformersMC'
         url = 'https://maven.terraformersmc.com/'
         content {
@@ -151,6 +155,14 @@ dependencies {
     implementation "curse.maven:placebo-283644:6926281"
     implementation "curse.maven:ldlib-626676:7418897"
 
+    //sauce lib
+    jarJar(implementation("com.alexthw.sauce:sauce-${minecraft_version}") {
+        version {
+            strictly '[0.0.31,)'
+            prefer sauce_version
+        }
+    }) { transitive = false }
+
     runtimeOnly "curse.maven:ars-elemental-561470:7398326"
     runtimeOnly "curse.maven:not-enough-glyphs-1023517:7398332"
 
@@ -177,7 +189,7 @@ dependencies {
     localRuntime 'curse.maven:ftb-library-forge-404465:5754910'
     localRuntime 'curse.maven:architectury-api-419699:5553800'
 //    localRuntime 'curse.maven:productivebees-377897:6154395'
-    implementation(jarJar(group: 'com.hollingsworth.nuggets', name: 'nuggets-neoforge-1.21', version:'[1.0.4,)'){
+    implementation(jarJar(group: 'com.hollingsworth.nuggets', name: 'nuggets-neoforge-1.21', version: '[1.0.4,)') {
         jarJar.pin(it, '1.0.4')
     })
     localRuntime "maven.modrinth:cloth-config:15.0.140+neoforge"
@@ -192,24 +204,21 @@ dependencies {
 
 jar {
     manifest {
-        attributes([
-                "Specification-Title": "Ars Trinkets",
-                "Specification-Vendor": "c446",
-                "Specification-Version": "1", // We are version 1 of ourselves
-                "Implementation-Title": project.name,
-                "Implementation-Version": mod_version,
-                "Implementation-Vendor" :"c446",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                "MixinConfigs": "ars_trinkets.mixins.json"
+        attributes(["Specification-Title"     : "Ars Trinkets",
+                    "Specification-Vendor"    : "c446",
+                    "Specification-Version"   : "1", // We are version 1 of ourselves
+                    "Implementation-Title"    : project.name,
+                    "Implementation-Version"  : mod_version,
+                    "Implementation-Vendor"   : "c446",
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                    //    "MixinConfigs": "ars_trinkets.mixins.json"
         ])
     }
     exclude('**/*.psd')
     exclude('**/*.bbmodel')
 }
 
-minecraft.accessTransformers.files(
-        file('src/main/resources/META-INF/accesstransformer.cfg')
-)
+minecraft.accessTransformers.files(file('src/main/resources/META-INF/accesstransformer.cfg'))
 
 publishing {
     publications {

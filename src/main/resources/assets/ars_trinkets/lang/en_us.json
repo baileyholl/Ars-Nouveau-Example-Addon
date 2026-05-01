@@ -55,6 +55,8 @@
   "ars_trinkets.perk.spell_damage_increase_absolute.desc": "Increases the damage of Ars Nouveau Spell Damage by an totalX multiplier instead of a flat+ value.",
   "ars_trinkets.perk.divinity": "Absolute Spell Damage Increase",
   "ars_trinkets.perk.divinity.desc": "Increases the value of all attributes that aren't blacklisted by tags by a multiply total value equal to it's own value.",
+  "ars_trinkets.perk.bonus_glyph_slots": "Bonus Glyph Slots",
+  "ars_trinkets.perk.bonus_glyph_slots.desc": "Increases the number of glyphs you can fit in a spell recipe.",
   "ars_trinkets.perk.total_mana_regen_boost": "Total Mana Regeneration",
   "ars_trinkets.perk.total_mana_boost": "Total Mana",
   "player_not_cursed.glyph_stopped": "You can not use this glyph yet...",
@@ -163,8 +165,12 @@
   "item.ars_trinkets.putrid_heart": "Heart of Blasphemy",
   "item.ars_trinkets.holy_heart": "Sanctified Heart",
   "item.ars_trinkets.omnipotence_crown": "Crown of the Exalted One",
-  "item.ars_trinkets.omnipotence_crown.desc1": "\uE446SThose Worthy of the Crown are few.\uE446",
-  "item.ars_trinkets.omnipotence_crown.desc2": "\uE446GCannot be unequipped.\uE446",
+  "item.ars_trinkets.omnipotence_crown.desc1": "\uE446GThose Worthy of the Crown are few.\uE446",
+  "item.ars_trinkets.omnipotence_crown.desc2": "\uE446GOnce equipped, the Crown becomes one with the host.\uE446",
+  "item.ars_trinkets.omnipotence_crown.desc3": "\uE446S- Grants the wearer nine extra \"lives\" every true death.\uE446",
+  "item.ars_trinkets.omnipotence_crown.desc4": "\uE446G- Incoming damage will be reduced to at most 10% of the wielder's maximum health.\uE446",
+  "item.ars_trinkets.omnipotence_crown.desc5": "\uE446G- Increases maximum spell size.\uE446",
+  "item.ars_trinkets.omnipotence_crown.desc6": "\uE446G\uE446",
   "item.ars_trinkets.omnipotence_crown.saved_1": "The crown prevents you from dying.",
   "item.ars_trinkets.omnipotence_crown.saved_2": "%d remaining lives",
   "item.ars_trinkets.essence_core_1": "Human's Heart",
@@ -203,5 +209,6 @@
   "text.ars_trinkets.souls.cored": "cored ",
   "text.ars_trinkets.souls.warning_corruption": "You approach madness as you feast on your killed foes.",
   "tab.ars_trinkets.main": "Ars Trinkets Items",
-  "item.ars_trinkets.putrid_heart.desc": "This item allows you to rid yourself of the powers you have gained."
+  "item.ars_trinkets.putrid_heart.desc": "This item allows you to rid yourself of the powers you have gained.",
+  "text.ars_trinkets.spell_too_large": "This spell exceeds your glyph slot limit (%s)."
 }

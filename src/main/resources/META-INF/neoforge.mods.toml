@@ -1,46 +1,23 @@
-# This is an example mods.toml file. It contains the data relating to the loading mods.
-# There are several mandatory fields (#mandatory), and many more that are optional (#optional).
-# The overall format is standard TOML format, v0.5.0.
-# Note that there are a couple of TOML lists in this file.
-# Find more information on toml format here:  https://github.com/toml-lang/toml
-# The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
 modLoader="javafml" #mandatory
-# A version range to match for said mod loader - for regular FML @Mod it will be the forge version
-loaderVersion="[4,)" #mandatory (28 is current forge version)
-# A URL to refer people to when problems occur with this mod
-issueTrackerURL="http://my.issue.tracker/" #optional
-
+loaderVersion="[2,)" #mandatory (28 is current forge version)
 license="GNU Lesser General Public License v3.0"
-# A list of mods - how many allowed here is determined by the individual mod loader
 [[mods]] #mandatory
-# The modid of the mod
 modId="ars_trinkets" #mandatory
-# The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
 version="${file.jarVersion}" #mandatory
- # A display name for the mod
 displayName="Ars Trinkets" #mandatory
-# A URL to query for updates for this mod. See the JSON update specification <here>
-#updateJSONURL="http://myurl.me/" #optional
-# A URL for the "homepage" for this mod, displayed in the mod UI
-#displayURL="http://example.com/" #optional
-# A file name (in the root of the mod JAR) containing a logo for display
-#logoFile="examplemod.png" #optional
-# A text field displayed in the mod UI
-credits="A bunch of Starbuncles" #optional
-# A text field displayed in the mod UI
-authors="Alexthw & BaileyHoll for base example, whoever forgot to change this for the rest." #optional
-# The description text for the mod (multi line!) (#mandatory)
+credits="A bunch of Starbuncles"
+authors="C446"
 description='''
-Starbuncles will conquer the world.
+All the power you would ever want from ars nouveau.
 '''
-
-# enumExtensions="META-INF/enumextensions.json
+# enumExtensions="META-INF/enumextensions.json # NO ENUM EXTENSIONS IN THIS MOD
 
 [[accessTransformers]]
-file="META-INF/accesstransformer.cfg"
+file="META-INF/accesstransformer.cfg" # for potion effects and constructors
 
 [[mixins]]
-config="ars_trinkets.mixins.json"
+config="ars_trinkets.mixins.json" # for extra glyphs.
+
 [[dependencies.ars_trinkets]]
 modId = "minecraft"
 versionRange = "[1.21,)"
