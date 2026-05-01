@@ -3,6 +3,7 @@ package com.c446.ars_trinkets.events;
 import com.c446.ars_trinkets.registry.ItemRegistry;
 import com.c446.ars_trinkets.tooltips.FlamingClientTooltipComponent;
 import com.c446.ars_trinkets.tooltips.SpinningClientTooltipComponent;
+import com.c446.ars_trinkets.tooltips.WiggleClientTooltipComponent;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -17,9 +18,19 @@ import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @EventBusSubscriber(value = Dist.CLIENT)
 public class ClientEvent {
+
+    // Toggle this to enable/disable debug logging
+    private static final boolean DEBUG_TOOLTIPS = true;
+
+    private static void dbg(String msg) {
+        if (DEBUG_TOOLTIPS) {
+            System.out.println("[ARS-TRINKETS-TOOLTIP] " + msg);
+        }
+    }
 
     @SubscribeEvent
     public static void onGatherTooltipComponents(RenderTooltipEvent.GatherComponents event) {
@@ -27,13 +38,14 @@ public class ClientEvent {
         List<Either<FormattedText, TooltipComponent>> rebuilt = new ArrayList<>();
         List<SpiralLine> pendingSpiralBlock = new ArrayList<>();
         int groupCounter = 0;
-        String phrase = event.getItemStack().getItem().equals(ItemRegistry.DIVINITY.get())
-                ? "Most Supreme who Opens the World, Wielder of Talismans, Ruler of Calendrics, Truth Embracing Dao Embodying Future Radiance Nine Firmaments Time Governing Myriad Daos Non-Action All-Illuminating Great Hall Vast Heaven Golden Gate Fate Great Heavenly Venerable Black Martial High Supreme Deity"
-                : null;
+        String phrase = event.getItemStack().getItem().equals(ItemRegistry.DIVINITY.get()) ? "Most Supreme..." : null;
+
+        dbg("=== BEGIN TOOLTIP GATHER for: " + event.getItemStack().getItem() + " ===");
 
         for (Either<FormattedText, TooltipComponent> element : elements) {
             var left = element.left();
             if (left.isEmpty()) {
+                dbg("  [RIGHT element] no FormattedText — flushing spiral block (size=" + pendingSpiralBlock.size() + ") then passing through");
                 flushPendingSpiralBlock(pendingSpiralBlock, rebuilt, event, phrase, groupCounter++);
                 rebuilt.add(element);
                 continue;
@@ -43,83 +55,107 @@ public class ClientEvent {
             String rawText = formattedText.getString();
             Style extractedStyle = formattedText instanceof Component comp ? comp.getStyle() : Style.EMPTY;
 
+            dbg("  [LEFT element] rawText=" + rawText.replace("\uE446", "<MARKER>"));
+
             ParsedMarker parsed = ParsedMarker.from(rawText);
             if (parsed == null) {
+                dbg("    -> no marker found, pendingSpiral.size=" + pendingSpiralBlock.size());
                 if (pendingSpiralBlock.isEmpty()) {
+                    dbg("    -> passthrough as plain");
                     rebuilt.add(element);
                 } else {
+                    dbg("    -> flushing spiral block before adding plain text");
                     flushPendingSpiralBlock(pendingSpiralBlock, rebuilt, event, phrase, groupCounter++);
                     rebuilt.add(Either.left(asComponent(formattedText, extractedStyle)));
                 }
                 continue;
             }
 
+            dbg("    -> parsed: type='" + parsed.type() + "' content='" + parsed.content() + "' prefix='" + parsed.prefix() + "' suffix='" + parsed.suffix() + "'");
+
             if (!parsed.prefix().isEmpty()) {
+                dbg("    -> flushing for prefix, then emitting prefix");
                 flushPendingSpiralBlock(pendingSpiralBlock, rebuilt, event, phrase, groupCounter++);
                 rebuilt.add(Either.left(Component.literal(parsed.prefix()).withStyle(extractedStyle)));
             }
 
             Component styledContent = Component.literal(parsed.content()).withStyle(extractedStyle);
+
             if (parsed.type().equals(ArtefactStyles.TYPE_FLAME)) {
+                dbg("    -> FLAME: flushing spiral block then emitting FlamingTooltipData");
                 flushPendingSpiralBlock(pendingSpiralBlock, rebuilt, event, phrase, groupCounter++);
                 rebuilt.add(Either.right(new FlamingClientTooltipComponent.FlamingTooltipData(styledContent)));
-            } else if (parsed.type().equalsIgnoreCase(ArtefactStyles.TYPE_GRAVITY)
-                    || parsed.type().equalsIgnoreCase(ArtefactStyles.TYPE_SPIRAL_ORIGIN)) {
-                pendingSpiralBlock.add(new SpiralLine(
-                        styledContent,
-                        parsed.type().equalsIgnoreCase(ArtefactStyles.TYPE_SPIRAL_ORIGIN)));
+
+            } else if (parsed.type().equalsIgnoreCase(ArtefactStyles.TYPE_SPIRAL_ORIGIN)) {
+                dbg("    -> SPIRAL: adding to pendingSpiralBlock (new size=" + (pendingSpiralBlock.size() + 1) + ")");
+                pendingSpiralBlock.add(new SpiralLine(styledContent, parsed.type().equalsIgnoreCase(ArtefactStyles.TYPE_SPIRAL_ORIGIN), ArtefactStyles.TYPE_SPIRAL_ORIGIN));
+
+            } else if (parsed.type().equalsIgnoreCase(ArtefactStyles.TYPE_GRAVITY)) {
+                dbg("    -> GRAVITY/WIGGLE: flushing spiral block (size=" + pendingSpiralBlock.size() + ") then emitting WiggleTooltipData");
+                flushPendingSpiralBlock(pendingSpiralBlock, rebuilt, event, phrase, groupCounter++);
+                rebuilt.add(Either.right(new WiggleClientTooltipComponent.WiggleTooltipData(styledContent, phrase, "gravity_" + groupCounter, event.getItemStack())));
+
             } else {
+                dbg("    -> UNKNOWN type '" + parsed.type() + "': flushing spiral block then emitting as plain text");
                 flushPendingSpiralBlock(pendingSpiralBlock, rebuilt, event, phrase, groupCounter++);
                 rebuilt.add(Either.left(styledContent));
             }
 
             if (!parsed.suffix().isEmpty()) {
+                dbg("    -> flushing for suffix, then emitting suffix");
                 flushPendingSpiralBlock(pendingSpiralBlock, rebuilt, event, phrase, groupCounter++);
                 rebuilt.add(Either.left(Component.literal(parsed.suffix()).withStyle(extractedStyle)));
             }
         }
 
+        dbg("  [END OF ELEMENTS] final flush, pendingSpiral.size=" + pendingSpiralBlock.size());
         flushPendingSpiralBlock(pendingSpiralBlock, rebuilt, event, phrase, groupCounter);
+
+        dbg("=== REBUILT " + rebuilt.size() + " elements ===");
+        for (int i = 0; i < rebuilt.size(); i++) {
+            var r = rebuilt.get(i);
+            String desc = r.left().map(t -> "LEFT: " + t.getString())
+                    .orElseGet(() -> "RIGHT: " + r.right().get().getClass().getSimpleName());
+            dbg("  [" + i + "] " + desc);
+        }
+
         elements.clear();
         elements.addAll(rebuilt);
     }
 
-    private static void flushPendingSpiralBlock(List<SpiralLine> pendingSpiralBlock,
-                                                List<Either<FormattedText, TooltipComponent>> rebuilt,
-                                                RenderTooltipEvent.GatherComponents event,
-                                                String phrase,
-                                                int groupIndex) {
-        if (pendingSpiralBlock.isEmpty()) {
+    private static void flushPendingSpiralBlock(List<SpiralLine> pendingSpiralBlock, List<Either<FormattedText, TooltipComponent>> rebuilt, RenderTooltipEvent.GatherComponents event, String phrase, int groupIndex) {
+        if (pendingSpiralBlock.isEmpty()) return;
+
+        // A single S-line has no neighbours to spiral around — treat it as a wiggle
+        if (pendingSpiralBlock.size() == 1) {
+            SpiralLine lone = pendingSpiralBlock.get(0);
+            String groupKey = buildGroupKey(event, groupIndex, lone.text().getString());
+            rebuilt.add(Either.right(new WiggleClientTooltipComponent.WiggleTooltipData(
+                    lone.text(), phrase, groupKey, event.getItemStack()
+            )));
+            pendingSpiralBlock.clear();
             return;
         }
 
+        // Multi-line block: proceed with spinning as before
         int explicitCenterIndex = -1;
         int blockWidth = 0;
         var font = Minecraft.getInstance().font;
         for (int i = 0; i < pendingSpiralBlock.size(); i++) {
             SpiralLine line = pendingSpiralBlock.get(i);
-            if (explicitCenterIndex == -1 && line.explicitCenter()) {
-                explicitCenterIndex = i;
-            }
+            if (explicitCenterIndex == -1 && line.explicitCenter()) explicitCenterIndex = i;
             blockWidth = Math.max(blockWidth, font.width(line.text()));
         }
 
-        int particleOwnerIndex = explicitCenterIndex >= 0 ? explicitCenterIndex : 0;
+        int particleOwnerIndex = Math.max(explicitCenterIndex, 0);
         String groupKey = buildGroupKey(event, groupIndex, pendingSpiralBlock.get(particleOwnerIndex).text().getString());
 
-        for (int i = 0; i < pendingSpiralBlock.size(); i++) {
-            SpiralLine line = pendingSpiralBlock.get(i);
+        for (SpiralLine line : pendingSpiralBlock) {
             rebuilt.add(Either.right(new SpinningClientTooltipComponent.SpinningTooltipData(
-                    line.text(),
-                    phrase,
-                    groupKey,
-                    i == particleOwnerIndex,
-                    true,
-                    blockWidth,
-                    pendingSpiralBlock.size(),
-                    particleOwnerIndex,
-                    explicitCenterIndex,
-                    event.getItemStack())));
+                    line.text(), phrase, groupKey, blockWidth,
+                    pendingSpiralBlock.size(), particleOwnerIndex, explicitCenterIndex,
+                    event.getItemStack()
+            )));
         }
         pendingSpiralBlock.clear();
     }
@@ -136,7 +172,7 @@ public class ClientEvent {
         return Component.literal(text.getString()).withStyle(extractedStyle);
     }
 
-    private record SpiralLine(Component text, boolean explicitCenter) {
+    private record SpiralLine(Component text, boolean explicitCenter, String type) {
     }
 
     private record ParsedMarker(String type, String content, String prefix, String suffix) {

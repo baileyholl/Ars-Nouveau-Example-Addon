@@ -49,7 +49,7 @@ public class Util {
         List<? extends Float> configOption = Config.Common.WORLD_DIFFICULTY_PER_LEVEL.get();
         if (configOption.size() > level) {
 
-            com.hollingsworth.arsnouveau.setup.config.Config.
+//            com.hollingsworth.arsnouveau.setup.config.Config.
 
             return configOption.get(level);
         } else {

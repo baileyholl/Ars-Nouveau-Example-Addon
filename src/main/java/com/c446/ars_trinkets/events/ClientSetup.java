@@ -6,6 +6,7 @@ import com.c446.ars_trinkets.entities.red_lightning.RedLightningRenderer;
 import com.c446.ars_trinkets.registry.EntityRegistry;
 import com.c446.ars_trinkets.tooltips.FlamingClientTooltipComponent;
 import com.c446.ars_trinkets.tooltips.SpinningClientTooltipComponent;
+import com.c446.ars_trinkets.tooltips.WiggleClientTooltipComponent;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -28,6 +29,7 @@ public class ClientSetup {
     public static void onRegisterTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event) {
         event.register(SpinningClientTooltipComponent.SpinningTooltipData.class, SpinningClientTooltipComponent::new);
         event.register(FlamingClientTooltipComponent.FlamingTooltipData.class, FlamingClientTooltipComponent::new);
+        event.register(WiggleClientTooltipComponent.WiggleTooltipData.class, WiggleClientTooltipComponent::new);
     }
 }
 

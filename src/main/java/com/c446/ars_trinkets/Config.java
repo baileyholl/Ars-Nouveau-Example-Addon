@@ -20,6 +20,10 @@ public class Config {
         public static ModConfigSpec.IntValue AURA_BASE_DELAY;
         public static ModConfigSpec.IntValue AURA_BASE_ACCELERATE;
         public static ModConfigSpec.IntValue MAX_LEVEL_ALLOWED;
+        public static ModConfigSpec.BooleanValue ENABLE_BONUS_GLYPH_SLOTS;
+        public static ModConfigSpec.BooleanValue ENFORCE_BONUS_GLYPH_SLOTS_ON_CAST;
+        public static ModConfigSpec.IntValue BONUS_GLYPH_SLOTS_FALLBACK;
+        public static ModConfigSpec.IntValue BONUS_GLYPH_SLOTS_CAP;
 
         public static ModConfigSpec.ConfigValue<List<? extends Double>> LOTUS_VALUES;
         public static ModConfigSpec.ConfigValue<List<? extends Double>> RING_VALUES;
@@ -43,6 +47,21 @@ public class Config {
             AURA_BASE_ACCELERATE = builder.defineInRange("aura_base_accelerate", 5, 1, 10000000);
 
             MAX_LEVEL_ALLOWED = builder.defineInRange("max_level_allowed", 9, 0, 9);
+
+            builder.push("bonus_glyph_slots");
+            ENABLE_BONUS_GLYPH_SLOTS = builder
+                    .comment("Enables addon-controlled bonus glyph slot resolution.")
+                    .define("enabled", true);
+            ENFORCE_BONUS_GLYPH_SLOTS_ON_CAST = builder
+                    .comment("Reject spells that exceed the computed slot cap during server-side cast.")
+                    .define("enforce_on_cast", true);
+            BONUS_GLYPH_SLOTS_FALLBACK = builder
+                    .comment("Used when no player/caster bonus could be resolved.")
+                    .defineInRange("fallback_bonus", 0, 0, 1024);
+            BONUS_GLYPH_SLOTS_CAP = builder
+                    .comment("Hard cap applied to computed bonus slots to avoid extreme values.")
+                    .defineInRange("bonus_cap", 256, 0, 4096);
+            builder.pop();
 
             LOTUS_VALUES = builder.defineList("lotus_curios_amplifications", List.of(1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d), element -> true);
             RING_VALUES = builder.defineList("ring_curios_amplifications", List.of(1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d), element -> true);
