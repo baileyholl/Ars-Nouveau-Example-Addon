@@ -1,7 +1,0 @@
-
-{
-  "name": "Example Notes",
-  "landing_text": "Lost notes from the worn notebook",
-  "version": 1,
-  "extend": "ars_nouveau:worn_notebook"
-}

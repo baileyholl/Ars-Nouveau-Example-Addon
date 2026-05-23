@@ -1,6 +1,7 @@
 package com.c446.ars_trinkets.spells.glyphs;
 
 import com.c446.ars_trinkets.ArsTrinkets;
+import com.c446.ars_trinkets.registry.DamageRegistry;
 import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.api.util.DamageUtil;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
@@ -54,8 +55,7 @@ public class EffectAirSword extends AbstractEffect implements IDamageEffect {
             float bonus = ((living.hasEffect(ModPotions.HEX_EFFECT)) ? (Objects.requireNonNull(living.getEffect(ModPotions.HEX_EFFECT)).getAmplifier() * 2) : (1));
             float damage = (float) ((spellStats.getAmpMultiplier() * bonus) + this.DAMAGE.get());
 
-            attemptDamage(world, shooter, spellStats, spellContext, resolver, living, DamageUtil.source(world, DamageTypesRegistry.GENERIC_SPELL_DAMAGE, shooter), damage);
-
+            attemptDamage(world, shooter, spellStats, spellContext, resolver, living, DamageUtil.source(world, DamageRegistry.AIR_SWORD, shooter), damage);
         }
     }
 

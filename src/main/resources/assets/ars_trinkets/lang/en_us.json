@@ -210,5 +210,12 @@
   "text.ars_trinkets.souls.warning_corruption": "You approach madness as you feast on your killed foes.",
   "tab.ars_trinkets.main": "Ars Trinkets Items",
   "item.ars_trinkets.putrid_heart.desc": "This item allows you to rid yourself of the powers you have gained.",
-  "text.ars_trinkets.spell_too_large": "This spell exceeds your glyph slot limit (%s)."
+  "text.ars_trinkets.spell_too_large": "This spell exceeds your glyph slot limit (%s).",
+  "text.ars_trinkets.karma.breakdown": "§6=== Karma Breakdown ===",
+  "text.ars_trinkets.karma.player_kills": "§cPlayer Kills: %s",
+  "text.ars_trinkets.karma.passive_kills": "§cPassive Mob Kills: %s",
+  "text.ars_trinkets.karma.deaths": "§cDeaths: %s",
+  "text.ars_trinkets.karma.villager_trades": "§aVillager Trades: %s",
+  "text.ars_trinkets.karma.animals_bred": "§aAnimals Bred: %s",
+  "text.ars_trinkets.karma.playtime": "§ePlaytime: %s hours"
 }

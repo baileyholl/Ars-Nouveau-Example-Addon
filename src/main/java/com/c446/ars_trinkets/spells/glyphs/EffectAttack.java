@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class EffectAttack extends AbstractEffect implements IDamageEffect {
 
-    public static final EffectAttack INSTANCE = new EffectAttack(ArsTrinkets.prefix("glyph_attack"), "Damages the target as if holding the first 'sword' item in your hotbar.");
+    public static final EffectAttack INSTANCE = new EffectAttack(ArsTrinkets.prefix("glyph_attack"), "Simulates a player's left-click attack, adding spell damage. Cast from offhand with a sword in hand for maximum damage.");
 
     public EffectAttack(ResourceLocation tag, String description) {
         super(tag, description);
@@ -45,28 +45,15 @@ public class EffectAttack extends AbstractEffect implements IDamageEffect {
     public void onResolveEntity(EntityHitResult rayTraceResult, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
         super.onResolveEntity(rayTraceResult, world, shooter, spellStats, spellContext, resolver);
 
+        var walker = StackWalker.getInstance();
+        StackWalker.getInstance().forEach(System.out::println);
+
+        /*
         var entity = rayTraceResult.getEntity();
         if (entity instanceof LivingEntity livingEntity && shooter.canAttack(livingEntity)) {
             if (shooter instanceof ServerPlayer sp) {
-                AtomicReference<ItemStack> firstSword = new AtomicReference<>();
-
-                for (int i = 0; i < 9; i++) {
-                    var item = sp.getInventory().items.get(i);
-
-                    var key = Registries.ITEM;
-                    var reg = world.registryAccess().registryOrThrow(key);
-
-
-                    reg.getHolder(BuiltInRegistries.ITEM.getResourceKey(item.getItem()).orElseThrow()).ifPresent(holder -> {
-                        if (holder.is(ItemTags.SWORDS)) {
-                            firstSword.set(item);
-                        }
-                    });
-
-                }
                 sp.attack(livingEntity);
             } else {
-
                 double damage = getAttributeValueOrZero(shooter, Attributes.ATTACK_DAMAGE);
                 double cricChance = getAttributeValueOrZero(shooter, ALObjects.Attributes.CRIT_CHANCE);
                 double critDamage = getAttributeValueOrZero(shooter, ALObjects.Attributes.CRIT_DAMAGE);
@@ -75,6 +62,7 @@ public class EffectAttack extends AbstractEffect implements IDamageEffect {
                 attemptDamage(world, shooter, spellStats, spellContext, resolver, livingEntity, DamageUtil.source(world, DamageTypesRegistry.GENERIC_SPELL_DAMAGE), (float) damage);
             }
         }
+        */
     }
 
     protected double getAttributeValueOrZero(LivingEntity l, Holder<Attribute> a) {

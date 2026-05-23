@@ -23,7 +23,7 @@ public class LevelingCapability implements INBTSerializable<CompoundTag> {
     public long souls; //
     public boolean cursed = false;
 
-    float getWorldDifficultyIncrease(){
+    public float getWorldDifficultyIncrease(){
         switch (this.level){
             default: return 1f;
             case 1 : return 1.5f;
@@ -73,7 +73,7 @@ public class LevelingCapability implements INBTSerializable<CompoundTag> {
             NeoForge.EVENT_BUS.post(pre);
 
             if (pre.isCanceled() || pre.newLevel > Config.Common.MAX_LEVEL_ALLOWED.getAsInt()) {
-                ArsTrinkets.LOGGER.debug("level-up event cancelled !\nnew level : {}\nold level : {}", pre.getNewLevel(), this.level);
+                ArsTrinkets.LOGGER.debug("level-up event cancelled ! -- new level : {} -- old level : {}", pre.getNewLevel(), this.level);
             } else{
                 level = pre.newLevel;
 
@@ -116,6 +116,10 @@ public class LevelingCapability implements INBTSerializable<CompoundTag> {
         if (this.level == 0) return Component.translatable("text.ars_trinkets.titles.asc0");
 
         return Component.translatable("text.ars_trinkets.titles." + (this.cursed ? "dsc" + (this.level): "asc" + (this.level )));
+    }
+
+    public void unsafeSetLevel(int newLevelForced) {
+        this.level = (short) newLevelForced;
     }
 
     public void reset() {

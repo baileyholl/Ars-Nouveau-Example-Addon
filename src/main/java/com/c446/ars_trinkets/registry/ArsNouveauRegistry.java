@@ -27,6 +27,8 @@ public class ArsNouveauRegistry {
         register(EffectAdvancedGrowth.INSTANCE);
         register(EffectAncientLightningBolt.INSTANCE);
         register(EffectAttack.INSTANCE);
+        register(EffectPhantomLook.INSTANCE);
+        register(EffectPhantomMove.INSTANCE);
     }
 
     public static void registerSounds(){

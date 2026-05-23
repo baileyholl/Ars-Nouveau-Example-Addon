@@ -24,7 +24,7 @@ import java.util.Objects;
 public class ClientEvent {
 
     // Toggle this to enable/disable debug logging
-    private static final boolean DEBUG_TOOLTIPS = true;
+    private static final boolean DEBUG_TOOLTIPS = false;
 
     private static void dbg(String msg) {
         if (DEBUG_TOOLTIPS) {

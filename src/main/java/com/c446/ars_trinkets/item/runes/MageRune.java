@@ -1,5 +1,6 @@
 package com.c446.ars_trinkets.item.runes;
 
+import com.c446.ars_trinkets.registry.AttributeRegistry;
 import com.google.common.collect.Multimap;
 import com.hollingsworth.arsnouveau.api.perk.PerkAttributes;
 import net.minecraft.core.Holder;
@@ -21,7 +22,7 @@ public class MageRune extends AbstractRune {
 
         map.put(PerkAttributes.MAX_MANA, new AttributeModifier(id, getMult(), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         map.put(PerkAttributes.MANA_REGEN_BONUS, new AttributeModifier(id, getMult(), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        map.put(PerkAttributes.SPELL_DAMAGE_BONUS, new AttributeModifier(id, getMult(), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        map.put(AttributeRegistry.SPELL_DAMAGE_ABSOLUTE, new AttributeModifier(id, getMult(), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         return map;
     }
 }

@@ -3,6 +3,12 @@ package com.c446.ars_trinkets;
 import com.c446.ars_trinkets.brigadier.ArsTrinketsLevelCommand;
 import com.c446.ars_trinkets.datagen.ComponentRegistry;
 import com.c446.ars_trinkets.registry.*;
+import com.c446.ars_trinkets.registry.TribulationTypeRegistry;
+import com.c446.ars_trinkets.tribulations.TribulationInstance;
+import com.c446.ars_trinkets.tribulations.TribulationManager;
+import com.c446.ars_trinkets.tribulations.TribulationType;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
+import net.neoforged.neoforge.registries.RegistryBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.IEventBus;
@@ -44,12 +50,15 @@ public class ArsTrinkets {
         ItemRegistry.ITEMS.register(modEventBus);
         ModRegistry.SOUNDS.register(modEventBus);
         EntityRegistry.ENTITIES.register(modEventBus);
+      //  TribulationTypeRegistry.class.getSimpleName(); // Trigger static initialization of tribulation types BEFORE registering DeferredRegister
+        TribulationTypeRegistry.TRIBULATION_TYPES.register(modEventBus);
 
         modEventBus.addListener(this::setup);
         modEventBus.addListener(this::doClientStuff);
+        modEventBus.addListener(this::registerTribulationTypeRegistry);
+
 //        modEventBus.addListener(this::onRegisterCommands);
 //        NeoForge.EVENT_BUS.register(this);
-
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.COMMON);
     }
 
@@ -59,13 +68,25 @@ public class ArsTrinkets {
 
     private void setup(final FMLCommonSetupEvent event) {
         ArsNouveauRegistry.registerSounds();
+        new TribulationManager();
+        LOGGER.info("[ArsTrinkets] TribulationManager initialized during FMLCommonSetupEvent");
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
 
     }
 
+    private void registerTribulationTypeRegistry(NewRegistryEvent event) {
+        event.create(new RegistryBuilder<>(TribulationTypeRegistry.REGISTRY_KEY));
+    }
 
+    @SubscribeEvent
+    public static void onServerStarting(ServerStartingEvent event) {
+        var registry = event.getServer().registryAccess().registryOrThrow(TribulationTypeRegistry.REGISTRY_KEY);
+        int count = registry.size();
+        LOGGER.info("[ArsTrinkets] Registered tribulation types: {}", count);
+        registry.forEach(type -> LOGGER.debug("[ArsTrinkets] - {}", registry.getKey(type)));
+    }
 
     public static void setInterval(Runnable method, int tickInterval, int timeToLive) {
         NeoForge.EVENT_BUS.register(new SetInterval(method, tickInterval, timeToLive));

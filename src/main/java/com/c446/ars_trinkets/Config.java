@@ -25,6 +25,17 @@ public class Config {
         public static ModConfigSpec.IntValue BONUS_GLYPH_SLOTS_FALLBACK;
         public static ModConfigSpec.IntValue BONUS_GLYPH_SLOTS_CAP;
 
+        // Karma system config
+        public static ModConfigSpec.BooleanValue ENABLE_KARMA_SCALING;
+        public static ModConfigSpec.DoubleValue KARMA_SCALE;
+        public static ModConfigSpec.DoubleValue KARMA_PLAYER_KILL_WEIGHT;
+        public static ModConfigSpec.DoubleValue KARMA_PASSIVE_MOB_KILL_WEIGHT;
+        public static ModConfigSpec.DoubleValue KARMA_DEATH_WEIGHT;
+        public static ModConfigSpec.DoubleValue KARMA_PLAYTIME_DAMPENING;
+        public static ModConfigSpec.DoubleValue KARMA_VILLAGER_TRADE_DAMPENING;
+        public static ModConfigSpec.DoubleValue KARMA_ANIMALS_BRED_DAMPENING;
+        public static ModConfigSpec.BooleanValue KARMA_SCALE_WITH_PLAYER_LEVEL;
+
         public static ModConfigSpec.ConfigValue<List<? extends Double>> LOTUS_VALUES;
         public static ModConfigSpec.ConfigValue<List<? extends Double>> RING_VALUES;
         public static ModConfigSpec.ConfigValue<List<? extends Double>> MONOCLE_VALUES;
@@ -61,6 +72,36 @@ public class Config {
             BONUS_GLYPH_SLOTS_CAP = builder
                     .comment("Hard cap applied to computed bonus slots to avoid extreme values.")
                     .defineInRange("bonus_cap", 256, 0, 4096);
+            builder.pop();
+
+            builder.push("karma_system");
+            ENABLE_KARMA_SCALING = builder
+                    .comment("Enable tribulation difficulty scaling based on player actions (karma system).")
+                    .define("enabled", true);
+            KARMA_SCALE = builder
+                    .comment("Global scale multiplier for all karma-related penalties. Adjust to fine-tune overall difficulty progression.")
+                    .defineInRange("karma_scale", 1.0, 0, 10.0);
+            KARMA_PLAYER_KILL_WEIGHT = builder
+                    .comment("Weight multiplier for player kills in karma calculation.")
+                    .defineInRange("player_kill_weight", 5.0, 0.0, 100.0);
+            KARMA_PASSIVE_MOB_KILL_WEIGHT = builder
+                    .comment("Weight multiplier for passive mob kills in karma calculation.")
+                    .defineInRange("passive_mob_kill_weight", 0.5, 0.0, 100.0);
+            KARMA_DEATH_WEIGHT = builder
+                    .comment("Weight multiplier for player deaths in karma calculation.")
+                    .defineInRange("death_weight", 2.0, 0.0, 100.0);
+            KARMA_PLAYTIME_DAMPENING = builder
+                    .comment("Dampening factor for playtime (hours). Higher values reduce karma scaling for experienced players.")
+                    .defineInRange("playtime_dampening", 0.001, 0.0, 0.1);
+            KARMA_VILLAGER_TRADE_DAMPENING = builder
+                    .comment("Dampening factor for villager trades. More trades = lower tribulation difficulty.")
+                    .defineInRange("villager_trade_dampening", 0.05, 0.0, 1.0);
+            KARMA_ANIMALS_BRED_DAMPENING = builder
+                    .comment("Dampening factor for animals bred. More breeding = lower tribulation difficulty (highest importance).")
+                    .defineInRange("animals_bred_dampening", 0.1, 0.0, 1.0);
+            KARMA_SCALE_WITH_PLAYER_LEVEL = builder
+                    .comment("Scale tribulation difficulty with player's in-game level via LevelingCapability.")
+                    .define("scale_with_level", true);
             builder.pop();
 
             LOTUS_VALUES = builder.defineList("lotus_curios_amplifications", List.of(1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d), element -> true);
