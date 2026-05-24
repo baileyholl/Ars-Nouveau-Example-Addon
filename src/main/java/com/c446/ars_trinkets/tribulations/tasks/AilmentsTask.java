@@ -1,6 +1,7 @@
 package com.c446.ars_trinkets.tribulations.tasks;
 
 import com.c446.ars_trinkets.ArsTrinkets;
+import com.c446.ars_trinkets.Config;
 import com.c446.ars_trinkets.tribulations.ScheduledTask;
 import com.c446.ars_trinkets.tribulations.TribulationInstance;
 import com.hollingsworth.arsnouveau.api.perk.PerkAttributes;
@@ -23,7 +24,7 @@ public class AilmentsTask extends ScheduledTask {
     );
 
     public AilmentsTask() {
-        super(80);
+        super(Config.Common.AILMENTS_INTERVAL.get());
         this.random = RandomSource.create();
     }
 
@@ -37,13 +38,20 @@ public class AilmentsTask extends ScheduledTask {
         double maxHealth = player.getMaxHealth();
 
         // Scale duration and intensity with tribulation intensity, reduced by warding
-        int baseDuration = (int)(100 + intensity * 30);
-        int duration = Math.max(30, (int)(baseDuration * (1.0 - warding * 0.01)));
+        int baseDuration = (int)(Config.Common.AILMENTS_DURATION_BASE.get()
+                + intensity * Config.Common.AILMENTS_DURATION_PER_INTENSITY.get());
+        int duration = Math.max(Config.Common.AILMENTS_DURATION_MIN.get(),
+                (int)(baseDuration * (1.0 - warding * Config.Common.AILMENTS_WARDING_DURATION_REDUCTION.get())));
 
         // Scale amplifier with intensity and health (higher health = worse debuffs)
-        int baseAmplifier = Math.round(intensity * 0.7f);
-        int healthScaling = Math.toIntExact(maxHealth > 20 ? Math.round((maxHealth - 20) / 10f) : 0);
-        int amplifier = Math.min(3, baseAmplifier + random.nextInt(Math.max(1, healthScaling)));
+        int baseAmplifier = Math.round((float)(Config.Common.AILMENTS_AMPLIFIER_BASE.get()
+                + intensity * Config.Common.AILMENTS_AMPLIFIER_PER_INTENSITY.get()));
+        double healthScalingThreshold = Config.Common.AILMENTS_HEALTH_SCALING_THRESHOLD.get();
+        int healthScaling = Math.toIntExact(maxHealth > healthScalingThreshold
+                ? Math.round((maxHealth - healthScalingThreshold) / Config.Common.AILMENTS_HEALTH_SCALING_DIVISOR.get())
+                : 0);
+        int amplifier = Math.min(Config.Common.AILMENTS_AMPLIFIER_MAX.get(),
+                baseAmplifier + random.nextInt(Math.max(1, healthScaling + Config.Common.AILMENTS_HEALTH_RANDOM_BONUS.get())));
 
         var debuff = DEBUFFS.get(random.nextInt(DEBUFFS.size()));
         ArsTrinkets.LOGGER.debug("[AilmentsTask] Executing: intensity={}, duration={}, amplifier={}, debuff={}", intensity, duration, amplifier, debuff.value().getDescriptionId());

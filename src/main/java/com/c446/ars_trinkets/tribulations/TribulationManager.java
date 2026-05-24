@@ -1,13 +1,15 @@
 package com.c446.ars_trinkets.tribulations;
 
 import com.c446.ars_trinkets.ArsTrinkets;
+import com.c446.ars_trinkets.Config;
 import com.c446.ars_trinkets.events.LevelModifiedEvent;
 import com.c446.ars_trinkets.registry.CapabilityRegistry;
 import com.c446.ars_trinkets.registry.TribulationTypeRegistry;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -44,6 +46,10 @@ public class TribulationManager {
     // -------------------------------------------------------------------------
 
     public void startTribulation(ServerPlayer player, List<Holder<TribulationType>> types, float intensity) {
+        if (!isTribulationSystemEnabled()) {
+            LOGGER.debug("[TribulationManager.startTribulation] Tribulation system disabled; skipping start for {}", player.getName().getString());
+            return;
+        }
         LOGGER.debug("[TribulationManager.startTribulation] Creating instance: player={}, types={}, intensity={}", player.getName().getString(), types.size(), intensity);
         var registry = Objects.requireNonNull(player.getServer()).registryAccess()
                 .registryOrThrow(TribulationTypeRegistry.REGISTRY_KEY);
@@ -52,6 +58,8 @@ public class TribulationManager {
         LOGGER.debug("[TribulationManager.startTribulation] Initializing tribulation instance");
         tribInstance.initialize(types, registry);
         player.getData(CapabilityRegistry.TRIBULATIONS).add(tribInstance);
+        player.displayClientMessage(Component.translatable("text.ars_trinkets.tribulation.begin")
+                .withStyle(ChatFormatting.RED), false);
         LOGGER.info("[TribulationManager.startTribulation] Tribulation started for {}: {} type(s), intensity={}", player.getName().getString(), types.size(), intensity);
     }
 
@@ -61,42 +69,49 @@ public class TribulationManager {
 
     @SubscribeEvent
     public static void onServerTick(ServerTickEvent.Pre event) {
-        if (instance != null) {
+        if (instance != null && isTribulationSystemEnabled()) {
             instance.handleServerTick(event);
         }
     }
 
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        if (instance != null) {
+        if (instance != null && isTribulationSystemEnabled()) {
             instance.handlePlayerJoin(event);
         }
     }
 
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        if (instance != null) {
+        if (instance != null && isTribulationSystemEnabled()) {
             instance.handlePlayerRespawn(event);
         }
     }
 
     @SubscribeEvent
     public static void onPlayerDeath(LivingDeathEvent event) {
-        if (instance != null && event.getEntity() instanceof ServerPlayer player) {
+        if (instance != null && isTribulationSystemEnabled() && event.getEntity() instanceof ServerPlayer player) {
             instance.handlePlayerDeath(player);
         }
     }
 
     @SubscribeEvent
     public static void onPreLevelUp(LevelModifiedEvent.Pre event) {
+        if (!isTribulationSystemEnabled()) {
+            return;
+        }
         if (instance == null) {
             ArsTrinkets.LOGGER.warn("[TribulationManager.onPreLevelUp] Instance not initialized, skipping level-up event");
             return;
         }
         if (event.entity instanceof ServerPlayer player) {
-            //event.setCanceled(true);
-            //instance.handlePreLevelUp(player, event.newLevel);
+            event.setCanceled(true);
+            instance.handlePreLevelUp(player, event.newLevel);
         }
+    }
+
+    private static boolean isTribulationSystemEnabled() {
+        return Config.Common.TRIBULATION_SYSTEM_ENABLED.get();
     }
 
     // -------------------------------------------------------------------------
@@ -162,12 +177,13 @@ public class TribulationManager {
             LOGGER.debug("[TribulationManager.handlePlayerDeath] Player died with {} active tribulation(s)", tribulations.getInstances().size());
         }
         for (var tribInstance : tribulations.getInstances()) {
+            if (!tribInstance.isActive()) continue;
+            tribInstance.fail();
             tribInstance.postEvent(new PlayerDiedEvent(tribInstance));
         }
     }
 
     private void handlePreLevelUp(@NotNull ServerPlayer player, short newLevel) {
-        System.err.println("HANDLING PRE-LEVEL UP");
         LOGGER.info("[TribulationManager.handlePreLevelUp] Level-up Pre event: {} -> level {}", player.getName().getString(), newLevel);
 
         var tribulations = player.getData(CapabilityRegistry.TRIBULATIONS);
@@ -183,30 +199,28 @@ public class TribulationManager {
                 TribulationTypeRegistry.BOSS_ENHANCEMENT.getDelegate()
         );
 
-        // Boss enhancement almost always applies (80% chance)
         List<Holder<TribulationType>> selected = new java.util.ArrayList<>();
-        if (random.nextFloat() < 0.8f) {
-            selected.add(TribulationTypeRegistry.BOSS_ENHANCEMENT);
-            LOGGER.debug("[TribulationManager.handlePreLevelUp] Boss enhancement selected (80% roll)");
+        selected.add(TribulationTypeRegistry.LIGHTNING_RAIN.getDelegate());
+        LOGGER.debug("[TribulationManager.handlePreLevelUp] Lightning rain selected (guaranteed)");
+
+        // Boss enhancement almost always applies (configurable chance)
+        if (random.nextFloat() < Config.Common.TRIBULATION_BOSS_ENHANCEMENT_CHANCE.get()) {
+            selected.add(TribulationTypeRegistry.BOSS_ENHANCEMENT.getDelegate());
+            LOGGER.debug("[TribulationManager.handlePreLevelUp] Boss enhancement selected (chance roll)");
         }
 
         // Higher levels add additional random tribulations
-        int additionalLayers = Math.max(0, (newLevel - 1) / 2);
+        int additionalLayers = Math.max(0, (newLevel - 1) / Config.Common.TRIBULATION_ADDITIONAL_LAYER_LEVELS_PER_STEP.get());
         LOGGER.debug("[TribulationManager.handlePreLevelUp] Additional layers to select: {}", additionalLayers);
         for (int i = 0; i < additionalLayers; i++) {
             Holder<TribulationType> type = allTypes.get(random.nextInt(allTypes.size()));
             selected.add(type);
         }
 
-        // Ensure at least one tribulation
-        if (selected.isEmpty()) {
-            selected.add(allTypes.get(random.nextInt(allTypes.size())));
-            LOGGER.debug("[TribulationManager.handlePreLevelUp] Fallback tribulation selected (no selection)");
-        }
-
         LOGGER.info("[TribulationManager.handlePreLevelUp] {} tribulation(s) selected for level {}", selected.size(), newLevel);
 
-        float intensity = 0.5f + (newLevel * 0.75f);
+        float intensity = (float)(Config.Common.TRIBULATION_INTENSITY_BASE.get()
+                + (newLevel * Config.Common.TRIBULATION_INTENSITY_PER_LEVEL.get()));
         startTribulation(player, selected, intensity);
     }
 }

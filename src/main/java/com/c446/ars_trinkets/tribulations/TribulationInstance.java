@@ -1,6 +1,7 @@
 package com.c446.ars_trinkets.tribulations;
 
 import com.c446.ars_trinkets.ArsTrinkets;
+import com.c446.ars_trinkets.Config;
 import com.c446.ars_trinkets.registry.TribulationTypeRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -23,10 +24,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TribulationInstance implements INBTSerializable<CompoundTag> {
+    private static final int TICKS_PER_SECOND = 20;
+
     private ServerPlayer player;
     private float intensity;
     private float karmaScaledIntensity; // Runtime cached intensity with karma scaling applied
     private boolean active;
+    private boolean failed;
+    private int elapsedTicks;
+    private int durationTicks = Config.Common.TRIBULATION_DURATION_BASE_SECONDS.get() * TICKS_PER_SECOND;
+    private int phase = 1;
     private final List<ResourceKey<TribulationType>> typeKeys = new ArrayList<ResourceKey<TribulationType>>();
     private final List<ScheduledTask> tasks = new ArrayList<>();
     public final CompoundTag data = new CompoundTag();
@@ -41,6 +48,7 @@ public class TribulationInstance implements INBTSerializable<CompoundTag> {
 
     public TribulationInstance(float intensity) {
         this.intensity = intensity;
+        this.durationTicks = calculateDurationTicks(intensity);
     }
 
     public void initialize(List<Holder<TribulationType>> types, Registry<TribulationType> registry) {
@@ -83,8 +91,35 @@ public class TribulationInstance implements INBTSerializable<CompoundTag> {
 
     public void tick() {
         if (!active || player == null) return;
+
+        elapsedTicks++;
+        updatePhase();
+
         for (var task : tasks) {
             task.tick(this);
+        }
+
+        if (elapsedTicks >= durationTicks) {
+            ArsTrinkets.LOGGER.info("[TribulationInstance.tick] Tribulation survived: player={}, durationTicks={}, intensity={}",
+                    player.getName().getString(), durationTicks, intensity);
+            deactivate();
+        }
+    }
+
+    private static int calculateDurationTicks(float intensity) {
+        float clampedIntensity = Math.max(0.0f, intensity);
+        int seconds = Config.Common.TRIBULATION_DURATION_BASE_SECONDS.get()
+                + Math.round((float)(clampedIntensity * Config.Common.TRIBULATION_DURATION_SECONDS_PER_INTENSITY.get()));
+        return Math.min(Config.Common.TRIBULATION_DURATION_MAX_SECONDS.get(), seconds) * TICKS_PER_SECOND;
+    }
+
+    private void updatePhase() {
+        int newPhase = Math.min(3, 1 + (elapsedTicks * 3 / Math.max(1, durationTicks)));
+        if (newPhase != phase) {
+            phase = newPhase;
+            postEvent(new PhaseChangedEvent(this, phase));
+            ArsTrinkets.LOGGER.debug("[TribulationInstance.tick] Phase changed: phase={}, elapsedTicks={}, durationTicks={}",
+                    phase, elapsedTicks, durationTicks);
         }
     }
 
@@ -99,8 +134,18 @@ public class TribulationInstance implements INBTSerializable<CompoundTag> {
         ArsTrinkets.LOGGER.debug("[TribulationInstance.deactivate] Deactivated tribulation instance");
     }
 
+    public void fail() {
+        failed = true;
+        active = false;
+        ArsTrinkets.LOGGER.debug("[TribulationInstance.fail] Failed tribulation instance");
+    }
+
     public boolean isActive() {
         return active;
+    }
+
+    public boolean hasFailed() {
+        return failed;
     }
 
     public ServerPlayer getPlayer() {
@@ -125,6 +170,10 @@ public class TribulationInstance implements INBTSerializable<CompoundTag> {
         var tag = new CompoundTag();
         tag.putFloat("intensity", intensity);
         tag.putBoolean("active", active);
+        tag.putBoolean("failed", failed);
+        tag.putInt("elapsedTicks", elapsedTicks);
+        tag.putInt("durationTicks", durationTicks);
+        tag.putInt("phase", phase);
 
         var typesList = new ListTag();
         for (ResourceKey<TribulationType> key : typeKeys) {
@@ -145,6 +194,10 @@ public class TribulationInstance implements INBTSerializable<CompoundTag> {
     public void deserializeNBT(HolderLookup.@NotNull Provider provider, CompoundTag tag) {
         intensity = tag.getFloat("intensity");
         active = tag.getBoolean("active");
+        failed = tag.getBoolean("failed");
+        elapsedTicks = tag.getInt("elapsedTicks");
+        durationTicks = tag.contains("durationTicks", Tag.TAG_INT) ? tag.getInt("durationTicks") : calculateDurationTicks(intensity);
+        phase = tag.contains("phase", Tag.TAG_INT) ? tag.getInt("phase") : 1;
 
         typeKeys.clear();
         var typesTag = tag.getList("types", Tag.TAG_STRING);

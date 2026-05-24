@@ -69,8 +69,6 @@ public class PlayerLevelHandling {
         }
     }
 
-
-
     //TODO: patchouli book, add titles back in, on level-up broadcasting etc...
     @SubscribeEvent
     public static void onDamage(LivingDamageEvent.Pre d) {
@@ -132,8 +130,8 @@ public class PlayerLevelHandling {
 
     private static void removeDivBoost(Map.Entry<Holder<Attribute>, AttributeInstance> ai) {
         if (ai.getValue().removeModifier(DIVINITY_STAT_BOOST_LOCATION)) {
-            ArsTrinkets.LOGGER.debug("successfully removed " + ai.getKey().getRegisteredName() + "'s boost.");
-        };
+            //ArsTrinkets.LOGGER.debug("successfully removed " + ai.getKey().getRegisteredName() + "'s boost.");
+        }
     }
 
     private static boolean shouldIncludeAttribute(Map.Entry<Holder<Attribute>, AttributeInstance> ai) {
@@ -146,14 +144,14 @@ public class PlayerLevelHandling {
 
         // Check "no increase if negative" tag
         if (ai.getKey().is(AttributeTagsProviders.DIVINITY_NO_INCREASE_IF_NEGATIVE) && value < 0) {
-            ArsTrinkets.LOGGER.warn("attribute " + ai.getKey().getRegisteredName() + " is negative and shouldn't be increased.");
+            //ArsTrinkets.LOGGER.warn("attribute {} is negative and shouldn't be increased.", ai.getKey().getRegisteredName());
             removeDivBoost(ai);
             return false;
         }
 
         // Check "no increase if positive" tag
         if (ai.getKey().is(AttributeTagsProviders.DIVINITY_NO_INCREASE_IF_POSITIVE) && value > 0) {
-            ArsTrinkets.LOGGER.warn("attribute " + ai.getKey().getRegisteredName() + " is positive and shouldn't be increased.");
+            //ArsTrinkets.LOGGER.warn("attribute {} is positive and shouldn't be increased.", ai.getKey().getRegisteredName());
             removeDivBoost(ai);
             return false;
         }
