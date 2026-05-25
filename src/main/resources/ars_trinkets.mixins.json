@@ -1,14 +1,16 @@
 {
   "required": true,
+  "minVersion": "0.8",
   "package": "com.c446.ars_trinkets.mixin",
   "compatibilityLevel": "JAVA_21",
-  "refmap": "ars_trinkets.refmap.json",
   "mixins": [
     "AbstractCasterBonusSlotsMixin",
     "AbstractCasterCastValidationMixin"
   ],
-  "minVersion": "0.8",
   "client": [
     "GuiSpellBookMixin"
-  ]
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

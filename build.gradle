@@ -3,18 +3,17 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.150'
+    id 'net.neoforged.moddev' version '1.0.17'
     id 'io.github.goooler.shadow' version '8.1.7'
 }
 
 version = mod_version
 
-
 if (System.getenv('BUILD_NUMBER') != null) {
     version += "." + System.getenv('BUILD_NUMBER')
 }
 
-group = 'com.c446.ars_trinkets' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = 'com.c446.ars_trinkets'
 
 base {
     archivesName = mod_id + '-' + minecraft_version
@@ -23,52 +22,63 @@ base {
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 java.withSourcesJar()
 
-subsystems {
+neoForge {
+    version = project.neo_version
+
     parchment {
-        minecraftVersion = "1.21.1"
         mappingsVersion = project.parchment_version
+        minecraftVersion = "1.21.1"
+    }
+
+    runs {
+        client {
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        server {
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        gameTestServer {
+            type = "gameTestServer"
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        data {
+            data()
+            programArguments.addAll '--mod', project.mod_id, '--all',
+                '--output', file('src/generated/resources/').getAbsolutePath(),
+                '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
     }
 }
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 configurations {
     libraries
-    // This will make sure that all dependencies that you add to the libraries configuration will also be added to the implementation configuration
-    // This way, you only need one dependency declaration for both runtime and compile dependencies
     shade
     implementation.extendsFrom libraries
     runtimeClasspath.extendsFrom localRuntime
-
-    shade
     implementation.extendsFrom shade
-
-}
-runs {
-    configureEach {
-        systemProperty 'forge.logging.markers', 'REGISTRIES'
-        systemProperty 'forge.logging.console.level', 'debug'
-        modSource project.sourceSets.main
-    }
-
-    client {
-        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
-    }
-
-    server {
-        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
-        programArgument '--nogui'
-    }
-
-    gameTestServer {
-        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
-    }
-
-    data {
-        programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
-    }
 }
 
-
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+jarJar.enable()
+tasks.named('jarJar') {}
 
 repositories {
     mavenCentral()
@@ -113,10 +123,6 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
-jarJar.enable()
-
-tasks.named('jarJar') {}
-
 configurations.configureEach {
     resolutionStrategy {
         force 'org.ow2.asm:asm:9.7'
@@ -134,7 +140,6 @@ dependencies {
     implementation "curse.maven:placebo-283644:6926281"
     implementation "curse.maven:ldlib-626676:7418897"
 
-    //sauce lib
     jarJar(implementation("com.alexthw.sauce:sauce-${minecraft_version}") {
         version {
             strictly '[0.0.31,)'
@@ -145,11 +150,8 @@ dependencies {
     runtimeOnly "curse.maven:ars-elemental-561470:7398326"
     runtimeOnly "curse.maven:not-enough-glyphs-1023517:7398332"
 
-    // base AN dependencies
     implementation "software.bernie.geckolib:geckolib-neoforge-1.21.1:${geckolib_version}"
     compileOnly('vazkii.patchouli:Patchouli:1.21-87-NEOFORGE')
-    //runtimeOnly "curse.maven:mmmmmmmmmmmm-225738:5779508"
-    //runtimeOnly "curse.maven:selene-499980:6114818"
     implementation "curse.maven:ars-nouveau-401955:8081100"
     localRuntime "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}"
     compileOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}:api"
@@ -161,42 +163,57 @@ dependencies {
     implementation "curse.maven:jade-324717:5444008"
     implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}+1.21.1"
 
-   // localRuntime "dev.emi:emi-neoforge:${emi_version}"
     localRuntime 'curse.maven:ftb-teams-forge-404468:5631446'
     localRuntime 'curse.maven:ftb-chunks-forge-314906:5710609'
     localRuntime 'curse.maven:ftb-library-forge-404465:5754910'
     localRuntime 'curse.maven:architectury-api-419699:5553800'
-//    localRuntime 'curse.maven:productivebees-377897:6154395'
     implementation(jarJar(group: 'com.hollingsworth.nuggets', name: 'nuggets-neoforge-1.21', version: '[1.0.4,)') {
         jarJar.pin(it, '1.0.4')
     })
-    //localRuntime "maven.modrinth:cloth-config:21.11.153+neoforge"
-    //localRuntime "curse.maven:immersive-portals-for-forge-355440:6013197"
-    //implementation "curse.maven:ars-elemental-561470:6086122"
+
     shade 'org.apache.lucene:lucene-core:10.1.0'
     shade 'org.apache.lucene:lucene-analysis-common:10.1.0'
     shade 'org.apache.lucene:lucene-queryparser:10.1.0'
-
-//    implementation 'com.hollingsworth.nuggets:nuggets-neoforge-1.21:1.0.4'
 }
+
+var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
+    var replaceProperties = [
+        minecraft_version      : minecraft_version,
+        minecraft_version_range: minecraft_version_range,
+        neo_version            : neo_version,
+        neo_version_range      : neo_version_range,
+        loader_version_range   : loader_version_range,
+        mod_id                 : mod_id,
+        mod_license            : mod_license,
+        mod_version            : version.toString(),
+        mod_authors            : mod_authors,
+        mod_description        : mod_description
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from "src/main/templates"
+    into "build/generated/sources/modMetadata"
+}
+
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
 
 jar {
     manifest {
-        attributes(["Specification-Title"     : "Ars Trinkets",
-                    "Specification-Vendor"    : "c446",
-                    "Specification-Version"   : "1", // We are version 1 of ourselves
-                    "Implementation-Title"    : project.name,
-                    "Implementation-Version"  : mod_version,
-                    "Implementation-Vendor"   : "c446",
-                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                    //    "MixinConfigs": "ars_trinkets.mixins.json"
+        attributes([
+            "Specification-Title"     : "Ars Trinkets",
+            "Specification-Vendor"    : "c446",
+            "Specification-Version"   : "1",
+            "Implementation-Title"    : project.name,
+            "Implementation-Version"  : mod_version,
+            "Implementation-Vendor"   : "c446",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            "MixinConfigs"            : "ars_trinkets.mixins.json"
         ])
     }
     exclude('**/*.psd')
     exclude('**/*.bbmodel')
 }
-
-minecraft.accessTransformers.files(file('src/main/resources/META-INF/accesstransformer.cfg'))
 
 publishing {
     publications {
@@ -215,10 +232,9 @@ publishing {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+    options.encoding = 'UTF-8'
 }
 
-// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
 idea {
     module {
         downloadSources = true
