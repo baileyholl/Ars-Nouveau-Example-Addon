@@ -77,9 +77,6 @@ configurations {
     implementation.extendsFrom shade
 }
 
-jarJar.enable()
-tasks.named('jarJar') {}
-
 repositories {
     mavenCentral()
     flatDir {
