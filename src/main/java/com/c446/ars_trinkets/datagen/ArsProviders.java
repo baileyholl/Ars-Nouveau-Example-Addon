@@ -62,6 +62,7 @@ public class ArsProviders {
             recipes.add(get(AuraForm.INSTANCE).withItem(MethodSelf.INSTANCE.getGlyph().asItem()).withItem(Items.NETHERITE_BLOCK, 3));
             recipes.add(get(EffectAncientLightningBolt.INSTANCE).withItem(EffectLightning.INSTANCE.getGlyph().asItem()).withItem(Essence10.get(), 6));
             recipes.add(get(EffectAdvancedGrowth.INSTANCE).withItem(EffectGrow.INSTANCE.getGlyph().asItem()).withItem(Essence6.get(), 5));
+            recipes.add(get(EffectInspectSoul.INSTANCE).withItem(ItemsRegistry.CONJURATION_ESSENCE).withItem(Items.NETHERITE_INGOT, 1));
 
             for (GlyphRecipe recipe : recipes) {
                 Path path = getScribeGlyphPath(output, recipe.output.getItem());

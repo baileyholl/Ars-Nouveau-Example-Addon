@@ -1,4 +1,4 @@
-package com.c446.ars_trinkets.mixin.client;
+package com.c446.ars_trinkets.mixin;
 
 import com.c446.ars_trinkets.spells.BonusGlyphSlotsResolver;
 import com.hollingsworth.arsnouveau.client.gui.book.GuiSpellBook;

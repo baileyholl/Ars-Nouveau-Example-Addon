@@ -26,31 +26,31 @@ public abstract class AbstractCasterCastValidationMixin {
             cancellable = true
     )
     private void arsTrinkets$validateRecipeLength(
-            Level world,
-            LivingEntity entity,
-            InteractionHand hand,
+            Level worldIn,
+            LivingEntity playerIn,
+            InteractionHand handIn,
             Component invalidMessage,
             CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir
     ) {
-        if (!Config.Common.ENFORCE_BONUS_GLYPH_SLOTS_ON_CAST.get() || world.isClientSide) {
+        if (!Config.Common.ENFORCE_BONUS_GLYPH_SLOTS_ON_CAST.get() || worldIn.isClientSide) {
             return;
         }
 
         AbstractCaster<?> caster = (AbstractCaster<?>) (Object) this;
-        Spell spell = caster.getSpell(world, entity, hand, caster);
-        int maxSize = BonusGlyphSlotsResolver.maxRecipeSize(entity, caster);
+        Spell spell = caster.getSpell(worldIn, playerIn, handIn, caster);
+        int maxSize = BonusGlyphSlotsResolver.maxRecipeSize(playerIn, caster);
 
         if (spell.size() <= maxSize) {
             return;
         }
 
         if (invalidMessage != null) {
-            PortUtil.sendMessageNoSpam(entity, invalidMessage);
+            PortUtil.sendMessageNoSpam(playerIn, invalidMessage);
         } else {
-            PortUtil.sendMessageNoSpam(entity, Component.translatable("text.ars_trinkets.spell_too_large", maxSize));
+            PortUtil.sendMessageNoSpam(playerIn, Component.translatable("text.ars_trinkets.spell_too_large", maxSize));
         }
 
-        cir.setReturnValue(new InteractionResultHolder<>(InteractionResult.SUCCESS, entity.getItemInHand(hand)));
+        cir.setReturnValue(new InteractionResultHolder<>(InteractionResult.SUCCESS, playerIn.getItemInHand(handIn)));
     }
 }
 

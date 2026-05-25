@@ -5,10 +5,12 @@ import com.c446.ars_trinkets.item.runes.AbstractRune;
 import com.c446.ars_trinkets.registry.AttributeRegistry;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.telemetry.TelemetryProperty;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerPlayerGameMode;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -87,7 +89,7 @@ public class OmnipotenceRune extends AbstractRune {
 
     @Override
     public boolean canUnequip(SlotContext slotContext, ItemStack stack) {
-        return false;
+        return slotContext.entity() instanceof ServerPlayer serverPlayer && (serverPlayer.isCreative());
     }
 
     @SubscribeEvent

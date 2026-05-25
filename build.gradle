@@ -72,10 +72,11 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     mavenCentral()
-    mavenLocal()
     flatDir {
         dirs 'externalmods'
     }
+
+    mavenLocal()
     maven {
         name = 'GeckoLib'
         url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
@@ -93,17 +94,6 @@ repositories {
             includeGroup "curse.maven"
         }
     }
-    exclusiveContent {
-        forRepository {
-            maven {
-                name = "Modrinth"
-                url = "https://api.modrinth.com/maven"
-            }
-        }
-        filter {
-            includeGroup "maven.modrinth"
-        }
-    }
     maven {
         name = "Illusive Soulworks maven"
         url = "https://maven.theillusivec4.top/"
@@ -119,17 +109,6 @@ repositories {
     maven {
         name = "OctoStudios"
         url = uri("https://maven.octo-studios.com/releases")
-    }
-    maven {
-        name = "BlameJared"
-        url = 'https://maven.blamejared.com'
-    }
-    maven {
-        name = 'TerraformersMC'
-        url = 'https://maven.terraformersmc.com/'
-        content {
-            includeGroup 'dev.emi'
-        }
     }
     maven { url 'https://jitpack.io' }
 }
@@ -171,19 +150,18 @@ dependencies {
     compileOnly('vazkii.patchouli:Patchouli:1.21-87-NEOFORGE')
     //runtimeOnly "curse.maven:mmmmmmmmmmmm-225738:5779508"
     //runtimeOnly "curse.maven:selene-499980:6114818"
-    //implementation("com.hollingsworth.ars_nouveau:ars_nouveau-${minecraft_version}:${ars_version}")
-    implementation "curse.maven:ars-nouveau-401955:7394698"
+    implementation "curse.maven:ars-nouveau-401955:8081100"
     localRuntime "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}"
     compileOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}:api"
 
     compileOnly "mezz.jei:jei-1.21.1-neoforge-api:${jei_version}"
     implementation "mezz.jei:jei-1.21.1-neoforge:${jei_version}"
-    compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
+    implementation "curse.maven:emi-580555:8081408"
     implementation 'com.github.glitchfiend:TerraBlender-neoforge:1.21-4.0.0.0'
     implementation "curse.maven:jade-324717:5444008"
     implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}+1.21.1"
 
-    localRuntime "dev.emi:emi-neoforge:${emi_version}"
+   // localRuntime "dev.emi:emi-neoforge:${emi_version}"
     localRuntime 'curse.maven:ftb-teams-forge-404468:5631446'
     localRuntime 'curse.maven:ftb-chunks-forge-314906:5710609'
     localRuntime 'curse.maven:ftb-library-forge-404465:5754910'
@@ -192,7 +170,7 @@ dependencies {
     implementation(jarJar(group: 'com.hollingsworth.nuggets', name: 'nuggets-neoforge-1.21', version: '[1.0.4,)') {
         jarJar.pin(it, '1.0.4')
     })
-    localRuntime "maven.modrinth:cloth-config:15.0.140+neoforge"
+    //localRuntime "maven.modrinth:cloth-config:21.11.153+neoforge"
     //localRuntime "curse.maven:immersive-portals-for-forge-355440:6013197"
     //implementation "curse.maven:ars-elemental-561470:6086122"
     shade 'org.apache.lucene:lucene-core:10.1.0'
