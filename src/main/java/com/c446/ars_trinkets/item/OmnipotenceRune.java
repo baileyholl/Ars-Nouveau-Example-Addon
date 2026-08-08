@@ -1,17 +1,18 @@
 package com.c446.ars_trinkets.item;
 
 import com.c446.ars_trinkets.ArsTrinkets;
+import com.c446.ars_trinkets.network.CrownLivesPayload;
 import com.c446.ars_trinkets.item.runes.AbstractRune;
 import com.c446.ars_trinkets.registry.AttributeRegistry;
 import com.google.common.collect.Multimap;
+import com.illusivesoulworks.caelus.api.CaelusApi;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.telemetry.TelemetryProperty;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.level.ServerPlayerGameMode;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
@@ -21,12 +22,14 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @EventBusSubscriber
@@ -34,6 +37,8 @@ public class OmnipotenceRune extends AbstractRune {
     private static final int EXTRA_LIVES_PER_CYCLE = 9;
     private static final double MAX_HIT_FRACTION = 0.10D;
     private static final int BONUS_SPELL_SLOTS = 10;
+    private static final ExtraLifeTracker LIFE_TRACKER = new ExtraLifeTracker(EXTRA_LIVES_PER_CYCLE);
+    private static final Map<UUID, Integer> LAST_SENT_LIVES = new HashMap<>();
 
     public OmnipotenceRune(Properties pProperties, int level, ResourceLocation registeredName) {
         super(pProperties, level, registeredName);
@@ -69,6 +74,10 @@ public class OmnipotenceRune extends AbstractRune {
                 AttributeRegistry.BONUS_GLYPH_SLOTS,
                 new AttributeModifier(id.withSuffix("_bonus_glyph_slots"), BONUS_SPELL_SLOTS, AttributeModifier.Operation.ADD_VALUE)
         );
+        /*map.put(
+                CaelusApi.getInstance().getFallFlyingAttribute(),
+                new AttributeModifier(id.withSuffix("_fall_flying"), 1.0D, AttributeModifier.Operation.ADD_VALUE)
+        );*/
 
         return map;
     }
@@ -77,13 +86,25 @@ public class OmnipotenceRune extends AbstractRune {
     public void curioTick(SlotContext slotContext, ItemStack stack) {
         UUID playerId = slotContext.entity().getUUID();
         ArsTrinkets.OMNIPOTENT_PLAYER.add(playerId);
-        remainingLives.putIfAbsent(playerId, EXTRA_LIVES_PER_CYCLE);
+        LIFE_TRACKER.equip(playerId);
+        if (slotContext.entity() instanceof ServerPlayer serverPlayer) {
+            enableCreativeFlight(serverPlayer);
+            sendRemainingLives(serverPlayer);
+        }
         super.curioTick(slotContext, stack);
     }
 
     @Override
     public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack) {
-        ArsTrinkets.OMNIPOTENT_PLAYER.remove(slotContext.entity().getUUID());
+        UUID playerId = slotContext.entity().getUUID();
+        ArsTrinkets.OMNIPOTENT_PLAYER.remove(playerId);
+        LIFE_TRACKER.unequip(playerId);
+        LAST_SENT_LIVES.remove(playerId);
+        if (slotContext.entity() instanceof ServerPlayer serverPlayer && !serverPlayer.isCreative()) {
+            serverPlayer.getAbilities().mayfly = false;
+            serverPlayer.getAbilities().flying = false;
+            serverPlayer.onUpdateAbilities();
+        }
         super.onUnequip(slotContext, newStack, stack);
     }
 
@@ -101,24 +122,13 @@ public class OmnipotenceRune extends AbstractRune {
         ev.setNewDamage(Math.min(ev.getNewDamage(), maxAllowedDamage));
     }
 
-    private static int getRemainingLives(UUID playerId) {
-        return remainingLives.getOrDefault(playerId, EXTRA_LIVES_PER_CYCLE);
-    }
-
-    private static void setRemainingLives(UUID playerId, int value) {
-        remainingLives.put(playerId, Math.max(0, value));
-    }
-
-    private static void resetLifeCycle(UUID playerId) {
-        setRemainingLives(playerId, EXTRA_LIVES_PER_CYCLE);
-    }
-
     private static void handleSaved(ServerPlayer serverPlayer, int livesLeft) {
         serverPlayer.displayClientMessage(Component.translatable("item.ars_trinkets.omnipotence_crown.saved_1"), false);
         serverPlayer.displayClientMessage(Component.translatable("item.ars_trinkets.omnipotence_crown.saved_2", livesLeft), false);
         serverPlayer.setHealth(serverPlayer.getMaxHealth());
         serverPlayer.invulnerableTime = Math.max(40, livesLeft * 40);
         serverPlayer.getFoodData().setFoodLevel(20);
+        serverPlayer.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1.0F, 1.0F);
     }
 
     @SubscribeEvent
@@ -127,16 +137,14 @@ public class OmnipotenceRune extends AbstractRune {
         UUID spID = serverPlayer.getUUID();
         if (!ArsTrinkets.OMNIPOTENT_PLAYER.contains(spID)) return;
 
-        int remaining = getRemainingLives(spID);
-        if (remaining <= 0) {
-            // A true death happened; next life starts with a full stock again.
-            resetLifeCycle(spID);
+        if (!LIFE_TRACKER.tryPreventDeath(spID)) {
+            sendRemainingLives(serverPlayer);
             return;
         }
 
-        int updatedLives = remaining - 1;
-        setRemainingLives(spID, updatedLives);
+        int updatedLives = LIFE_TRACKER.remaining(spID);
         handleSaved(serverPlayer, updatedLives);
+        sendRemainingLives(serverPlayer);
         ev.setCanceled(true);
     }
 
@@ -144,7 +152,10 @@ public class OmnipotenceRune extends AbstractRune {
     public static void onRespawn(PlayerEvent.PlayerRespawnEvent ev) {
         UUID playerId = ev.getEntity().getUUID();
         if (ArsTrinkets.OMNIPOTENT_PLAYER.contains(playerId)) {
-            resetLifeCycle(playerId);
+            LIFE_TRACKER.respawn(playerId);
+            if (ev.getEntity() instanceof ServerPlayer serverPlayer) {
+                sendRemainingLives(serverPlayer);
+            }
         }
     }
 
@@ -152,7 +163,11 @@ public class OmnipotenceRune extends AbstractRune {
     public static void onLogout(PlayerEvent.PlayerLoggedOutEvent ev) {
         UUID playerId = ev.getEntity().getUUID();
         ArsTrinkets.OMNIPOTENT_PLAYER.remove(playerId);
-        remainingLives.remove(playerId);
+        LIFE_TRACKER.unequip(playerId);
+        LAST_SENT_LIVES.remove(playerId);
+        if (ev.getEntity() instanceof ServerPlayer serverPlayer) {
+            sendRemainingLives(serverPlayer);
+        }
     }
 
     @Override
@@ -160,5 +175,18 @@ public class OmnipotenceRune extends AbstractRune {
         return ICurio.DropRule.ALWAYS_KEEP;
     }
 
-    static HashMap<UUID, Integer> remainingLives = new HashMap<>();
+    private static void enableCreativeFlight(ServerPlayer serverPlayer) {
+        if (!serverPlayer.getAbilities().mayfly) {
+            serverPlayer.getAbilities().mayfly = true;
+            serverPlayer.onUpdateAbilities();
+        }
+    }
+
+    private static void sendRemainingLives(ServerPlayer serverPlayer) {
+        UUID playerId = serverPlayer.getUUID();
+        int lives = ArsTrinkets.OMNIPOTENT_PLAYER.contains(playerId) ? LIFE_TRACKER.remaining(playerId) : 0;
+        Integer previous = LAST_SENT_LIVES.put(playerId, lives);
+        if (previous != null && previous == lives) return;
+        PacketDistributor.sendToPlayer(serverPlayer, new CrownLivesPayload(lives));
+    }
 }

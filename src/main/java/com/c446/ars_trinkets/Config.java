@@ -24,6 +24,8 @@ public class Config {
         public static ModConfigSpec.BooleanValue ENFORCE_BONUS_GLYPH_SLOTS_ON_CAST;
         public static ModConfigSpec.IntValue BONUS_GLYPH_SLOTS_FALLBACK;
         public static ModConfigSpec.IntValue BONUS_GLYPH_SLOTS_CAP;
+        public static ModConfigSpec.IntValue CROWN_LIVES_HUD_X_OFFSET;
+        public static ModConfigSpec.IntValue CROWN_LIVES_HUD_Y_OFFSET;
 
         // Karma system config
         public static ModConfigSpec.BooleanValue ENABLE_KARMA_SCALING;
@@ -150,6 +152,15 @@ public class Config {
             BONUS_GLYPH_SLOTS_CAP = builder
                     .comment("Hard cap applied to computed bonus slots to avoid extreme values.")
                     .defineInRange("bonus_cap", 256, 0, 4096);
+            builder.pop();
+
+            builder.push("omnipotence_crown");
+            CROWN_LIVES_HUD_X_OFFSET = builder
+                    .comment("Horizontal offset in pixels for the crown's extra-life icons above the food bar.")
+                    .defineInRange("lives_hud_x_offset", 0, -1000, 1000);
+            CROWN_LIVES_HUD_Y_OFFSET = builder
+                    .comment("Vertical offset in pixels for the crown's extra-life icons above the food bar.")
+                    .defineInRange("lives_hud_y_offset", 0, -1000, 1000);
             builder.pop();
 
             builder.push("karma_system");

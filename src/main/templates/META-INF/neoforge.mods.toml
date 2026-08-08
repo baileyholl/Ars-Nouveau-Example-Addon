@@ -36,3 +36,10 @@ type = "required"
 versionRange = "[1.21.1-5.4,)"
 ordering = "AFTER"
 side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "caelus"
+type = "required"
+versionRange = "[7.0,)"
+ordering = "AFTER"
+side = "BOTH"

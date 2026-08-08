@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '1.0.17'
+    id 'net.neoforged.moddev' version '2.0.142'
     id 'io.github.goooler.shadow' version '8.1.7'
 }
 
@@ -91,6 +91,13 @@ repositories {
             includeGroup("software.bernie.geckolib")
         }
     }
+    maven {
+        name = 'TerraformersMC'
+        url = 'https://maven.terraformersmc.com/releases'
+        content {
+            includeGroup 'dev.emi'
+        }
+    }
     exclusiveContent {
         forRepository {
             maven {
@@ -131,7 +138,7 @@ configurations.configureEach {
 }
 
 dependencies {
-    implementation "net.neoforged:neoforge:${neo_version}"
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.0'
     // attributeslib / apoth
     implementation "curse.maven:apothic-attributes-898963:6751650"
     implementation "curse.maven:placebo-283644:6926281"
@@ -148,15 +155,15 @@ dependencies {
     runtimeOnly "curse.maven:not-enough-glyphs-1023517:7398332"
 
     implementation "software.bernie.geckolib:geckolib-neoforge-1.21.1:${geckolib_version}"
-    compileOnly('vazkii.patchouli:Patchouli:1.21-87-NEOFORGE')
+    compileOnly("vazkii.patchouli:Patchouli:${patchouli_version}")
     implementation "curse.maven:ars-nouveau-401955:8081100"
     localRuntime "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}"
     compileOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}:api"
 
     compileOnly "mezz.jei:jei-1.21.1-neoforge-api:${jei_version}"
     implementation "mezz.jei:jei-1.21.1-neoforge:${jei_version}"
-    implementation "curse.maven:emi-580555:8081408"
-    implementation 'com.github.glitchfiend:TerraBlender-neoforge:1.21-4.0.0.0'
+    implementation "dev.emi:emi-neoforge:${emi_version}"
+    implementation 'com.github.glitchfiend:TerraBlender-neoforge:1.21.1-4.1.0.8'
     implementation "curse.maven:jade-324717:5444008"
     implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}+1.21.1"
 
@@ -164,16 +171,20 @@ dependencies {
     localRuntime 'curse.maven:ftb-chunks-forge-314906:5710609'
     localRuntime 'curse.maven:ftb-library-forge-404465:5754910'
     localRuntime 'curse.maven:architectury-api-419699:5553800'
-    jarJar(implementation("com.hollingsworth.nuggets:nuggets-neoforge-1.21") {
+    jarJar(implementation("com.hollingsworth.nuggets:nuggets-neoforge-1.21.1") {
         version {
-            strictly '[1.0.4,)'
-            prefer '1.0.4'
+            strictly '[1.1.0,)'
+            prefer nuggets_version
         }
     })
 
     shade 'org.apache.lucene:lucene-core:10.1.0'
     shade 'org.apache.lucene:lucene-analysis-common:10.1.0'
     shade 'org.apache.lucene:lucene-queryparser:10.1.0'
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
@@ -239,5 +250,46 @@ idea {
     module {
         downloadSources = true
         downloadJavadoc = true
+    }
+}
+
+def prismInstanceDir = file(
+    System.getenv('PRISM_INSTANCE_DIR') ?: '/home/clement/.local/share/PrismLauncher/instances/Ars Draconis'
+)
+def prismModsDir = new File(prismInstanceDir, 'minecraft/mods')
+def prismLauncher = System.getenv('PRISM_LAUNCHER') ?: 'prismlauncher'
+def prismInstanceName = System.getenv('PRISM_INSTANCE_NAME') ?: 'Ars Draconis'
+
+tasks.register('installPrismMod', Copy) {
+    group = 'verification'
+    description = 'Replaces this mod in the configured Prism Launcher instance.'
+    dependsOn tasks.named('jar')
+
+    // This task deletes an existing external jar as a side effect. Always run
+    // it so Gradle cannot leave a stale copy in Prism because the Copy task is
+    // considered up-to-date.
+    outputs.upToDateWhen { false }
+
+    doFirst {
+        if (!prismInstanceDir.isDirectory()) {
+            throw new GradleException("Prism Launcher instance does not exist: ${prismInstanceDir}")
+        }
+        prismModsDir.mkdirs()
+        project.delete(fileTree(prismModsDir) {
+            include("${mod_id}-*.jar")
+        })
+    }
+
+    from tasks.named('jar').flatMap { it.archiveFile }
+    into prismModsDir
+}
+
+tasks.register('runPrismClient', Exec) {
+    group = 'verification'
+    description = 'Builds the mod, installs it into Prism Launcher, and boots the instance.'
+    dependsOn tasks.named('installPrismMod')
+
+    doFirst {
+        commandLine prismLauncher, '--launch', prismInstanceName
     }
 }

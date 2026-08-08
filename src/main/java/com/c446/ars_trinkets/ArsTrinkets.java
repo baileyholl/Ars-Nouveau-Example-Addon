@@ -22,6 +22,8 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import com.c446.ars_trinkets.network.CrownLivesPayload;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -56,6 +58,7 @@ public class ArsTrinkets {
         modEventBus.addListener(this::setup);
         modEventBus.addListener(this::doClientStuff);
         modEventBus.addListener(this::registerTribulationTypeRegistry);
+        modEventBus.addListener(this::registerPayloads);
 
 //        modEventBus.addListener(this::onRegisterCommands);
 //        NeoForge.EVENT_BUS.register(this);
@@ -78,6 +81,10 @@ public class ArsTrinkets {
 
     private void registerTribulationTypeRegistry(NewRegistryEvent event) {
         event.create(new RegistryBuilder<>(TribulationTypeRegistry.REGISTRY_KEY));
+    }
+
+    private void registerPayloads(RegisterPayloadHandlersEvent event) {
+        event.registrar("1").playToClient(CrownLivesPayload.TYPE, CrownLivesPayload.STREAM_CODEC, CrownLivesPayload::handle);
     }
 
     @SubscribeEvent
