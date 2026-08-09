@@ -63,6 +63,7 @@ public class ArsProviders {
             recipes.add(get(EffectAncientLightningBolt.INSTANCE).withItem(EffectLightning.INSTANCE.getGlyph().asItem()).withItem(Essence10.get(), 6));
             recipes.add(get(EffectAdvancedGrowth.INSTANCE).withItem(EffectGrow.INSTANCE.getGlyph().asItem()).withItem(Essence6.get(), 5));
             recipes.add(get(EffectInspectSoul.INSTANCE).withItem(ItemsRegistry.CONJURATION_ESSENCE).withItem(Items.NETHERITE_INGOT, 1));
+            recipes.add(get(EffectDevourSoul.INSTANCE).withItem(ItemsRegistry.CONJURATION_ESSENCE).withItem(Items.NETHERITE_BLOCK, 1));
 
             for (GlyphRecipe recipe : recipes) {
                 Path path = getScribeGlyphPath(output, recipe.output.getItem());
@@ -447,6 +448,12 @@ public class ArsProviders {
                             .withResult(ETERNITY_RUNE.get())
                             .build()
                     );
+
+                    recipes.add(builder()
+                            .withReagent(GOLDEN_HELMET)
+                            .withPedestalItem(8, ETERNITY_RUNE.get())
+                                    .withResult(DIVINITY.get())
+                            .build());
 
                     /*recipes.add(builder()
                             .withPedestalItem(8, ETERNITY_RUNE.get())

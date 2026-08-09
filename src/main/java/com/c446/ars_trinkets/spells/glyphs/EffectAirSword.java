@@ -5,7 +5,6 @@ import com.c446.ars_trinkets.registry.DamageRegistry;
 import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.api.util.DamageUtil;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
-import com.hollingsworth.arsnouveau.setup.registry.DamageTypesRegistry;
 import com.hollingsworth.arsnouveau.setup.registry.ModPotions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -25,10 +24,6 @@ import java.util.Set;
 public class EffectAirSword extends AbstractEffect implements IDamageEffect {
     public static EffectAirSword INSTANCE = new EffectAirSword(ArsTrinkets.prefix("glyph_sword"), "conjures a blade of wind that pierces the enemy, negating invulnerability");
 
-    public EffectAirSword(String tag, String description) {
-        super(tag, description);
-    }
-
     public EffectAirSword(ResourceLocation tag, String description) {
         super(tag, description);
     }
@@ -36,7 +31,6 @@ public class EffectAirSword extends AbstractEffect implements IDamageEffect {
 
     @Override
     public void onResolveEntity(EntityHitResult rayTraceResult, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
-        rayTraceResult.getEntity();
         if (rayTraceResult.getEntity() instanceof LivingEntity living && world instanceof ServerLevel level) {
             Vec3 livingEyes = living.getEyePosition();
             double x = livingEyes.x;

@@ -2,6 +2,7 @@ package com.c446.ars_trinkets.tribulations.tasks;
 
 import com.c446.ars_trinkets.ArsTrinkets;
 import com.c446.ars_trinkets.Config;
+import com.c446.ars_trinkets.tribulations.DamageResistanceMath;
 import com.c446.ars_trinkets.registry.EffectsRegistry;
 import com.c446.ars_trinkets.tribulations.ScheduledTask;
 import com.c446.ars_trinkets.tribulations.TribulationInstance;
@@ -52,27 +53,24 @@ public class BossEnhancementTask extends ScheduledTask {
     private void enhanceMob(Mob mob, net.minecraft.world.entity.player.Player player, TribulationInstance instance) {
         ArsTrinkets.LOGGER.debug("\t[enhanceMob] Enhancing mob: {}, player={}, intensity={}", mob.getDisplayName(), player.getName().getString(), instance.getIntensity());
         float intensity = instance.getIntensity();
-        double spellDamage = getAttributeValue(player, PerkAttributes.SPELL_DAMAGE_BONUS, 0.0);
         double playerDamage = getAttributeValue(player, Attributes.ATTACK_DAMAGE, 1.0);
-
         int effectDuration = Config.Common.BOSS_ENHANCEMENT_EFFECT_DURATION.get();
 
         int strengthLevel = Math.toIntExact(Math.min(Config.Common.BOSS_ENHANCEMENT_STRENGTH_MAX.get(),
                 Math.round(Config.Common.BOSS_ENHANCEMENT_STRENGTH_BASE.get()
-                        + (intensity * Config.Common.BOSS_ENHANCEMENT_STRENGTH_PER_INTENSITY.get())
-                        + (playerDamage * Config.Common.BOSS_ENHANCEMENT_STRENGTH_PER_PLAYER_DAMAGE.get()))));
-        mob.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, effectDuration, strengthLevel - 1, false, false));
+                        + intensity * Config.Common.BOSS_ENHANCEMENT_STRENGTH_PER_INTENSITY.get()
+                        + playerDamage * Config.Common.BOSS_ENHANCEMENT_STRENGTH_PER_PLAYER_DAMAGE.get())));
+        if (strengthLevel > 0) {
+            mob.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, effectDuration,
+                    strengthLevel - 1, false, false));
+        }
 
         int resistanceLevel = Math.min(Config.Common.BOSS_ENHANCEMENT_RESISTANCE_MAX.get(),
-                Math.round((float)(Config.Common.BOSS_ENHANCEMENT_RESISTANCE_BASE.get()
+                Math.round((float) (Config.Common.BOSS_ENHANCEMENT_RESISTANCE_BASE.get()
                         + intensity * Config.Common.BOSS_ENHANCEMENT_RESISTANCE_PER_INTENSITY.get())));
-        mob.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, effectDuration, resistanceLevel, false, false));
-
-        int speedLevel = Math.toIntExact(Math.round(Config.Common.BOSS_ENHANCEMENT_SPEED_BASE.get()
-                + (intensity * Config.Common.BOSS_ENHANCEMENT_SPEED_PER_INTENSITY.get())
-                + (spellDamage * Config.Common.BOSS_ENHANCEMENT_SPEED_PER_SPELL_DAMAGE.get())));
-        if (speedLevel > 0) {
-            mob.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, effectDuration, speedLevel - 1, false, false));
+        if (resistanceLevel > 0) {
+            mob.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, effectDuration,
+                    DamageResistanceMath.amplifierForConfiguredLevel(resistanceLevel), false, false));
         }
 
         int healthBoostLevel = Math.min(Config.Common.BOSS_ENHANCEMENT_HEALTH_MAX.get(),
@@ -84,12 +82,15 @@ public class BossEnhancementTask extends ScheduledTask {
 
         int damageBoostLevel = Math.toIntExact(Math.min(Config.Common.BOSS_ENHANCEMENT_DAMAGE_MAX.get(),
                 Math.round(Config.Common.BOSS_ENHANCEMENT_DAMAGE_BASE.get()
-                        + (intensity * Config.Common.BOSS_ENHANCEMENT_DAMAGE_PER_INTENSITY.get())
-                        + (playerDamage * Config.Common.BOSS_ENHANCEMENT_DAMAGE_PER_PLAYER_DAMAGE.get())
-                        + (spellDamage * Config.Common.BOSS_ENHANCEMENT_DAMAGE_PER_SPELL_DAMAGE.get()))));
+                        + intensity * Config.Common.BOSS_ENHANCEMENT_DAMAGE_PER_INTENSITY.get()
+                        + playerDamage * Config.Common.BOSS_ENHANCEMENT_DAMAGE_PER_PLAYER_DAMAGE.get()
+                        + player.getAttributeValue(PerkAttributes.SPELL_DAMAGE_BONUS)
+                        * Config.Common.BOSS_ENHANCEMENT_DAMAGE_PER_SPELL_DAMAGE.get())));
         if (damageBoostLevel > 0) {
-            mob.addEffect(new MobEffectInstance(EffectsRegistry.TRIBULATION_DAMAGE, effectDuration, damageBoostLevel - 1, false, false));
+            mob.addEffect(new MobEffectInstance(EffectsRegistry.TRIBULATION_DAMAGE, effectDuration,
+                    damageBoostLevel - 1, false, false));
         }
+
     }
 
     private double getAttributeValue(net.minecraft.world.entity.player.Player player,

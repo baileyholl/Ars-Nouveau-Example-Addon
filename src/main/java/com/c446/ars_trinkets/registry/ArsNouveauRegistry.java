@@ -24,6 +24,7 @@ public class ArsNouveauRegistry {
         register(IsNotSelf.INSTANCE);
         register(AuraForm.INSTANCE);
         register(EffectInspectSoul.INSTANCE);
+        register(EffectDevourSoul.INSTANCE);
         register(EffectAdvancedGrowth.INSTANCE);
         register(EffectAncientLightningBolt.INSTANCE);
         register(EffectAttack.INSTANCE);

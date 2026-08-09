@@ -100,6 +100,9 @@ public class OmnipotenceRune extends AbstractRune {
         ArsTrinkets.OMNIPOTENT_PLAYER.remove(playerId);
         LIFE_TRACKER.unequip(playerId);
         LAST_SENT_LIVES.remove(playerId);
+        if (slotContext.entity() instanceof ServerPlayer serverPlayer) {
+            sendRemainingLives(serverPlayer);
+        }
         if (slotContext.entity() instanceof ServerPlayer serverPlayer && !serverPlayer.isCreative()) {
             serverPlayer.getAbilities().mayfly = false;
             serverPlayer.getAbilities().flying = false;

@@ -45,6 +45,7 @@ public class ModModelsProvider extends ItemModelProvider {
         glyph(EffectSonicBoom.INSTANCE);
         glyph(AuraForm.INSTANCE);
         glyph(EffectInspectSoul.INSTANCE);
+        glyph(EffectDevourSoul.INSTANCE);
 //        glyph(Inversion.INSTANCE);
         glyph(EffectAncientLightningBolt.INSTANCE);
         glyph(EffectAdvancedGrowth.INSTANCE);

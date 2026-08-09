@@ -1,0 +1,38 @@
+{
+  "type": "ars_nouveau:enchanting_apparatus",
+  "keepNbtOfReagent": false,
+  "pedestalItems": [
+    {
+      "item": "ars_trinkets:eternity_rune"
+    },
+    {
+      "item": "ars_trinkets:eternity_rune"
+    },
+    {
+      "item": "ars_trinkets:eternity_rune"
+    },
+    {
+      "item": "ars_trinkets:eternity_rune"
+    },
+    {
+      "item": "ars_trinkets:eternity_rune"
+    },
+    {
+      "item": "ars_trinkets:eternity_rune"
+    },
+    {
+      "item": "ars_trinkets:eternity_rune"
+    },
+    {
+      "item": "ars_trinkets:eternity_rune"
+    }
+  ],
+  "reagent": {
+    "item": "minecraft:golden_helmet"
+  },
+  "result": {
+    "count": 1,
+    "id": "ars_trinkets:omnipotence_crown"
+  },
+  "sourceCost": 0
+}

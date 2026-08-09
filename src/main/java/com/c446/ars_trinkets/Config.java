@@ -22,8 +22,9 @@ public class Config {
         public static ModConfigSpec.IntValue MAX_LEVEL_ALLOWED;
         public static ModConfigSpec.BooleanValue ENABLE_BONUS_GLYPH_SLOTS;
         public static ModConfigSpec.BooleanValue ENFORCE_BONUS_GLYPH_SLOTS_ON_CAST;
+        public static ModConfigSpec.BooleanValue STACK_BONUS_GLYPH_SLOTS_WITH_INFINITE_SPELLS;
         public static ModConfigSpec.IntValue BONUS_GLYPH_SLOTS_FALLBACK;
-        public static ModConfigSpec.IntValue BONUS_GLYPH_SLOTS_CAP;
+        public static ModConfigSpec.ConfigValue<List<? extends String>> BONUS_GLYPH_SLOTS_BY_LEVEL;
         public static ModConfigSpec.IntValue CROWN_LIVES_HUD_X_OFFSET;
         public static ModConfigSpec.IntValue CROWN_LIVES_HUD_Y_OFFSET;
 
@@ -37,6 +38,32 @@ public class Config {
         public static ModConfigSpec.DoubleValue KARMA_VILLAGER_TRADE_DAMPENING;
         public static ModConfigSpec.DoubleValue KARMA_ANIMALS_BRED_DAMPENING;
         public static ModConfigSpec.BooleanValue KARMA_SCALE_WITH_PLAYER_LEVEL;
+        public static ModConfigSpec.DoubleValue DEVOUR_SOUL_CONSUMPTION_PERCENT;
+        public static ModConfigSpec.DoubleValue DEVOUR_SOUL_DAMAGE_PER_SQRT_SOUL;
+
+        // Mob scaling config
+        public static ModConfigSpec.BooleanValue MOB_SCALING_ENABLED;
+        public static ModConfigSpec.IntValue MOB_LEVEL_MIN;
+        public static ModConfigSpec.IntValue MOB_LEVEL_MAX;
+        public static ModConfigSpec.IntValue MOB_PLAYER_LEVEL_OFFSET;
+        public static ModConfigSpec.DoubleValue MOB_LEVEL_SCORE_FLOOR;
+        public static ModConfigSpec.DoubleValue MOB_LEVEL_SCORE_BASE;
+        public static ModConfigSpec.IntValue MOB_CORE_MIN;
+        public static ModConfigSpec.IntValue MOB_CORE_MAX;
+        public static ModConfigSpec.IntValue MOB_PLAYER_CORE_OFFSET;
+        public static ModConfigSpec.DoubleValue MOB_HEALTH_GROWTH_BASE;
+        public static ModConfigSpec.DoubleValue MOB_CORE_DECAY;
+        public static ModConfigSpec.DoubleValue MOB_CORE_LEVEL_BIAS_DIVISOR;
+        public static ModConfigSpec.BooleanValue MOB_HEALTH_SCALING_ENABLED;
+        public static ModConfigSpec.DoubleValue MOB_HEALTH_SCALING_MAX;
+        public static ModConfigSpec.DoubleValue MOB_ARMOR_SCALING_CAP;
+        public static ModConfigSpec.DoubleValue MOB_DAMAGE_SCALING_COEFFICIENT;
+        public static ModConfigSpec.BooleanValue MOB_LEVEL_DAMAGE_NORMALIZATION_ENABLED;
+        public static ModConfigSpec.DoubleValue MOB_LEVEL_DAMAGE_NORMALIZATION_COEFFICIENT;
+        public static ModConfigSpec.BooleanValue ROAMING_HEALTH_SCALING_ENABLED;
+        public static ModConfigSpec.DoubleValue ROAMING_HEALTH_SCALING_MAX;
+        public static ModConfigSpec.BooleanValue ROAMING_ATTACK_SCALING_ENABLED;
+        public static ModConfigSpec.BooleanValue ROAMING_RESISTANCE_ENABLED;
 
         public static ModConfigSpec.BooleanValue TRIBULATION_SYSTEM_ENABLED;
         public static ModConfigSpec.DoubleValue TRIBULATION_INTENSITY_BASE;
@@ -146,12 +173,19 @@ public class Config {
             ENFORCE_BONUS_GLYPH_SLOTS_ON_CAST = builder
                     .comment("Reject spells that exceed the computed slot cap during server-side cast.")
                     .define("enforce_on_cast", true);
+            STACK_BONUS_GLYPH_SLOTS_WITH_INFINITE_SPELLS = builder
+                    .comment("When Infinite Spells is disabled, stack player/item bonus glyph slots instead of taking the larger bonus.")
+                    .define("stack_with_infinite_spells", true);
             BONUS_GLYPH_SLOTS_FALLBACK = builder
                     .comment("Used when no player/caster bonus could be resolved.")
                     .defineInRange("fallback_bonus", 0, 0, 1024);
-            BONUS_GLYPH_SLOTS_CAP = builder
-                    .comment("Hard cap applied to computed bonus slots to avoid extreme values.")
-                    .defineInRange("bonus_cap", 256, 0, 4096);
+            BONUS_GLYPH_SLOTS_BY_LEVEL = builder
+                    .comment("Bonus glyph slots by player level, formatted as level;bonus_total.")
+                    .defineList(
+                            "level_bonus_totals",
+                            List.of("1;0", "2;0", "3;0", "4;0", "5;0", "6;1", "7;2", "8;3", "9;5"),
+                            Common::isBonusGlyphSlotsEntry
+                    );
             builder.pop();
 
             builder.push("omnipotence_crown");
@@ -191,6 +225,83 @@ public class Config {
             KARMA_SCALE_WITH_PLAYER_LEVEL = builder
                     .comment("Scale tribulation difficulty with player's in-game level via LevelingCapability.")
                     .define("scale_with_level", true);
+            DEVOUR_SOUL_CONSUMPTION_PERCENT = builder
+                    .comment("Percentage of the caster's souls consumed by Devour Soul before each cast.")
+                    .defineInRange("devour_soul_consumption_percent", 10.0, 0.0, 100.0);
+            DEVOUR_SOUL_DAMAGE_PER_SQRT_SOUL = builder
+                    .comment("Bonus damage per square root of souls consumed by Devour Soul.")
+                    .defineInRange("devour_soul_damage_per_sqrt_soul", 2.0, 0.0, 100000.0);
+            builder.pop();
+
+            builder.push("mob_scaling");
+            MOB_SCALING_ENABLED = builder
+                    .comment("Scales mob HP, attack, and armor from base stats, level, and random cores.")
+                    .define("enabled", true);
+            MOB_LEVEL_MIN = builder
+                    .comment("Minimum mob level. Formula: level = clamp(floor(log(score) / log(score_base)), level_min, level_max).")
+                    .defineInRange("level_min", 1, 1, 100);
+            MOB_LEVEL_MAX = builder
+                    .comment("Maximum mob level. Formula: score = max(level_score_floor, base_health + base_attack + base_armor). "
+                            + "Per-player spawn cap: max_mob_level = min(level_max, player_level + player_level_offset).")
+                    .defineInRange("level_max", 9, 1, 100);
+            MOB_PLAYER_LEVEL_OFFSET = builder
+                    .comment("Mob levels allowed above the player's level. Formula: max_mob_level = min(level_max, player_level + player_level_offset).")
+                    .defineInRange("player_level_offset", 1, 0, 100);
+            MOB_LEVEL_SCORE_FLOOR = builder
+                    .comment("Minimum score used by level calculation. Formula: score = max(level_score_floor, health + attack + armor).")
+                    .defineInRange("level_score_floor", 1.0, 0.0001, 100000.0);
+            MOB_LEVEL_SCORE_BASE = builder
+                    .comment("Logarithm base used by level calculation. Formula: raw_level = floor(log(score) / log(level_score_base)).")
+                    .defineInRange("level_score_base", 2.0, 1.0001, 100.0);
+            MOB_CORE_MIN = builder
+                    .comment("Minimum random core count. Formula: health_multiplier = health_growth_base^(level - level_min) * cores.")
+                    .defineInRange("core_min", 1, 1, 100);
+            MOB_CORE_MAX = builder
+                    .comment("Maximum random core count. Formula: combat_multiplier = level * cores; armor is capped separately. "
+                            + "Per-player spawn cap: max_mob_cores = min(core_max, player_cores + player_core_offset).")
+                    .defineInRange("core_max", 9, 1, 100);
+            MOB_PLAYER_CORE_OFFSET = builder
+                    .comment("Mob cores allowed above the player's core count. Formula: max_mob_cores = min(core_max, player_cores + player_core_offset).")
+                    .defineInRange("player_core_offset", 3, 0, 100);
+            MOB_HEALTH_GROWTH_BASE = builder
+                    .comment("Health growth base per level. Formula: health_multiplier = health_growth_base^(level - level_min) * clamped_cores.")
+                    .defineInRange("health_growth_base", 2.0, 1.0, 100.0);
+            MOB_CORE_DECAY = builder
+                    .comment("Core-roll weight decay. Formula: core_weight = core_decay^((core - 1) * level_bias).")
+                    .defineInRange("core_decay", 0.7, 0.0001, 1.0);
+            MOB_CORE_LEVEL_BIAS_DIVISOR = builder
+                    .comment("Core-roll level bias divisor. Formula: level_bias = 1 - clamp(level, level_min, level_max) / core_level_bias_divisor.")
+                    .defineInRange("core_level_bias_divisor", 12.0, 1.0, 1000.0);
+            MOB_HEALTH_SCALING_ENABLED = builder
+                    .comment("Applies level/core health scaling to mobs. Disable to keep their vanilla health.")
+                    .define("health_scaling_enabled", true);
+            MOB_HEALTH_SCALING_MAX = builder
+                    .comment("Maximum health multiplier from mob level/core scaling. Lower this for nerfed difficulty.")
+                    .defineInRange("health_scaling_max_multiplier", 16.0, 1.0, 100000.0);
+            MOB_ARMOR_SCALING_CAP = builder
+                    .comment("Maximum armor value after mob level/core scaling.")
+                    .defineInRange("armor_scaling_cap", 40.0, 0.0, 100000.0);
+            MOB_DAMAGE_SCALING_COEFFICIENT = builder
+                    .comment("Mob attack-event damage coefficient. Formula: final_damage = base_damage * level_damage_multiplier * cores * damage_coefficient.")
+                    .defineInRange("damage_scaling_coefficient", 0.5, 0.0, 100.0);
+            MOB_LEVEL_DAMAGE_NORMALIZATION_ENABLED = builder
+                    .comment("Normalizes player damage against leveled mobs using the mob's inverse level multiplier.")
+                    .define("level_damage_normalization_enabled", true);
+            MOB_LEVEL_DAMAGE_NORMALIZATION_COEFFICIENT = builder
+                    .comment("Strength of mob level damage normalization: 0 disables it, 1 fully cancels equal-level scaling.")
+                    .defineInRange("level_damage_normalization_coefficient", 1.0, 0.0, 1.0);
+            ROAMING_HEALTH_SCALING_ENABLED = builder
+                    .comment("Allows player difficulty to increase roaming mob HP.")
+                    .define("roaming_health_enabled", true);
+            ROAMING_HEALTH_SCALING_MAX = builder
+                    .comment("Maximum multiplier applied to roaming mob HP from player difficulty.")
+                    .defineInRange("roaming_health_multiplier_max", 4.0, 1.0, 100000.0);
+            ROAMING_ATTACK_SCALING_ENABLED = builder
+                    .comment("Legacy roaming attack scaling; mob capability damage remains authoritative when disabled.")
+                    .define("roaming_attack_enabled", false);
+            ROAMING_RESISTANCE_ENABLED = builder
+                    .comment("Legacy roaming resistance effect. Disabled by default to avoid absolute damage immunity.")
+                    .define("roaming_resistance_enabled", false);
             builder.pop();
 
             builder.push("tribulations");
@@ -264,6 +375,7 @@ public class Config {
             BOSS_ENHANCEMENT_RADIUS_PER_INTENSITY = builder.defineInRange("radius_per_intensity", 24.0, 0.0, 100000.0);
             BOSS_ENHANCEMENT_RADIUS_PER_SPELL_DAMAGE = builder.defineInRange("radius_per_spell_damage", 6.0, 0.0, 100000.0);
             BOSS_ENHANCEMENT_EFFECT_DURATION = builder.defineInRange("effect_duration_ticks", 260, 1, 100000);
+            builder.comment("Legacy boss strength/resistance/damage effects are disabled by default; mob capability damage is authoritative.");
             BOSS_ENHANCEMENT_STRENGTH_MAX = builder.defineInRange("strength_max", 6, 0, 255);
             BOSS_ENHANCEMENT_STRENGTH_BASE = builder.defineInRange("strength_base", 2.0, 0.0, 100000.0);
             BOSS_ENHANCEMENT_STRENGTH_PER_INTENSITY = builder.defineInRange("strength_per_intensity", 1.1, 0.0, 100000.0);
@@ -309,6 +421,47 @@ public class Config {
                             25.0f,
                             30.0f
                     ), e-> true);
+        }
+
+        private static boolean isBonusGlyphSlotsEntry(Object value) {
+            if (!(value instanceof String entry)) {
+                return false;
+            }
+
+            String[] parts = entry.split(";", -1);
+            if (parts.length != 2) {
+                return false;
+            }
+
+            try {
+                return Integer.parseInt(parts[0].trim()) >= 1
+                        && Integer.parseInt(parts[1].trim()) >= 0;
+            } catch (NumberFormatException ignored) {
+                return false;
+            }
+        }
+
+        public static int getBonusGlyphSlotsForLevel(int level) {
+            if (level <= 0 || BONUS_GLYPH_SLOTS_BY_LEVEL == null) {
+                return 0;
+            }
+
+            for (String entry : BONUS_GLYPH_SLOTS_BY_LEVEL.get()) {
+                String[] parts = entry.split(";", -1);
+                if (parts.length != 2) {
+                    continue;
+                }
+
+                try {
+                    if (Integer.parseInt(parts[0].trim()) == level) {
+                        return Math.max(0, Integer.parseInt(parts[1].trim()));
+                    }
+                } catch (NumberFormatException ignored) {
+                    // Invalid entries are rejected by the config validator; keep resolution fail-soft.
+                }
+            }
+
+            return 0;
         }
     }
 

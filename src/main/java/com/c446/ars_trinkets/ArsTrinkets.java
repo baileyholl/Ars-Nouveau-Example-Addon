@@ -24,6 +24,7 @@ import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import com.c446.ars_trinkets.network.CrownLivesPayload;
+import com.c446.ars_trinkets.network.MobSoulVisionPayload;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -85,6 +86,7 @@ public class ArsTrinkets {
 
     private void registerPayloads(RegisterPayloadHandlersEvent event) {
         event.registrar("1").playToClient(CrownLivesPayload.TYPE, CrownLivesPayload.STREAM_CODEC, CrownLivesPayload::handle);
+        event.registrar("1").playToClient(MobSoulVisionPayload.TYPE, MobSoulVisionPayload.STREAM_CODEC, MobSoulVisionPayload::handle);
     }
 
     @SubscribeEvent

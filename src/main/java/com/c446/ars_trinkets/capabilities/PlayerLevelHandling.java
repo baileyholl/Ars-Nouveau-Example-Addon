@@ -22,6 +22,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.loading.FMLPaths;
@@ -29,6 +30,8 @@ import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
@@ -38,6 +41,36 @@ import static com.c446.ars_trinkets.registry.AttributeRegistry.ATTRIBUTES;
 
 @EventBusSubscriber
 public class PlayerLevelHandling {
+    private static final ResourceLocation BONUS_GLYPH_SLOTS_LOCATION = ArsTrinkets.prefix("level_bonus_glyph_slots");
+
+    public static void updateBonusGlyphSlots(Player player) {
+        AttributeInstance instance = player.getAttribute(AttributeRegistry.BONUS_GLYPH_SLOTS);
+        if (instance == null || !player.hasData(CapabilityRegistry.LEVEL_CAP)) {
+            return;
+        }
+
+        int bonusSlots = Config.Common.ENABLE_BONUS_GLYPH_SLOTS.get()
+                ? Config.Common.getBonusGlyphSlotsForLevel(LevelingCapability.get(player).level)
+                : 0;
+        AttributeModifier existing = instance.getModifier(BONUS_GLYPH_SLOTS_LOCATION);
+
+        if (bonusSlots == 0) {
+            if (existing != null) {
+                instance.removeModifier(BONUS_GLYPH_SLOTS_LOCATION);
+            }
+            return;
+        }
+
+        if (existing == null || existing.amount() != bonusSlots) {
+            instance.removeModifier(BONUS_GLYPH_SLOTS_LOCATION);
+            instance.addTransientModifier(new AttributeModifier(
+                    BONUS_GLYPH_SLOTS_LOCATION,
+                    bonusSlots,
+                    AttributeModifier.Operation.ADD_VALUE
+            ));
+        }
+    }
+
     //TODO: stop using the old hacky way and use AttributeFix to override default maximum value.
     @SubscribeEvent
     public static void addMana(MaxManaCalcEvent e) {
@@ -73,12 +106,26 @@ public class PlayerLevelHandling {
     @SubscribeEvent
     public static void onDamage(LivingDamageEvent.Pre d) {
         //System.out.println(FMLPaths.CONFIGDIR.get());
-        if (d.getSource().getEntity() instanceof Player attacker && attacker.hasData(CapabilityRegistry.LEVEL_CAP)) {
+        if (d.getSource().getEntity() instanceof Player attacker
+                && attacker.hasData(CapabilityRegistry.LEVEL_CAP)) {
             d.setNewDamage((float) (d.getNewDamage() * attacker.getData(CapabilityRegistry.LEVEL_CAP).getDamageMult()));
         }
 
-        if (d.getEntity() instanceof Player victim) {
-            d.setNewDamage((float) (d.getNewDamage() / victim.getData(CapabilityRegistry.LEVEL_CAP).getDamageMult()));
+        if (d.getEntity() instanceof Player victim
+                && victim.hasData(CapabilityRegistry.LEVEL_CAP)) {
+            d.setNewDamage((float) (d.getNewDamage()
+                    * com.c446.ars_trinkets.spells.glyphs.EffectDevourSoul.targetDamageMultiplier(
+                            victim.getData(CapabilityRegistry.LEVEL_CAP).getDamageMult())));
+        }
+
+        if (Config.Common.MOB_LEVEL_DAMAGE_NORMALIZATION_ENABLED.get()
+                && d.getEntity() instanceof LivingEntity victim
+                && !(victim instanceof Player)
+                && victim.hasData(CapabilityRegistry.LEVEL_CAP)) {
+            d.setNewDamage((float) (d.getNewDamage()
+                    * com.c446.ars_trinkets.spells.glyphs.EffectDevourSoul.targetDamageMultiplier(
+                            victim.getData(CapabilityRegistry.LEVEL_CAP).getDamageMult(),
+                            Config.Common.MOB_LEVEL_DAMAGE_NORMALIZATION_COEFFICIENT.get())));
         }
     }
 
@@ -99,8 +146,33 @@ public class PlayerLevelHandling {
     @SubscribeEvent
     public static void onLevelUpPost(LevelModifiedEvent.Post e){
         if (e.entity instanceof ServerPlayer sp) {
+            updateBonusGlyphSlots(sp);
             var cap = sp.getData(CapabilityRegistry.LEVEL_CAP);
             sp.displayClientMessage(Component.translatable("text.ars_trinkets.ritual_" + (cap.level)).append(cap.getTitle()), false);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent e) {
+        updateBonusGlyphSlots(e.getEntity());
+    }
+
+    @SubscribeEvent
+    public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent e) {
+        updateBonusGlyphSlots(e.getEntity());
+    }
+
+    @SubscribeEvent
+    public static void onPlayerDeath(LivingDeathEvent e) {
+        if (e.getEntity() instanceof Player player) {
+            updateBonusGlyphSlots(player);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerSpawn(EntityJoinLevelEvent e) {
+        if (e.getEntity() instanceof Player player) {
+            updateBonusGlyphSlots(player);
         }
     }
 
@@ -162,6 +234,9 @@ public class PlayerLevelHandling {
     @SubscribeEvent
     public static void tickEntity(PlayerTickEvent.Pre e) {
         Player p = e.getEntity();
+        if (p.tickCount % 20 == 0 && p.hasData(CapabilityRegistry.LEVEL_CAP)) {
+            updateBonusGlyphSlots(p);
+        }
         UUID playerId = p.getUUID();
 
         // Get current divinity value

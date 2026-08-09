@@ -2,12 +2,14 @@ package com.c446.ars_trinkets.spells.glyphs;
 
 import com.c446.ars_trinkets.ArsTrinkets;
 import com.c446.ars_trinkets.registry.CapabilityRegistry;
+import com.c446.ars_trinkets.network.MobSoulVisionPayload;
 import com.c446.ars_trinkets.tribulations.KarmaCalculator;
 import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -50,7 +52,8 @@ public class EffectInspectSoul extends AbstractEffect {
     public void onResolveEntity(EntityHitResult rayTraceResult, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
         var entity = rayTraceResult.getEntity();
 
-        if (entity instanceof LivingEntity livingEntity && livingEntity.hasData(CapabilityRegistry.LEVEL_CAP) && shooter instanceof ServerPlayer caster){
+        if (entity instanceof LivingEntity livingEntity && shooter instanceof ServerPlayer caster
+                && (livingEntity instanceof ServerPlayer || livingEntity.hasData(CapabilityRegistry.LEVEL_CAP))){
             var targetLevelCap = livingEntity.getData(CapabilityRegistry.LEVEL_CAP);
             var casterLevelCap = caster.getData(CapabilityRegistry.LEVEL_CAP);
             boolean canPeer = targetLevelCap.level <= (casterLevelCap.level + spellStats.getAmpMultiplier());
@@ -61,6 +64,8 @@ public class EffectInspectSoul extends AbstractEffect {
                 // If inspecting self, show karma breakdown
                 if (entity == caster) {
                     displayKarmaBreakdown(caster);
+                    PacketDistributor.sendToPlayer(caster,
+                            new MobSoulVisionPayload(casterLevelCap.level, true));
                 }
             }
             else {

@@ -1,6 +1,7 @@
 package com.c446.ars_trinkets.tribulations;
 
 import com.c446.ars_trinkets.ArsTrinkets;
+import com.c446.ars_trinkets.Config;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Mob;
@@ -27,40 +28,35 @@ public class RoamingEntities {
         // Don't enhance if multiplier is below 1.1 (minimal negative karma)
         if (karmaMultiplier < 1.1f) return;
 
-        // Scale enhancement based on karma (1.0 = no change, 2.0 = 2x enhancement)
-        float enhancementFactor = karmaMultiplier - 1.0f; // 0.0 to X.X range
-
-        // Apply strength buff
-        int strengthLevel = Math.min(3, Math.round(enhancementFactor));
-        if (strengthLevel > 0) {
-            mob.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, -1, strengthLevel - 1, false, false));
+        // Capability scaling owns mob combat damage. Roaming difficulty contributes HP only by default.
+        if (Config.Common.ROAMING_HEALTH_SCALING_ENABLED.get()) {
+            double healthMultiplier = Math.min(
+                    karmaMultiplier,
+                    Config.Common.ROAMING_HEALTH_SCALING_MAX.get());
+            var healthAttr = mob.getAttribute(Attributes.MAX_HEALTH);
+            if (healthAttr != null && healthMultiplier > 1.0) {
+                healthAttr.addPermanentModifier(new AttributeModifier(
+                        ArsTrinkets.prefix("roaming_difficulty_health"),
+                        healthMultiplier - 1.0,
+                        AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+                mob.setHealth(mob.getMaxHealth());
+            }
         }
 
-        // Apply resistance
-        int resistanceLevel = Math.round(enhancementFactor * 0.5f);
-        if (resistanceLevel > 0) {
-            mob.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, -1, resistanceLevel - 1, false, false));
+        if (Config.Common.ROAMING_ATTACK_SCALING_ENABLED.get()) {
+            int strengthLevel = Math.min(3, Math.round(karmaMultiplier - 1.0f));
+            if (strengthLevel > 0) {
+                mob.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, -1,
+                        strengthLevel - 1, false, false));
+            }
         }
 
-        // Apply speed boost
-        int speedLevel = Math.round(enhancementFactor * 0.3f);
-        if (speedLevel > 0) {
-            mob.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, -1, speedLevel - 1, false, false));
-        }
-
-        // Boost health
-        var healthAttr = mob.getAttribute(Attributes.MAX_HEALTH);
-        if (healthAttr != null) {
-            double healthBoost = enhancementFactor * 10.0;
-            healthAttr.addPermanentModifier(new AttributeModifier(ArsTrinkets.prefix("karma_boost"), healthBoost, AttributeModifier.Operation.ADD_VALUE));
-            mob.setHealth(Math.min(mob.getMaxHealth(), mob.getHealth() + (float) healthBoost));
-        }
-
-        // Boost damage
-        var damageAttr = mob.getAttribute(Attributes.ATTACK_DAMAGE);
-        if (damageAttr != null) {
-            double damageBoost = enhancementFactor * 3.0;
-            damageAttr.addPermanentModifier(new AttributeModifier(ArsTrinkets.prefix("karma_damage"), damageBoost, AttributeModifier.Operation.ADD_VALUE));
+        if (Config.Common.ROAMING_RESISTANCE_ENABLED.get()) {
+            int resistanceLevel = Math.round((karmaMultiplier - 1.0f) * 0.5f);
+            if (resistanceLevel > 0) {
+                mob.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, -1,
+                        DamageResistanceMath.amplifierForConfiguredLevel(resistanceLevel), false, false));
+            }
         }
     }
 }

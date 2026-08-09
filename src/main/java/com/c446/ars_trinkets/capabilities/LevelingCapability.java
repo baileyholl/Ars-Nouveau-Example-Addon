@@ -59,8 +59,9 @@ public class LevelingCapability implements INBTSerializable<CompoundTag> {
         this.cursed = cTag.getBoolean("cursed");
     }
 
-    public static LevelingCapability get(Player p) {
-        return p.getData(CapabilityRegistry.LEVEL_CAP);
+    public static LevelingCapability get(Player p) throws NullPointerException {
+        if (!p.hasData(CapabilityRegistry.LEVEL_CAP)) throw new NullPointerException("player capability is null");
+        else return p.getData(CapabilityRegistry.LEVEL_CAP);
     }
 
     public void addSoul(int soulsToAdd, Player player) {
@@ -109,7 +110,16 @@ public class LevelingCapability implements INBTSerializable<CompoundTag> {
     }
 
     public double getDamageMult() {
-        return this.level == 0 ? 1d : Config.Common.DAMAGE_BONUS_PER_LEVEL.get().get(this.level - 1);
+        return this.level == 0 ? 1d : damageMultiplierValue(
+                Config.Common.DAMAGE_BONUS_PER_LEVEL.get().get(this.level - 1));
+    }
+
+    static double damageMultiplierValue(Object configuredValue) {
+        return ((Number) configuredValue).doubleValue();
+    }
+
+    public double getMobDamageMult() {
+        return getDamageMult() * Math.max(1, this.cores);
     }
 
     public Component getTitle() {
